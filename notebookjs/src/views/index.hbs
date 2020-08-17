@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+    </link>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/javascript/javascript.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@0.1.1/dist/index.min.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+
+        <div id="my-div" style="height: 500px; width: 1000px;">
+
+        </div>
+        <button style="color: black;" id="run" onclick="run_cell(1)">Run</button>
+        <div id="out" style="height: 500px; width: 1000px;">
+
+        </div>
+
+        <hr>
+        <div id="my-div2" style="height: 500px; width: 1000px;">
+
+        </div>
+        <button style="color: black;" id="run" onclick="run_cell(2)">Run</button>
+        <div id="out2" style="height: 500px; width: 1000px;">
+
+        </div>
+    </div>
+
+
+
+    <script>
+        var code_out, code_out2;
+        var variable_space = {}
+
+        const editor = CodeMirror(document.getElementById('my-div'), {
+            lineNumbers: true,
+            tabSize: 2,
+            mode: 'javascript',
+            theme: 'monokai',
+            value: ''
+        });
+
+        const editor2 = CodeMirror(document.getElementById('my-div2'), {
+            lineNumbers: true,
+            tabSize: 2,
+            mode: 'javascript',
+            theme: 'monokai',
+            value: ''
+        });
+
+        editor.on('changes', () => {
+            code_out = editor.getValue();
+        });
+
+        editor2.on('changes', () => {
+            code_out2 = editor2.getValue();
+        });
+
+
+        function run_cell(id) {
+            if (id == 1) {
+                console.log(code_out);
+                let a = ("global", eval)(code_out)
+                // a = eval(code_out) + "<br>"
+                document.getElementById("out").innerHTML = a
+
+            } else {
+                // console.log(variable_space[code_out2]);
+                // a = eval(code_out2) + "<br>"
+                console.log(code_out);
+                document.getElementById("out2").innerHTML = ("global", eval)(code_out2)
+
+            }
+            // var a = eval(code_out) + "<br>"
+            // document.getElementById("out").innerHTML = a
+        }
+    </script>
+
+
+
+
+
+</body>
+
+</html>
+
+
+
+
+<!-- async function load(){
+	df = await dfd.read_csv("https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv")
+  return df
+  
+}
+
+df = load().then((df)=>{return df}) -->
