@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+    </link>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/javascript/javascript.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@0.1.1/dist/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container">
+
+        <div id="div-1" style="width:100%;height:30%;">
+
+        </div>
+            <button style="color: black;" id="run_div-1" class="run">Run</button>
+            <div id=out_div-1></div>
+    
+        
+
+
+    </div>
+
+
+
+    <script>
+        const editor = CodeMirror(document.getElementById('div-1'), {
+            lineNumbers: true,
+            tabSize: 2,
+            mode: 'javascript',
+            theme: 'monokai',
+            value: ''
+        });
+
+        /////PROTO///////////
+
+        let store_cope = {
+            "div-1": editor
+        }
+
+        function exec_cell(id,count){
+
+            $(`#out_${id}`).html(("global", eval)(store_cope[id].getValue()) || "");
+
+            count = parseInt(count) +1
+            let div_count = `div-${count}`
+
+            if(!(div_count in store_cope)){
+                $("#container").append(
+                    `<div id=${div_count} class=""></div><br />
+                    <button style="color: black;" id=run_${div_count} class="run">Run</button>
+                    <div id=out_${div_count}></div><br />`   
+                )
+
+                let editor = CodeMirror(document.getElementById(`${div_count}`), {
+                    lineNumbers: true,
+                    tabSize: 2,
+                    mode: 'javascript',
+                    theme: 'monokai',
+                    value: ''
+                });
+
+
+                store_cope[div_count] = editor;
+                
+            }
+
+        }
+
+        $(document).on("click","button.run",function(){
+            let id = this.id.split("_")[1]
+            let count = this.id.split("-")[1]
+            exec_cell(id,count);
+        })
+    </script>
+
+
+
+
+
+</body>
+
+</html>
+
+
+
+
+<!-- async function load(){
+	df = await dfd.read_csv("https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv")
+  return df
+  
+}
+
+df = load().then((df)=>{return df}) -->
