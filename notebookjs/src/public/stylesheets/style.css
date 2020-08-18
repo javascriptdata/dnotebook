@@ -1,8 +1,20 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.container{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.out-divs{
+  padding: 20px;
+}
+
+.code_symbol{
+  margin-left: 40px;
 }
