@@ -38,7 +38,7 @@ function exec_cell(c_id) {
         if (Array.isArray(global_scope)) {
             global_scope = print_val(global_scope)
         }
-        $(`#out_${id}`).html(global_scope || "");
+        $(`#out_${id}`).html(global_scope);
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -279,7 +279,7 @@ $(document).on("click", "button.add-text", function () {
     } else {
         where = "up"
     }
-    console.log(this.id);
+    // console.log(this.id);
     add_new_text_cell(this.id, where)
 })
 
@@ -320,5 +320,9 @@ function update_text_box_size() {
 }
 
 
+$("#download").click(function(){
+    
+    let out= notebook_json(vars_in_scope);
 
-
+    console.log(out);
+});
