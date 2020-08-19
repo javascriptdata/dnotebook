@@ -24,7 +24,7 @@ function exec_cell(c_id) {
         if (Array.isArray(global_scope)) {
             global_scope = print_val(global_scope)
         }
-        $(`#out_${id}`).html(global_scope || "");
+        $(`#out_${id}`).html(global_scope);
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`

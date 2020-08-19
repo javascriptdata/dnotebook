@@ -88,3 +88,57 @@ function viz(name,callback){
 
     return cb
 }
+
+function table(df){
+
+    const {col_types, series, columns, index, values} = df;
+
+    
+    let head = ""
+    if(series){
+        head += `<th class="${col_types[0]}">${columns}</th>`
+    }else{
+
+        columns.forEach((name,i)=>{
+            head +=`<th class="${col_types[i]}">${name}</th>`
+        });
+    }
+
+    let body = ""
+
+    values.forEach((row,i)=>{
+
+        let b_String = `<tr><th>${index[i]}</th>`
+
+        if(series){
+            b_String += `<td class="${col_types[0]}">${row}</td>`
+        }else{
+
+            row.forEach((v,j)=>{
+                b_String +=`<td class="${col_types[j]}">${v}</td>`
+            });
+        }
+
+        b_String +="</tr>"
+
+        body +=b_String;
+    });
+
+    const table = `
+    <div style="overflow: auto; max-height: 300px;"><table class="df-table" border="1">
+      <thead>
+        <tr>
+          <th></th>
+          ${head}
+        </tr>
+      </thead>
+      <tbody>
+        ${body}
+      </tbody>
+    </table>
+    </div>
+  `;
+
+  return table;
+
+}
