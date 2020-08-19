@@ -7,6 +7,7 @@ const editor = CodeMirror(document.getElementById('div-1'), {
 });
 
 
+
 var md = new Remarkable()
 //Global Params
 let vars_in_scope = {
@@ -67,7 +68,7 @@ function add_new_code_cell(c_id, where) {
     <div class="col-md-1">
         <p id="cell-num" class="code_symbol">[${new_id}]</p>
     </div>
-    <div id="div-${new_id}" class="col-md-11">
+    <div id="div-${new_id}" class="col-md-9">
         <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="display: none;">
             <button type="button" id="run_div-${new_id}" class="btn btn-sm btn-success run"><i
                     class="fas fa-play"></i>Run</button>
@@ -98,10 +99,12 @@ function add_new_code_cell(c_id, where) {
         </div>
 
     </div>
+    <div class="col-md-2"></div>
     <div class="col-md-1"></div>
-    <div id="out_div-${new_id}" class="col-md-10 out-divs">
+    <div id="out_div-${new_id}" class="col-md-9 out-divs">
 
     </div>
+    <div class="col-md-2"></div>
 </div>
 `
 
@@ -152,7 +155,7 @@ function add_new_text_cell(c_id, where) {
                  <p id="cell-num" class="code_symbol">[${new_id}]</p>
             </div>
 
-            <div id="text-div_${new_id}" class="col-md-11">
+            <div id="text-div_${new_id}" class="col-md-9">
                 <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="margin-bottom: 2px;">
                     <button type="button" id="run_md_div-${new_id}" class="btn btn-sm btn-success run"><i class="fas fa-play"></i>
                         Run</button>
@@ -181,9 +184,11 @@ function add_new_text_cell(c_id, where) {
 
                 <textarea id="text-box_${new_id}" class="text-box"></textarea>
             </div>
-
+            <div class="col-md-2"></div>
             <div class="col-md-1"></div>
-            <div id="out-text-div_${new_id}" style="display:block;" class="col-md-11 text-out-box"></div>
+            <div id="out-text-div_${new_id}" style="display:block;" class="col-md-9 text-out-box"></div>
+            <div class="col-md-2"></div>
+
         </div>
 
         `

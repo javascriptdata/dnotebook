@@ -7,8 +7,9 @@ a {
 }
 
 .container{
-  margin-left: 10px;
-  margin-right: 10px;
+  padding: 20px;
+  /* margin-left: 10px; */
+  /* margin-right: 10px; */
 }
 
 .out-divs{
@@ -22,6 +23,7 @@ a {
 .CodeMirror {
   border: 1px solid #eee;
   height: auto;
+  padding: 10px;
 }
 
 .mdCell {

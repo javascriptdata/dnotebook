@@ -1,11 +1,11 @@
 <body>
 
-    <div class="container">
+    <div class="">
         <div class="row" style="margin-top: 50px;" id="cell-1">
             <div class="col-md-1">
                 <p id="cell-num" class="code_symbol">[1]</p>
             </div>
-            <div id="div-1" class="col-md-11">
+            <div id="div-1" class="col-md-9">
                 <div id="btn-actions-1" class="btn-group-horizontal" style="display: none;">
                     <button type="button" id="run_div-1" class="btn btn-sm btn-success run"><i class="fas fa-play"></i>
                         Run</button>
@@ -36,10 +36,20 @@
                 </div>
 
             </div>
+            <div class="col-md-2">
+                {{!-- <form method="GET">
+                    <div class="form-group">
+                        <label for="exampleFormControlFile1">Add Data</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                    </div>
+                </form> --}}
+            </div>
             {{!-- Output of code div start --}}
             <div class="col-md-1"></div>
-            <div id="out_div-1" class="col-md-11 out-divs">
+            <div id="out_div-1" class="col-md-9 out-divs">
             </div>
+            <div class="col-md-2"></div>
+
             {{!-- Output of code div start --}}
 
 
@@ -81,7 +91,7 @@
             <div class="col-md-1"></div>
             <div id="out-text-div_${new_id}" style="display:block;" class="col-md-11 text-out-box">
             </div> --}}
-            
+
             {{!-- Markdown cell End --}}
 
         </div>
