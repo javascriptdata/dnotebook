@@ -6,16 +6,18 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     value: ''
 });
 
-/////PROTO///////////
 
+//Global Params
 let vars_in_scope = {
     "div-1": editor
 }
+
 let __cells_count = 1
 
 function exec_cell(c_id) {
     let id = c_id.split("_")[1]
     let count = c_id.split("-")[1]
+    window.current_cell = id;
 
     try {
         let global_scope = ("global", eval)(vars_in_scope[id].getValue())
@@ -26,35 +28,13 @@ function exec_cell(c_id) {
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
-
-        // if (!(div_count in vars_in_scope)) {
-        //     // add_new_code_cell(id, 'down')
-        //     // $("#container").append(
-        //     //     `<div id=${div_count} class=""></div><br />
-        //     // <button style="color: black;" id=run_${div_count} class="run">Run</button>
-        //     // <div id=out_${div_count}></div><br />`
-        //     // )
-
-        //     // let editor = CodeMirror(document.getElementById(`${div_count}`), {
-        //     //     lineNumbers: true,
-        //     //     tabSize: 2,
-        //     //     mode: 'javascript',
-        //     //     theme: 'monokai',
-        //     //     extraKeys: {"Ctrl-Space": "autocomplete"},
-        //     //     value: ''
-        //     //             });
-
-        //     // // editor.setSize(10, 10);
-
-        //     // vars_in_scope[div_count] = editor;
-
-        // }
+        window.current_cell = div_count
 
     } catch (error) {
         $(`#out_${id}`).html(error)
     }
-
 }
+
 
 function add_new_code_cell(c_id, where) {
     __cells_count += 1
@@ -119,11 +99,6 @@ function add_new_code_cell(c_id, where) {
         divReference.insertAdjacentHTML("afterend", html);
     }
 
-
-
-
-    // $(`#${parent_cell_id}`).parentNode.append(html)
-
     let editor = CodeMirror(document.getElementById(`div-${new_id}`), {
         lineNumbers: true,
         tabSize: 2,
@@ -131,8 +106,6 @@ function add_new_code_cell(c_id, where) {
         theme: 'monokai',
         value: ''
     });
-
-
     vars_in_scope[`div-${new_id}`] = editor
 
 }
@@ -143,37 +116,29 @@ function add_new_text_cell(id, count) {
 }
 
 function delete_cell(id) {
-    if (__cells_count == 1){
+    if (__cells_count == 1) {
         document.getElementsByClassName("del").disable = true
-    }else{
+    } else {
         row_id = `cell-${Number(id)}`
         var div_ele = document.getElementById(row_id);
         div_ele.parentNode.removeChild(div_ele);
         __cells_count -= 1
     }
-   
-    
+
+
 
 }
 
 $(document).on("click", "button.run", function () {
-    // let id = this.id.split("_")[1]
-    // let count = this.id.split("-")[1]
-    // console.log(id);
-    // console.log(count);
     exec_cell(this.id);
 })
 
 $(document).on("click", "button.del", function () {
-    // let id = this.id.split("_")[1]
     let id = this.id.split("-")[1]
     delete_cell(id)
 })
 
 $(document).on("click", "button.add-code", function () {
-    // let last_cell_in_scope = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
-    // let id = this.id.split("-")[1]
-
     let where;
     if (this.id.split("_").includes("down")) {
         where = "down"
@@ -181,5 +146,4 @@ $(document).on("click", "button.add-code", function () {
         where = "up"
     }
     add_new_code_cell(this.id, where)
-    // add_new_code_cell(id, last_cell_in_scope, where)
 })
