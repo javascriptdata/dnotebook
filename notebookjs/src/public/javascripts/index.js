@@ -154,7 +154,7 @@ function add_new_text_cell(c_id, where) {
 
             <div id="text-div_${new_id}" class="col-md-11">
                 <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="margin-bottom: 2px;">
-                    <button type="button" id="run_div-1" class="btn btn-sm btn-success run"><i class="fas fa-play"></i>
+                    <button type="button" id="run_md_div-${new_id}" class="btn btn-sm btn-success run"><i class="fas fa-play"></i>
                         Run</button>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-sm  btn-info add-code">
@@ -241,7 +241,14 @@ function delete_text_cell(id) {
 
 
 $(document).on("click", "button.run", function () {
-    exec_cell(this.id);
+    if (this.id.split("_").includes("md")) {
+        console.log("md");
+        let id = this.id.split("-")[1]
+        let val = document.getElementById(`text-box_${id}`).value
+        show_md(id, val)
+    } else {
+        exec_cell(this.id);
+    }
 })
 
 $(document).on("click", "button.del", function () {
@@ -273,13 +280,17 @@ $(document).on("click", "button.add-text", function () {
 
 $(document).on("dblclick", "textarea.text-box", function () {
     let id = this.id.split("_")[1]
-    div_id = `text-div_${id}`
-    md_texts[div_id] = this.value //stores the markdown text for the corresponding div
-    render_md = md.render(this.value)
-    $(`#out-text-div_${id}`).html(render_md).show()
-    document.getElementById(div_id).style.display = "none"
+    show_md(id, this.value)
 
 })
+
+function show_md(id, value) {
+    div_id = `text-div_${id}`
+    md_texts[div_id] = value //stores the markdown text for the corresponding div
+    render_md = md.render(value)
+    $(`#out-text-div_${id}`).html(render_md).show()
+    document.getElementById(div_id).style.display = "none"
+}
 
 $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]
