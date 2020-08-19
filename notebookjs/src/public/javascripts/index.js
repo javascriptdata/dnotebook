@@ -11,46 +11,66 @@ const editor = CodeMirror(document.getElementById('div-1'), {
 let vars_in_scope = {
     "div-1": editor
 }
+let __cells_count = 1
 
-function exec_cell(id, count) {
-    
-    let global_scope = ("global", eval)(vars_in_scope[id].getValue())
+function exec_cell(c_id) {
+    let id = c_id.split("_")[1]
+    let count = c_id.split("-")[1]
 
-    if(Array.isArray(global_scope)){
-        global_scope = print_val(global_scope)
-    }
-    $(`#out_${id}`).html(global_scope || "");
+    try {
+        let global_scope = ("global", eval)(vars_in_scope[id].getValue())
+        if (Array.isArray(global_scope)) {
+            global_scope = print_val(global_scope)
+        }
+        $(`#out_${id}`).html(global_scope || "");
 
-    count = parseInt(count) + 1
-    let div_count = `div-${count}`
+        count = parseInt(count) + 1
+        let div_count = `div-${count}`
 
-    if (!(div_count in vars_in_scope)) {
-        $("#container").append(
-            `<div id=${div_count} class=""></div><br />
-            <button style="color: black;" id=run_${div_count} class="run">Run</button>
-            <div id=out_${div_count}></div><br />`
-        )
+        // if (!(div_count in vars_in_scope)) {
+        //     // add_new_code_cell(id, 'down')
+        //     // $("#container").append(
+        //     //     `<div id=${div_count} class=""></div><br />
+        //     // <button style="color: black;" id=run_${div_count} class="run">Run</button>
+        //     // <div id=out_${div_count}></div><br />`
+        //     // )
 
-        let editor = CodeMirror(document.getElementById(`${div_count}`), {
-            lineNumbers: true,
-            tabSize: 2,
-            mode: 'javascript',
-            theme: 'monokai',
-            value: ''
-        });
+        //     // let editor = CodeMirror(document.getElementById(`${div_count}`), {
+        //     //     lineNumbers: true,
+        //     //     tabSize: 2,
+        //     //     mode: 'javascript',
+        //     //     theme: 'monokai',
+        //     //     extraKeys: {"Ctrl-Space": "autocomplete"},
+        //     //     value: ''
+        //     //             });
 
+        //     // // editor.setSize(10, 10);
 
-        vars_in_scope[div_count] = editor;
+        //     // vars_in_scope[div_count] = editor;
 
+        // }
+
+    } catch (error) {
+        $(`#out_${id}`).html(error)
     }
 
 }
 
-function add_new_code_cell(id, last_scope_id, where) {
+function add_new_code_cell(c_id, where) {
+    __cells_count += 1
+    let last_scope_id = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
+    let id = c_id.split("-")[1]
+
+    if (where == "down") {
+        where = "down"
+    } else {
+        where = "up"
+    }
+
     let new_id = parseInt(last_scope_id) + 1
     let parent_cell_id = `cell-${id}`
     let html = `
-    <div class="row" style="margin-top: 50px;" id="cell-${new_id}">
+    <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
     <div class="col-md-1">
         <p id="cell-num" class="code_symbol">[${new_id}]</p>
     </div>
@@ -60,7 +80,7 @@ function add_new_code_cell(id, last_scope_id, where) {
                     class="fas fa-play"></i>Run</button>
             <div class="btn-group" role="group" aria-label="Basic example">
                 
-                <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-info add-code">
+                <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-sm  btn-info add-code">
                     <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Code
                 </button>
                 <button type="button" id="add_code_up_btn-${new_id}" class="btn btn-sm btn-info add-code">
@@ -81,7 +101,7 @@ function add_new_code_cell(id, last_scope_id, where) {
 
             <button type="button" id="del_btn-${new_id}" class="btn btn-sm btn-danger del"><i
                     class="fas fa-trash-alt"></i>
-                Delete</button>
+                </button>
         </div>
 
     </div>
@@ -123,18 +143,25 @@ function add_new_text_cell(id, count) {
 }
 
 function delete_cell(id) {
-    row_id = `cell-${Number(id)}`
-    var div_ele = document.getElementById(row_id);
-    div_ele.parentNode.removeChild(div_ele);
+    if (__cells_count == 1){
+        document.getElementsByClassName("del").disable = true
+    }else{
+        row_id = `cell-${Number(id)}`
+        var div_ele = document.getElementById(row_id);
+        div_ele.parentNode.removeChild(div_ele);
+        __cells_count -= 1
+    }
+   
+    
 
 }
 
 $(document).on("click", "button.run", function () {
-    let id = this.id.split("_")[1]
-    let count = this.id.split("-")[1]
+    // let id = this.id.split("_")[1]
+    // let count = this.id.split("-")[1]
     // console.log(id);
     // console.log(count);
-    exec_cell(id, count);
+    exec_cell(this.id);
 })
 
 $(document).on("click", "button.del", function () {
@@ -144,8 +171,8 @@ $(document).on("click", "button.del", function () {
 })
 
 $(document).on("click", "button.add-code", function () {
-    let last_cell_in_scope = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
-    let id = this.id.split("-")[1]
+    // let last_cell_in_scope = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
+    // let id = this.id.split("-")[1]
 
     let where;
     if (this.id.split("_").includes("down")) {
@@ -153,5 +180,6 @@ $(document).on("click", "button.add-code", function () {
     } else {
         where = "up"
     }
-    add_new_code_cell(id, last_cell_in_scope, where)
+    add_new_code_cell(this.id, where)
+    // add_new_code_cell(id, last_cell_in_scope, where)
 })
