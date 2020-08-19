@@ -77,3 +77,14 @@ function print_val(val){
         
     }
 }
+
+function viz(name,callback){
+
+    let id = `#out_${window.current_cell}`
+    $(`${id}`).append(`<div id=${name}></div>`)
+
+    let cb =  callback(name);
+    // $("#ploty").remove(`${name}`)
+
+    return cb
+}
