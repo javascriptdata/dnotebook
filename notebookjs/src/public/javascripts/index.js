@@ -13,7 +13,13 @@ let vars_in_scope = {
 }
 
 function exec_cell(id, count) {
-    $(`#out_${id}`).html(("global", eval)(vars_in_scope[id].getValue()) || "");
+    
+    let global_scope = ("global", eval)(vars_in_scope[id].getValue())
+
+    if(Array.isArray(global_scope)){
+        global_scope = print_val(global_scope)
+    }
+    $(`#out_${id}`).html(global_scope || "");
 
     count = parseInt(count) + 1
     let div_count = `div-${count}`
