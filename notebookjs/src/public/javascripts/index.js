@@ -6,6 +6,14 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     value: ''
 });
 
+$("#div-1")
+    .mouseover(function () {
+        $("#btn-actions-1").show()
+    })
+    .mouseout(function () {
+        $("#btn-actions-1").hide()
+    });
+
 
 //Global Params
 let vars_in_scope = {
@@ -55,7 +63,7 @@ function add_new_code_cell(c_id, where) {
         <p id="cell-num" class="code_symbol">[${new_id}]</p>
     </div>
     <div id="div-${new_id}" class="col-md-11">
-        <div class="btn-group-horizontal">
+        <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="display: none;">
             <button type="button" id="run_div-${new_id}" class="btn btn-sm btn-success run"><i
                     class="fas fa-play"></i>Run</button>
             <div class="btn-group" role="group" aria-label="Basic example">
@@ -91,6 +99,7 @@ function add_new_code_cell(c_id, where) {
     </div>
 </div>
 `
+
     let divReference = document.getElementById(parent_cell_id);
 
     if (where == "up") {
@@ -107,6 +116,14 @@ function add_new_code_cell(c_id, where) {
         value: ''
     });
     vars_in_scope[`div-${new_id}`] = editor
+
+    $(`#div-${new_id}`)
+        .mouseover(function () {
+            $(`#btn-actions-${new_id}`).show()
+        })
+        .mouseout(function () {
+            $(`#btn-actions-${new_id}`).hide()
+        });
 
 }
 
@@ -128,6 +145,8 @@ function delete_cell(id) {
 
 
 }
+
+
 
 $(document).on("click", "button.run", function () {
     exec_cell(this.id);
