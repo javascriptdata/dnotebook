@@ -147,3 +147,10 @@ $(document).on("click", "button.add-code", function () {
     }
     add_new_code_cell(this.id, where)
 })
+
+$("#download").click(function(){
+    
+    let out= notebook_json(vars_in_scope);
+
+    console.log(out);
+});

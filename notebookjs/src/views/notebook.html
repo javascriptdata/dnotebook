@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+  </link>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/javascript/javascript.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/danfojs@0.1.1/dist/index.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="container">
+  </div>
+
+
+<script src="../public/javascripts/index.js"></script>
+<script src="../public/javascripts/utils.js"></script>
+<script src="../public/javascripts/temp_store.js"></script>
+<script>
+
+    function load_notebook(json){
+
+        
+        for(let key in json){
+            
+            let id = key.split("-")[1]
+
+            let html = html_load(id)
+
+            $(".container").append(html)
+
+            const editor = CodeMirror(document.getElementById(`div-${id}`), {
+                lineNumbers: true,
+                tabSize: 1,
+                mode: 'javascript',
+                theme: 'monokai',
+                value: ''
+            });
+            let input = json[key]["in"]
+            editor.getDoc().setValue(input);
+
+            vars_in_scope[`div-${id}`] = editor
+
+            let out = json[key]["out"]
+
+            $(`#out_div-${id}`).html(out);
+        }
+    }
+
+
+    load_notebook(json);
+
+    function html_load(new_id){
+
+        let html = `
+    <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
+    <div class="col-md-1">
+        <p id="cell-num" class="code_symbol">[${new_id}]</p>
+    </div>
+    <div id="div-${new_id}" class="col-md-11">
+        <div class="btn-group-horizontal">
+            <button type="button" id="run_div-${new_id}" class="btn btn-sm btn-success run"><i
+                    class="fas fa-play"></i>Run</button>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                
+                <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-sm  btn-info add-code">
+                    <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Code
+                </button>
+                <button type="button" id="add_code_up_btn-${new_id}" class="btn btn-sm btn-info add-code">
+                    <i class="fas fa-sort-up"></i> Code
+                </button>
+
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+               
+                <button type="button" id="add_text_down_btn-${new_id}" class="btn btn-sm btn-info add-text">
+                    <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Text
+                </button>
+                <button type="button" id="add_text_up_btn-${new_id}" class="btn btn-sm btn-info add-text">
+                <i class="fas fa-sort-up"></i> Text
+            </button>
+            </div>
+
+            <button type="button" id="del_btn-${new_id}" class="btn btn-sm btn-danger del"><i
+                    class="fas fa-trash-alt"></i>
+                </button>
+        </div>
+
+    </div>
+    <div class="col-md-1"></div>
+    <div id="out_div-${new_id}" class="col-md-10 out-divs">
+
+    </div>
+</div>
+`
+    return html;
+    }
+    
+</script>
+</body>
+
+</html>

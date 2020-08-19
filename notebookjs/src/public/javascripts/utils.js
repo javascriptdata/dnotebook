@@ -142,3 +142,26 @@ function table(df){
   return table;
 
 }
+
+function notebook_json(scope){
+
+    var store = {}
+
+    for(let key in scope){
+
+        let id = key.split("-")[1]
+        
+        let cell_content = scope[key].getValue()
+
+        let cell_output = $(`#out_${key}`).html()
+
+        store[`cell-${id}`] = {
+            "in": cell_content,
+             "out": cell_output
+        }
+    }
+
+    store = JSON.stringify(store);
+
+    return store
+}
