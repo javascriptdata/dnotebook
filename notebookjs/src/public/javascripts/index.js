@@ -8,17 +8,13 @@ const editor = CodeMirror(document.getElementById('div-1'), {
 
 
 var md = new Remarkable()
-// console.log(md.render('# Remarkable rulezz!'));
-
 //Global Params
 let vars_in_scope = {
     "div-1": editor
 }
 
-let md_texts = {} //stores markdown text and corresponding div name
-
-let __code_cell_count = 1
-// let __all_cells_count = 
+var md_texts = {} //stores markdown text and corresponding div name
+var __code_cell_count = 1
 
 
 $("#div-1")
@@ -96,7 +92,7 @@ function add_new_code_cell(c_id, where) {
             </button>
             </div>
 
-            <button type="button" id="del_btn-${new_id}" class="btn btn-sm btn-danger del"><i
+            <button type="button" id="del-btn_${new_id}" class="btn btn-sm btn-danger del"><i
                     class="fas fa-trash-alt"></i>
                 </button>
         </div>
@@ -153,42 +149,41 @@ function add_new_text_cell(c_id, where) {
     let html = `
         <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
             <div class="col-md-1">
-            <p id="cell-num" class="code_symbol">[${new_id}]</p>
-        </div>
-
-        <div id="text-div_${new_id}" class="col-md-11">
-            <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="margin-bottom: 2px;">
-                <button type="button" id="run_div-1" class="btn btn-sm btn-success run"><i class="fas fa-play"></i>
-                    Run</button>
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-sm  btn-info add-code">
-                        <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Code
-                    </button>
-                    <button type="button" id="add_code_up_btn-${new_id}" class="btn btn-sm btn-info add-code">
-                        <i class="fas fa-sort-up"></i> Code
-                    </button>
-                </div>
-
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" id="add_text_down_btn-${new_id}" class="btn btn-sm btn-info add-text">
-                        <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Text
-                    </button>
-                    <button type="button" id="add_text_up_btn-${new_id}" class="btn btn-sm btn-info add-text">
-                        <i class="fas fa-sort-up"></i> Text
-                    </button>
-                </div>
-
-                <button type="button" id="del-text_${new_id}" class="btn btn-sm btn-danger del"><i
-                        class="fas fa-trash-alt"></i>
-                </button>
+                 <p id="cell-num" class="code_symbol">[${new_id}]</p>
             </div>
 
-            <textarea id="text-box_${new_id}" class="text-box"></textarea>
-        </div>
+            <div id="text-div_${new_id}" class="col-md-11">
+                <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="margin-bottom: 2px;">
+                    <button type="button" id="run_div-1" class="btn btn-sm btn-success run"><i class="fas fa-play"></i>
+                        Run</button>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-sm  btn-info add-code">
+                            <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Code
+                        </button>
+                        <button type="button" id="add_code_up_btn-${new_id}" class="btn btn-sm btn-info add-code">
+                            <i class="fas fa-sort-up"></i> Code
+                        </button>
+                    </div>
 
-        <div class="col-md-1"></div>
-        <div id="out-text-div_${new_id}" style="display:block;" class="col-md-11 text-out-box">
-        </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" id="add_text_down_btn-${new_id}" class="btn btn-sm btn-info add-text">
+                            <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Text
+                        </button>
+                        <button type="button" id="add_text_up_btn-${new_id}" class="btn btn-sm btn-info add-text">
+                            <i class="fas fa-sort-up"></i> Text
+                        </button>
+                    </div>
+
+                    <button type="button" id="del-text_${new_id}" class="btn btn-sm btn-danger del"><i
+                            class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+
+                <textarea id="text-box_${new_id}" class="text-box"></textarea>
+            </div>
+
+            <div class="col-md-1"></div>
+            <div id="out-text-div_${new_id}" style="display:block;" class="col-md-11 text-out-box"></div>
         </div>
 
         `
@@ -250,14 +245,10 @@ $(document).on("click", "button.run", function () {
 })
 
 $(document).on("click", "button.del", function () {
-    let id = this.id.split("-")[1]
+    let id = this.id.split("_")[1]
     delete_cell(id)
 })
 
-$(document).on("click", "button.del-text", function () {
-    let id = this.id.split("-")[1]
-    delete_text_cell(id)
-})
 
 $(document).on("click", "button.add-code", function () {
     let where;
