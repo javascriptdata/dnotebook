@@ -1,60 +1,61 @@
-function print_val(val){
 
-    if(Array.isArray(val[0])){
+function print_val(val) {
+
+    if (Array.isArray(val[0])) {
 
         let col_length = val[0].length;
         let row_length = val.length;
 
         let data_string = "[";
-        if(row_length > 10){
+        if (row_length > 10) {
 
-            for(let i=0; i < 10; i++){
+            for (let i = 0; i < 10; i++) {
 
                 let row_val = val[i]
 
-                data_string +="[";
-                if(col_length > 10){
+                data_string += "[";
+                if (col_length > 10) {
 
-                    for(let j=0; j< 10; j++){
+                    for (let j = 0; j < 10; j++) {
                         data_string += `${row_val[j]},`
                     }
 
-                    data_string += `.......${col_length-10} more],`
-                }else{
+                    data_string += `.......${col_length - 10} more],`
+                } else {
 
-                    for(let j=0; j < col_length;j++){
+                    for (let j = 0; j < col_length; j++) {
                         data_string += `${row_val[j]},`
                     }
-                    data_string +="],"
+                    data_string += "],"
                 }
             }
             data_string += `...${row_length - 10} more]`
         }
-        else{
-            for(let i=0; i < row_length; i++){
+        else {
+            for (let i = 0; i < row_length; i++) {
 
                 let row_val = val[i]
 
-                data_string +="[";
-                if(col_length > 10){
+                data_string += "[";
+                if (col_length > 10) {
 
-                    for(let j=0; j< 10; j++){
+                    for (let j = 0; j < 10; j++) {
                         data_string += `${row_val[j]},`
                     }
 
-                    data_string += `.......${col_length-10} more],`
-                }else{
+                    data_string += `.......${col_length - 10} more],`
+                } else {
 
-                    for(let j=0; j < col_length;j++){
+                    for (let j = 0; j < col_length; j++) {
                         data_string += `${row_val[j]},`
                     }
-                    data_string +="],"
+                    data_string += "],"
                 }
             }
-            data_string +="]"
+            data_string += "]"
         }
         return data_string
-    }else{
+    } else {
 
         let row_length = val.length;
 
@@ -62,28 +63,28 @@ function print_val(val){
 
         let count = row_length > 10 ? 10 : row_length
 
-        for(let i=0; i< count; i++){
+        for (let i = 0; i < count; i++) {
 
             data_string += `${val[i]},`
         }
 
         let diff = row_length - count;
-        if( diff > 0){
+        if (diff > 0) {
             data_string += `....${diff} more]`
-        }else{
+        } else {
             data_string += "]";
         }
         return data_string;
-        
+
     }
 }
 
-function viz(name,callback){
+function viz(name, callback) {
 
     let id = `#out_${window.current_cell}`
     $(`${id}`).append(`<div id=${name}></div>`)
 
-    let cb =  callback(name);
+    let cb = callback(name);
     // $("#ploty").remove(`${name}`)
 
     return cb

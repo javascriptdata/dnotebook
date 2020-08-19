@@ -24,6 +24,21 @@ a {
   height: auto;
 }
 
+.mdCell {
+  height: auto;
+}
+
 .out-divs{
   height: auto;
+}
+
+.text-box{
+  width: 100%;
+  padding: 5px;
+}
+.text-out-box{
+  width: 100%;
+  padding: 5px;
+  margin-left: 90px;
+
 }
