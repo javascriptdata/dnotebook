@@ -8,17 +8,6 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     autoCloseBrackets: true
 });
 
-//run first cell on CTRL ENTER Pressed
-$(`#div-1`).keydown(function (e) {
-    if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-        document.getElementById("cell_spinner-1").style.display = "block"
-        document.getElementById("cell_num-1").style.display = "none"
-        exec_cell(`run_div-1`);
-
-    }
-});
-
-
 
 var md = new Remarkable()
 //Global Params
@@ -50,12 +39,11 @@ function exec_cell(c_id) {
         let output = ("global", eval)(vars_in_scope[id].getValue())
         if (Array.isArray(output)) {
             output = print_val(output)
-        } else if (typeof output == 'object' && output !== null) {
+        }
+         else if (typeof output === 'object' && output !== null) {
             output = JSON.stringify(output)
-            if (output == "{}") {
-                output = ""
-            }
-        } else if (console) {
+        }
+         else if (console) {
             //retreive value from the console funcction
             console.oldLog = console.log;
             console.log = function (value) {
@@ -73,8 +61,6 @@ function exec_cell(c_id) {
         }
 
         $(`#out_${id}`).html(output);
-        document.getElementById("cell_spinner-1").style.display = "none"
-        document.getElementById("cell_num-1").style.display = "block"
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -83,8 +69,6 @@ function exec_cell(c_id) {
     } catch (error) {
         $(`#out_${id}`).html(error)
         console.log(error)
-        document.getElementById("cell_spinner-1").style.display = "none"
-        document.getElementById("cell_num-1").style.display = "block"
 
     }
 }
@@ -157,16 +141,13 @@ function add_new_code_cell(c_id, where) {
 
     let editor = CodeMirror(document.getElementById(`div-${new_id}`), {
         lineNumbers: true,
-        tabSize: 4,
+        tabSize: 2,
         mode: 'javascript',
         theme: 'monokai',
-        value: '',
-        extraKeys: { "Ctrl-Space": "autocomplete" },
-        autoCloseBrackets: true
+        value: ''
     });
     vars_in_scope[`div-${new_id}`] = editor
 
-    //show action buttons on hover
     $(`#div-${new_id}`)
         .mouseover(function () {
             $(`#btn-actions-${new_id}`).show()
@@ -174,17 +155,6 @@ function add_new_code_cell(c_id, where) {
         .mouseout(function () {
             $(`#btn-actions-${new_id}`).hide()
         });
-
-
-    //run cell on CTRL-ENTER Pressed
-    $(`#div-${new_id}`).keydown(function (e) {
-        if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-            document.getElementById("cell_spinner-1").style.display = "block"
-            document.getElementById("cell_num-1").style.display = "none"
-            exec_cell(`run_div-${new_id}`);
-
-        }
-    });
 
 }
 
@@ -267,6 +237,7 @@ function add_new_text_cell(c_id, where) {
             document.getElementById(`btn-actions-${new_id}`).style.display = "none"
         });
 
+
 }
 
 function delete_cell(id) {
@@ -289,12 +260,9 @@ $(document).on("click", "button.run", function () {
         let val = document.getElementById(`text-box_${id}`).value
         show_md(id, val)
     } else {
-        document.getElementById("cell_spinner-1").style.display = "block"
-        document.getElementById("cell_num-1").style.display = "none"
         exec_cell(this.id);
     }
 })
-
 
 $(document).on("click", "button.del", function () {
     let id = this.id.split("_")[1]
@@ -337,7 +305,6 @@ function show_md(id, value) {
     $(`#out-text-div_${id}`).html(render_md).show()
     document.getElementById(div_id).style.display = "none"
 }
-
 
 $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]
