@@ -50,22 +50,27 @@ function exec_cell(c_id) {
         let output = ("global", eval)(vars_in_scope[id].getValue())
         if (Array.isArray(output)) {
             output = print_val(output)
-        }
-         else if (typeof output === 'object' && output !== null) {
+        } else if (typeof output === 'object' && output !== null) {
             output = JSON.stringify(output)
-        }
-         else if (console) {
+            if (output == "{}") {
+                output = ""
+            }
+        } else if (console) {
             //retreive value from the console funcction
             console.oldLog = console.log;
             console.log = function (value) {
                 return value;
             };
             output = eval(vars_in_scope[id].getValue());
+
             if (Array.isArray(output)) {
                 output = print_val(output)
             } else {
                 if (typeof output === 'object' && output !== null) {
                     output = JSON.stringify(output)
+                    if (output == "{}") {
+                        output = ""
+                    }
                 }
 
             }
