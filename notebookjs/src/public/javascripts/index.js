@@ -8,10 +8,17 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     autoCloseBrackets: true
 });
 
-//run first cell on double click
-$(`#div-1`).dblclick(function () {
-    exec_cell(`run_div-1`);
+//run first cell on CTRL ENTER Pressed
+$(`#div-1`).keydown(function (e) {
+    if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+        document.getElementById("cell_spinner-1").style.display = "block"
+        document.getElementById("cell_num-1").style.display = "none"
+        exec_cell(`run_div-1`);
+
+    }
 });
+
+
 
 var md = new Remarkable()
 //Global Params
@@ -59,7 +66,12 @@ function exec_cell(c_id) {
             }
         }
 
-        $(`#out_${id}`).html(output);
+        Promise.resolve(output).then((val) => {
+            $(`#out_${id}`).html(val);
+            document.getElementById("cell_spinner-1").style.display = "none"
+            document.getElementById("cell_num-1").style.display = "block"
+        })
+
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -159,9 +171,14 @@ function add_new_code_cell(c_id, where) {
         });
 
 
-    //run cell on double click
-    $(`#div-${new_id}`).dblclick(function () {
-        exec_cell(`run_div-${new_id}`);
+    //run cell on CTRL-ENTER Pressed
+    $(`#div-${new_id}`).keydown(function (e) {
+        if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+            document.getElementById("cell_spinner-1").style.display = "block"
+            document.getElementById("cell_num-1").style.display = "none"
+            exec_cell(`run_div-${new_id}`);
+
+        }
     });
 
 }
@@ -245,7 +262,6 @@ function add_new_text_cell(c_id, where) {
             document.getElementById(`btn-actions-${new_id}`).style.display = "none"
         });
 
-
 }
 
 function delete_cell(id) {
@@ -262,13 +278,13 @@ function delete_cell(id) {
 
 
 $(document).on("click", "button.run", function () {
-    console.log(this.id);
-
     if (this.id.split("_").includes("md")) {
         let id = this.id.split("-")[1]
         let val = document.getElementById(`text-box_${id}`).value
         show_md(id, val)
     } else {
+        document.getElementById("cell_spinner-1").style.display = "block"
+        document.getElementById("cell_num-1").style.display = "none"
         exec_cell(this.id);
     }
 })
@@ -314,6 +330,7 @@ function show_md(id, value) {
     $(`#out-text-div_${id}`).html(render_md).show()
     document.getElementById(div_id).style.display = "none"
 }
+
 
 $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]
