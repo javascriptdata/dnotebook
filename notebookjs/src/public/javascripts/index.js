@@ -65,10 +65,10 @@ function exec_cell(c_id) {
             if (Array.isArray(output)) {
                 output = print_val(output)
             } else {
-                if(typeof output === 'object' && output !== null){
+                if (typeof output === 'object' && output !== null) {
                     output = JSON.stringify(output)
                 }
-                
+
             }
         }
 
@@ -298,7 +298,7 @@ $(document).on("click", "button.run", function () {
 
 $(document).on("click", "button.del", function () {
     let id = this.id.split("_")[1]
-    console.log(id,this.id, __code_cell_count)
+    console.log(id, this.id, __code_cell_count)
     delete_cell(id)
 })
 
@@ -362,7 +362,7 @@ function update_text_box_size() {
 
 
 $("#download").click(function () {
-    let out = notebook_json(vars_in_scope,md_texts);
+    let out = notebook_json(vars_in_scope, md_texts);
 
     var blob = new Blob([out], { "type": "application/json" });
     var url = (window.URL || window.webkitURL).createObjectURL(blob);
@@ -377,14 +377,16 @@ $("#download").click(function () {
     link_pae.remove();
 });
 
-$("#uploadnb").click(function() {
+
+
+$("#import-notebook-file").change(() => {
 
     var files = $("#import-notebook-file")[0].files
     let json_content = null
-    if(files.length > 0){
+    if (files.length > 0) {
         var content = files[0];
         var reader = new FileReader();
-        reader.onload = function(t){
+        reader.onload = function (t) {
             json_content = t.target.result;
             let json = JSON.parse(json_content)
 
@@ -394,7 +396,27 @@ $("#uploadnb").click(function() {
         }
         reader.readAsText(content);
     }
+    // $("#uploadNoteModal").modal('hide');
 })
+
+// $("#uploadnb").click(function () {
+
+//     var files = $("#import-notebook-file")[0].files
+//     let json_content = null
+//     if (files.length > 0) {
+//         var content = files[0];
+//         var reader = new FileReader();
+//         reader.onload = function (t) {
+//             json_content = t.target.result;
+//             let json = JSON.parse(json_content)
+
+//             $(".content").empty()
+
+//             load_notebook(json);
+//         }
+//         reader.readAsText(content);
+//     }
+// })
 
 
 

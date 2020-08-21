@@ -79,16 +79,24 @@ function print_val(val) {
     }
 }
 
-function viz(name, callback) {
-
+function this_div() {
     let id = `#out_${window.current_cell}`
-    $(`${id}`).append(`<div id=${name}></div>`)
-
-    let cb = callback(name);
-    // $("#ploty").remove(`${name}`)
-
-    return cb
+    let rand_div_name = `random_div_#${id}`
+    $(`${id}`).append(`<div id=${rand_div_name}></div>`)
+    return rand_div_name
 }
+
+
+// function viz(name, callback) {
+//     // out_div-1
+//     let id = `#out_div${window.current_cell}`
+//     // $(`${id}`).append(`<div id=${name}></div>`)
+
+//     let cb = callback(name);
+//     // $("#ploty").remove(`${name}`)
+
+//     return cb
+// }
 
 function table(df) {
 
