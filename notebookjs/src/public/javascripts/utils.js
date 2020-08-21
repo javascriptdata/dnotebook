@@ -204,4 +204,129 @@ function LoadPackage(array, callback) {
     })();
 }
 
+function md_load(id){
+
+    let md = `<div class="row" style="margin-top: 10px;" id="cell-${id}"></div>`
+
+    return md;
+}
+
+function html_load(new_id){
+
+    let html = `
+    <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
+    <div class="col-md-1">
+        <p id="cell-num" class="code_symbol">[${new_id}]</p>
+    </div>
+    <div id="div-${new_id}" class="col-md-9">
+        <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="display: none;">
+            <button type="button" id="run_div-${new_id}" class="btn btn-sm btn-success run"><i
+                    class="fas fa-play"></i>Run</button>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                
+                <button type="button" id="add_code_down_btn-${new_id}" class="btn btn-sm  btn-info add-code">
+                    <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Code
+                </button>
+                <button type="button" id="add_code_up_btn-${new_id}" class="btn btn-sm btn-info add-code">
+                    <i class="fas fa-sort-up"></i> Code
+                </button>
+
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+            
+                <button type="button" id="add_text_down_btn-${new_id}" class="btn btn-sm btn-info add-text">
+                    <i class="fas fa-sort-down" style="margin-top: -10px;"></i> Text
+                </button>
+                <button type="button" id="add_text_up_btn-${new_id}" class="btn btn-sm btn-info add-text">
+                <i class="fas fa-sort-up"></i> Text
+            </button>
+            </div>
+
+            <button type="button" id="del_btn-${new_id}" class="btn btn-sm btn-danger del"><i
+                    class="fas fa-trash-alt"></i>
+                </button>
+        </div>
+
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
+    <div id="out_div-${new_id}" class="col-md-9 out-divs">
+
+    </div>
+    <div class="col-md-2"></div>
+    </div>
+    `
+return html;
+}
+
+function load_notebook(json){
+
+        
+    for(let key in json){
+        
+        let id = key.split("-")[1]
+
+        if(Object.prototype.hasOwnProperty.call(json[key], "in")){
+            let html = html_load(id)
+
+            $(".content").append(html)
+
+            const editor = CodeMirror(document.getElementById(`div-${id}`), {
+                lineNumbers: true,
+                tabSize: 1,
+                mode: 'javascript',
+                theme: 'monokai',
+                value: ''
+            });
+            let input = json[key]["in"]
+            editor.getDoc().setValue(input);
+
+            vars_in_scope[`div-${id}`] = editor
+
+            let out = json[key]["out"]
+
+            $(`#out_div-${id}`).html(out);
+
+            $(`#div-${id}`)
+              .mouseover(function () {
+                  $(`#btn-actions-${id}`).show()
+              })
+              .mouseout(function () {
+                  $(`#btn-actions-${id}`).hide()
+              });
+
+        }else{
+
+          let md = md_load(id)
+
+          $(".content").append(md);
+
+          let out = json[key]["out"]
+          $(`#cell-${id}`).html(out)
+
+          let md_out = json[key]["md"]
+          // console.log(md_out)
+          md_texts[`text-div_${Number(id)}`] = md_out;
+
+          vars_in_scope[`div_text-${id}`] = ""
+
+          $(`textarea#text-box_${id}`).addClass("text-box")
+          $(`textarea#text-box_${id}`).val(md_out)
+          // update_text_box_size()
+
+          $(`#text-div_${id}`)
+            .mouseover(function () {
+                document.getElementById(`btn-actions-${id}`).style.display = "block"
+            })
+            .mouseout(function () {
+                document.getElementById(`btn-actions-${id}`).style.display = "none"
+            });
+        }
+
+        __code_cell_count = parseInt(id)
+      
+    }
+}
+
 

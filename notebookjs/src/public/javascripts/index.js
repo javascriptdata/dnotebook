@@ -39,9 +39,11 @@ function exec_cell(c_id) {
         let output = ("global", eval)(vars_in_scope[id].getValue())
         if (Array.isArray(output)) {
             output = print_val(output)
-        } else if (typeof output === 'object' && output !== null) {
+        }
+         else if (typeof output === 'object' && output !== null) {
             output = JSON.stringify(output)
-        } else if (console) {
+        }
+         else if (console) {
             //retreive value from the console funcction
             console.oldLog = console.log;
             console.log = function (value) {
@@ -51,7 +53,10 @@ function exec_cell(c_id) {
             if (Array.isArray(output)) {
                 output = print_val(output)
             } else {
-                output = JSON.stringify(output)
+                if(typeof output === 'object' && output !== null){
+                    output = JSON.stringify(output)
+                }
+                
             }
         }
 
@@ -285,15 +290,15 @@ $(document).on("click", "button.add-text", function () {
     add_new_text_cell(this.id, where)
 })
 
-$(document).on("dblclick", "textarea.text-box", function () {
-    let id = this.id.split("_")[1]
-    show_md(id, this.value)
+// $(document).on("dblclick", "textarea.text-box", function () {
+//     let id = this.id.split("_")[1]
+//     show_md(id, this.value)
 
-})
+// })
 
 function show_md(id, value) {
     div_id = `text-div_${id}`
-    // md_texts[div_id] = value //stores the markdown text for the corresponding div
+    md_texts[div_id] = value //stores the markdown text for the corresponding div
     render_md = md.render(value)
     $(`#out-text-div_${id}`).html(render_md).show()
     document.getElementById(div_id).style.display = "none"
@@ -322,6 +327,36 @@ function update_text_box_size() {
 
 
 $("#download").click(function () {
-    let out = notebook_json(vars_in_scope);
-    console.log(out);
+    let out = notebook_json(vars_in_scope,md_texts);
+
+    var blob = new Blob([out], { "type": "application/json" });
+    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+
+    var link = document.createElement('a');
+    link.download = 'danfo_notebook.json';
+    link.href = url;
+
+    var link_pae = $(link);
+    $("body").append(link_pae);//maybe needed
+    link.click();
+    link_pae.remove();
 });
+
+$("#uploadnb").click(function() {
+
+    var files = $("#import-notebook-file")[0].files
+    let json_content = null
+    if(files.length > 0){
+        var content = files[0];
+        var reader = new FileReader();
+        reader.onload = function(t){
+            json_content = t.target.result;
+            let json = JSON.parse(json_content)
+
+            $(".content").empty()
+
+            load_notebook(json);
+        }
+        reader.readAsText(content);
+    }
+})
