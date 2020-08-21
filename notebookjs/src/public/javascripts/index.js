@@ -8,6 +8,10 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     autoCloseBrackets: true
 });
 
+//run first cell on double click
+$(`#div-1`).dblclick(function () {
+    exec_cell(`run_div-1`);
+});
 
 var md = new Remarkable()
 //Global Params
@@ -139,10 +143,13 @@ function add_new_code_cell(c_id, where) {
         tabSize: 2,
         mode: 'javascript',
         theme: 'monokai',
-        value: ''
+        value: '',
+        extraKeys: { "Ctrl-Space": "autocomplete" },
+        autoCloseBrackets: true
     });
     vars_in_scope[`div-${new_id}`] = editor
 
+    //show action buttons on hover
     $(`#div-${new_id}`)
         .mouseover(function () {
             $(`#btn-actions-${new_id}`).show()
@@ -150,6 +157,12 @@ function add_new_code_cell(c_id, where) {
         .mouseout(function () {
             $(`#btn-actions-${new_id}`).hide()
         });
+
+
+    //run cell on double click
+    $(`#div-${new_id}`).dblclick(function () {
+        exec_cell(`run_div-${new_id}`);
+    });
 
 }
 
@@ -249,6 +262,8 @@ function delete_cell(id) {
 
 
 $(document).on("click", "button.run", function () {
+    console.log(this.id);
+
     if (this.id.split("_").includes("md")) {
         let id = this.id.split("-")[1]
         let val = document.getElementById(`text-box_${id}`).value
@@ -257,6 +272,7 @@ $(document).on("click", "button.run", function () {
         exec_cell(this.id);
     }
 })
+
 
 $(document).on("click", "button.del", function () {
     let id = this.id.split("_")[1]
