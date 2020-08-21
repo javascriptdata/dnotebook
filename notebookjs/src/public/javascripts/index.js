@@ -322,8 +322,6 @@ function update_text_box_size() {
 
 
 $("#download").click(function () {
-
     let out = notebook_json(vars_in_scope);
-
     console.log(out);
 });
