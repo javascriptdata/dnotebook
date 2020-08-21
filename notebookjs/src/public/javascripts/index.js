@@ -164,7 +164,9 @@ function add_new_code_cell(c_id, where) {
         tabSize: 2,
         mode: 'javascript',
         theme: 'monokai',
-        value: ''
+        value: '',
+        extraKeys: { "Ctrl-Space": "autocomplete" },
+        autoCloseBrackets: true
     });
     vars_in_scope[`div-${new_id}`] = editor
 
