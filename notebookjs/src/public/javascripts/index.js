@@ -220,7 +220,7 @@ function add_new_text_cell(c_id, where) {
         divReference.insertAdjacentHTML("afterend", html);
     }
 
-    vars_in_scope[`div-${new_id}`] = ""
+    vars_in_scope[`div_text-${new_id}`] = ""
 
     update_text_box_size()
 
