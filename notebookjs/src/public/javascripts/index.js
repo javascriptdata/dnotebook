@@ -1,11 +1,12 @@
 const editor = CodeMirror(document.getElementById('div-1'), {
     lineNumbers: true,
-    tabSize: 1,
+    tabSize: 4,
     mode: 'javascript',
     theme: 'monokai',
-    value: ''
+    value: '',
+    extraKeys: { "Ctrl-Space": "autocomplete" },
+    autoCloseBrackets: true
 });
-
 
 
 var md = new Remarkable()
@@ -28,17 +29,33 @@ $("#div-1")
 
 
 
+
 function exec_cell(c_id) {
     let id = c_id.split("_")[1]
     let count = c_id.split("-")[1]
     window.current_cell = id;
 
     try {
-        let global_scope = ("global", eval)(vars_in_scope[id].getValue())
-        if (Array.isArray(global_scope)) {
-            global_scope = print_val(global_scope)
+        let output = ("global", eval)(vars_in_scope[id].getValue())
+        if (Array.isArray(output)) {
+            output = print_val(output)
+        } else if (typeof output === 'object' && output !== null) {
+            output = JSON.stringify(output)
+        } else if (console) {
+            //retreive value from the console funcction
+            console.oldLog = console.log;
+            console.log = function (value) {
+                return value;
+            };
+            output = eval(vars_in_scope[id].getValue());
+            if (Array.isArray(output)) {
+                output = print_val(output)
+            } else {
+                output = JSON.stringify(output)
+            }
         }
-        $(`#out_${id}`).html(global_scope);
+
+        $(`#out_${id}`).html(output);
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -46,6 +63,8 @@ function exec_cell(c_id) {
 
     } catch (error) {
         $(`#out_${id}`).html(error)
+        console.log(error)
+
     }
 }
 
@@ -228,21 +247,6 @@ function delete_cell(id) {
 
 }
 
-function delete_text_cell(id) {
-    // __all_cell_count
-    md_textarea_id = `text-div_${Number(id)}`
-    md_out_id = `out-text-div_${Number(id)}`
-
-    var md_div_ele = document.getElementById(md_textarea_id);
-    var out_div_ele = document.getElementById(md_out_id);
-
-    md_div_ele.parentNode.removeChild(md_div_ele);
-    out_div_ele.parentNode.removeChild(out_div_ele);
-
-    delete md_texts[md_textarea_id]
-
-}
-
 
 $(document).on("click", "button.run", function () {
     if (this.id.split("_").includes("md")) {
@@ -289,7 +293,7 @@ $(document).on("dblclick", "textarea.text-box", function () {
 
 function show_md(id, value) {
     div_id = `text-div_${id}`
-    md_texts[div_id] = value //stores the markdown text for the corresponding div
+    // md_texts[div_id] = value //stores the markdown text for the corresponding div
     render_md = md.render(value)
     $(`#out-text-div_${id}`).html(render_md).show()
     document.getElementById(div_id).style.display = "none"
@@ -299,10 +303,9 @@ $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]
     md_id = `text-div_${id}`
     out_id = `out-text-div_${id}`
-    md_txt = md_texts[md_id]
+    // md_txt = md_texts[md_id]
 
     document.getElementById(md_id).style.display = "block"
-    document.getElementById(md_id).value = md_txt
     document.getElementById(out_id).style.display = "none"
 
 })
@@ -318,9 +321,9 @@ function update_text_box_size() {
 }
 
 
-$("#download").click(function(){
-    
-    let out= notebook_json(vars_in_scope);
+$("#download").click(function () {
+
+    let out = notebook_json(vars_in_scope);
 
     console.log(out);
 });
