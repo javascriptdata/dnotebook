@@ -324,11 +324,11 @@ $(document).on("click", "button.add-text", function () {
     add_new_text_cell(this.id, where)
 })
 
-// $(document).on("dblclick", "textarea.text-box", function () {
-//     let id = this.id.split("_")[1]
-//     show_md(id, this.value)
+$(document).on("dblclick", "textarea.text-box", function () {
+    let id = this.id.split("_")[1]
+    show_md(id, this.value)
 
-// })
+})
 
 function show_md(id, value) {
     div_id = `text-div_${id}`
@@ -395,3 +395,17 @@ $("#uploadnb").click(function() {
         reader.readAsText(content);
     }
 })
+
+
+
+async function load_data(path) {
+    document.getElementById("cell-running").style.display = "block"
+    let df = await dfd.read_csv(path)
+    document.getElementById("cell-running").style.display = "none"
+    return df
+
+}
+
+
+
+
