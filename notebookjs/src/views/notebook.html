@@ -25,46 +25,58 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
     integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='../public/stylesheets/style.css' />
+  <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
+  <style>
+    table.df-table {
+      white-space: pre;
+    }
 
+    table.df-table th,
+    td {
+      padding: 2px 5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    table.df-table .float32,
+    .int32 {
+      text-align: right;
+    }
+  </style>
 
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#"><img style="width: 40px; width: 40px; margin-left: 5px; border-radius: 10px;"
+        src="../public/images/danfo.svg" /> notebooks</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
+    <div style="margin-right: 200px;" class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown active">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            Dropdown
+            File
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" id="download" href="#">Download Notebook</a>
+            <a class="dropdown-item" id="upload" href="#">Upload Notebook</a>
+            <a class="dropdown-item" id="add-data" href="#">Add Data</a>
+
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="nav-link" href="#">Getting Started</a>
+            <a class="dropdown-item" id="download" href="https://github.com/opensource9ja/notebookjs">Github</a>
+            <a class="dropdown-item" id="upload" href="#">Danfo.js</a>
+            <a class="dropdown-item" id="add-data" href="#">About Dnotebooks</a>
           </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
     </div>
   </nav>
-
 
   <div class="container">
   </div>
@@ -72,7 +84,7 @@
 
 <script src="../public/javascripts/index.js"></script>
 <script src="../public/javascripts/utils.js"></script>
-<script src="../public/javascripts/temp_store.js"></script>
+<script src="../public/javascripts/temp2_store.js"></script>
 <script>
 
     function load_notebook(json){
@@ -82,25 +94,62 @@
             
             let id = key.split("-")[1]
 
-            let html = html_load(id)
+            if(Object.prototype.hasOwnProperty.call(json[key], "in")){
+                let html = html_load(id)
 
-            $(".container").append(html)
+                $(".container").append(html)
 
-            const editor = CodeMirror(document.getElementById(`div-${id}`), {
-                lineNumbers: true,
-                tabSize: 1,
-                mode: 'javascript',
-                theme: 'monokai',
-                value: ''
-            });
-            let input = json[key]["in"]
-            editor.getDoc().setValue(input);
+                const editor = CodeMirror(document.getElementById(`div-${id}`), {
+                    lineNumbers: true,
+                    tabSize: 1,
+                    mode: 'javascript',
+                    theme: 'monokai',
+                    value: ''
+                });
+                let input = json[key]["in"]
+                editor.getDoc().setValue(input);
 
-            vars_in_scope[`div-${id}`] = editor
+                vars_in_scope[`div-${id}`] = editor
 
-            let out = json[key]["out"]
+                let out = json[key]["out"]
 
-            $(`#out_div-${id}`).html(out);
+                $(`#out_div-${id}`).html(out);
+
+                $(`#div-${id}`)
+                  .mouseover(function () {
+                      $(`#btn-actions-${id}`).show()
+                  })
+                  .mouseout(function () {
+                      $(`#btn-actions-${id}`).hide()
+                  });
+
+            }else{
+
+              let md = md_load(id)
+
+              $(".container").append(md);
+
+              let out = json[key]["out"]
+              $(`#cell-${id}`).html(out)
+
+              let md_out = json[key]["md"]
+              // console.log(md_out)
+              md_texts[`text-div_${Number(id)}`] = md_out;
+
+              vars_in_scope[`div_text-${id}`] = ""
+              update_text_box_size()
+
+              $(`#text-div_${id}`)
+                .mouseover(function () {
+                    document.getElementById(`btn-actions-${id}`).style.display = "block"
+                })
+                .mouseout(function () {
+                    document.getElementById(`btn-actions-${id}`).style.display = "none"
+                });
+            }
+
+            __code_cell_count = parseInt(id)
+          
         }
     }
 
@@ -110,12 +159,12 @@
     function html_load(new_id){
 
         let html = `
-    <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
+        <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
     <div class="col-md-1">
         <p id="cell-num" class="code_symbol">[${new_id}]</p>
     </div>
-    <div id="div-${new_id}" class="col-md-11">
-        <div class="btn-group-horizontal">
+    <div id="div-${new_id}" class="col-md-9">
+        <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="display: none;">
             <button type="button" id="run_div-${new_id}" class="btn btn-sm btn-success run"><i
                     class="fas fa-play"></i>Run</button>
             <div class="btn-group" role="group" aria-label="Basic example">
@@ -145,14 +194,23 @@
         </div>
 
     </div>
+    <div class="col-md-2"></div>
     <div class="col-md-1"></div>
-    <div id="out_div-${new_id}" class="col-md-10 out-divs">
+    <div id="out_div-${new_id}" class="col-md-9 out-divs">
 
     </div>
+    <div class="col-md-2"></div>
 </div>
 `
     return html;
     }
+
+  function md_load(id){
+
+    let md = `<div class="row" style="margin-top: 10px;" id="cell-${id}"></div>`
+
+    return md;
+  }
     
 </script>
 </body>

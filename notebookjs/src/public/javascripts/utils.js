@@ -144,22 +144,37 @@ function table(df){
 
 }
 
-function notebook_json(scope){
+function notebook_json(scope,md_scope){
 
     var store = {}
 
     for(let key in scope){
 
-        let id = key.split("-")[1]
+        let key_split = key.split("-")
+        let id = key_split[1]
         
-        let cell_content = scope[key].getValue()
+        let type = key_split[0].split("_")[1]
 
-        let cell_output = $(`#out_${key}`).html()
+        if(type == "text"){
 
-        store[`cell-${id}`] = {
-            "in": cell_content,
-             "out": cell_output
+            let md_out = md_scope[`text-div_${Number(id)}`]
+            let text_output = $(`#cell-${id}`).html()
+            store[`cell-${id}`] = {
+                "out": text_output,
+                "md" : md_out
+            }
         }
+        else{
+            let cell_content = scope[key].getValue()
+
+            let cell_output = $(`#out_${key}`).html()
+
+            store[`cell-${id}`] = {
+                "in": cell_content,
+                "out": cell_output
+            }
+        }
+        
     }
 
     store = JSON.stringify(store);

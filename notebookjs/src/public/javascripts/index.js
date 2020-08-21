@@ -202,7 +202,7 @@ function add_new_text_cell(c_id, where) {
         divReference.insertAdjacentHTML("afterend", html);
     }
 
-    vars_in_scope[`div-${new_id}`] = ""
+    vars_in_scope[`div_text-${new_id}`] = ""
 
     update_text_box_size()
 
@@ -260,7 +260,7 @@ $(document).on("click", "button.del", function () {
     console.log(this.id);
     let id = this.id.split("-")[1]
     console.log(id);
-    // delete_cell(id)
+    delete_cell(id)
 })
 
 
@@ -303,11 +303,14 @@ $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]
     md_id = `text-div_${id}`
     out_id = `out-text-div_${id}`
+    // console.log(md_texts);
     md_txt = md_texts[md_id]
-
+    console.log(md_id, md_txt);
+    // console.log($(`#${out_id}`).html())
     document.getElementById(md_id).style.display = "block"
-    document.getElementById(md_id).value = md_txt
-    document.getElementById(out_id).style.display = "none"
+    // // console.log($(`#${md_id} .text-out-box`).val());
+    document.getElementById(md_id).value = "nnnnnnnn"
+    // document.getElementById(out_id).style.display = "none"
 
 })
 
@@ -324,7 +327,7 @@ function update_text_box_size() {
 
 $("#download").click(function(){
     
-    let out= notebook_json(vars_in_scope);
+    let out= notebook_json(vars_in_scope,md_texts);
 
     console.log(out);
 });
