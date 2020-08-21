@@ -50,8 +50,11 @@ function exec_cell(c_id) {
         let output = ("global", eval)(vars_in_scope[id].getValue())
         if (Array.isArray(output)) {
             output = print_val(output)
-        } else if (typeof output === 'object' && output !== null) {
+        } else if (typeof output == 'object' && output !== null) {
             output = JSON.stringify(output)
+            if (output == "{}") {
+                output = ""
+            }
         } else if (console) {
             //retreive value from the console funcction
             console.oldLog = console.log;
@@ -66,12 +69,9 @@ function exec_cell(c_id) {
             }
         }
 
-        Promise.resolve(output).then((val) => {
-            $(`#out_${id}`).html(val);
-            document.getElementById("cell_spinner-1").style.display = "none"
-            document.getElementById("cell_num-1").style.display = "block"
-        })
-
+        $(`#out_${id}`).html(output);
+        document.getElementById("cell_spinner-1").style.display = "none"
+        document.getElementById("cell_num-1").style.display = "block"
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -80,6 +80,8 @@ function exec_cell(c_id) {
     } catch (error) {
         $(`#out_${id}`).html(error)
         console.log(error)
+        document.getElementById("cell_spinner-1").style.display = "none"
+        document.getElementById("cell_num-1").style.display = "block"
 
     }
 }
@@ -152,7 +154,7 @@ function add_new_code_cell(c_id, where) {
 
     let editor = CodeMirror(document.getElementById(`div-${new_id}`), {
         lineNumbers: true,
-        tabSize: 2,
+        tabSize: 4,
         mode: 'javascript',
         theme: 'monokai',
         value: '',
