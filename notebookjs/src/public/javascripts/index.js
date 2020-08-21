@@ -8,6 +8,17 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     autoCloseBrackets: true
 });
 
+//run first cell on CTRL ENTER Pressed
+$(`#div-1`).keydown(function (e) {
+    if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+        // document.getElementById("cell_spinner-1").style.display = "block"
+        // document.getElementById("cell_num-1").style.display = "none"
+        exec_cell(`run_div-1`);
+
+    }
+});
+
+
 
 var md = new Remarkable()
 //Global Params
@@ -61,6 +72,8 @@ function exec_cell(c_id) {
         }
 
         $(`#out_${id}`).html(output);
+        // document.getElementById("cell_spinner-1").style.display = "none"
+        // document.getElementById("cell_num-1").style.display = "block"
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -69,6 +82,8 @@ function exec_cell(c_id) {
     } catch (error) {
         $(`#out_${id}`).html(error)
         console.log(error)
+        // document.getElementById("cell_spinner-1").style.display = "none"
+        // document.getElementById("cell_num-1").style.display = "block"
 
     }
 }
@@ -155,6 +170,17 @@ function add_new_code_cell(c_id, where) {
         .mouseout(function () {
             $(`#btn-actions-${new_id}`).hide()
         });
+
+
+    //run cell on CTRL-ENTER Pressed
+    $(`#div-${new_id}`).keydown(function (e) {
+        if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+            // document.getElementById("cell_spinner-1").style.display = "block"
+            // document.getElementById("cell_num-1").style.display = "none"
+            exec_cell(`run_div-${new_id}`);
+
+        }
+    });
 
 }
 
@@ -260,6 +286,8 @@ $(document).on("click", "button.run", function () {
         let val = document.getElementById(`text-box_${id}`).value
         show_md(id, val)
     } else {
+        // document.getElementById("cell_spinner-1").style.display = "block"
+        // document.getElementById("cell_num-1").style.display = "none"
         exec_cell(this.id);
     }
 })
@@ -292,11 +320,11 @@ $(document).on("click", "button.add-text", function () {
     add_new_text_cell(this.id, where)
 })
 
-// $(document).on("dblclick", "textarea.text-box", function () {
-//     let id = this.id.split("_")[1]
-//     show_md(id, this.value)
+$(document).on("dblclick", "textarea.text-box", function () {
+    let id = this.id.split("_")[1]
+    show_md(id, this.value)
 
-// })
+})
 
 function show_md(id, value) {
     div_id = `text-div_${id}`
@@ -362,3 +390,17 @@ $("#uploadnb").click(function() {
         reader.readAsText(content);
     }
 })
+
+
+
+async function load_data(path) {
+    document.getElementById("cell-running").style.display = "block"
+    let df = await dfd.read_csv(path)
+    document.getElementById("cell-running").style.display = "none"
+    return df
+
+}
+
+
+
+

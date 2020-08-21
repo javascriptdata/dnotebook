@@ -45,3 +45,16 @@ a {
 
 }
 
+
+.inputfileholder {
+  overflow: hidden;
+  max-width: 200px;
+  height: 21px;
+  position: relative
+}
+
+.inputfileholder .inputfile {
+  position: absolute;
+  left: -90px;
+  outline: none;
+}

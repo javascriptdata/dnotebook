@@ -144,7 +144,7 @@ function table(df) {
 
 }
 
-function notebook_json(scope,md_scope){
+function notebook_json(scope, md_scope) {
 
     var store = {}
 
@@ -152,19 +152,19 @@ function notebook_json(scope,md_scope){
 
         let key_split = key.split("-")
         let id = key_split[1]
-        
+
         let type = key_split[0].split("_")[1]
 
-        if(type == "text"){
+        if (type == "text") {
 
             let md_out = md_scope[`text-div_${Number(id)}`]
             let text_output = $(`#cell-${id}`).html()
             store[`cell-${id}`] = {
                 "out": text_output,
-                "md" : md_out
+                "md": md_out
             }
         }
-        else{
+        else {
             let cell_content = scope[key].getValue()
 
             let cell_output = $(`#out_${key}`).html()
@@ -174,7 +174,7 @@ function notebook_json(scope,md_scope){
                 "out": cell_output
             }
         }
-        
+
     }
 
     store = JSON.stringify(store);
@@ -204,14 +204,14 @@ function LoadPackage(array, callback) {
     })();
 }
 
-function md_load(id){
+function md_load(id) {
 
     let md = `<div class="row" style="margin-top: 10px;" id="cell-${id}"></div>`
 
     return md;
 }
 
-function html_load(new_id){
+function html_load(new_id) {
 
     let html = `
     <div class="row" style="margin-top: 10px;" id="cell-${new_id}">
@@ -257,17 +257,17 @@ function html_load(new_id){
     <div class="col-md-2"></div>
     </div>
     `
-return html;
+    return html;
 }
 
-function load_notebook(json){
+function load_notebook(json) {
 
-        
-    for(let key in json){
-        
+
+    for (let key in json) {
+
         let id = key.split("-")[1]
 
-        if(Object.prototype.hasOwnProperty.call(json[key], "in")){
+        if (Object.prototype.hasOwnProperty.call(json[key], "in")) {
             let html = html_load(id)
 
             $(".content").append(html)
@@ -289,44 +289,52 @@ function load_notebook(json){
             $(`#out_div-${id}`).html(out);
 
             $(`#div-${id}`)
-              .mouseover(function () {
-                  $(`#btn-actions-${id}`).show()
-              })
-              .mouseout(function () {
-                  $(`#btn-actions-${id}`).hide()
-              });
+                .mouseover(function () {
+                    $(`#btn-actions-${id}`).show()
+                })
+                .mouseout(function () {
+                    $(`#btn-actions-${id}`).hide()
+                });
 
-        }else{
-
-          let md = md_load(id)
-
-          $(".content").append(md);
-
-          let out = json[key]["out"]
-          $(`#cell-${id}`).html(out)
-
-          let md_out = json[key]["md"]
-          // console.log(md_out)
-          md_texts[`text-div_${Number(id)}`] = md_out;
-
-          vars_in_scope[`div_text-${id}`] = ""
-
-          $(`textarea#text-box_${id}`).addClass("text-box")
-          $(`textarea#text-box_${id}`).val(md_out)
-          // update_text_box_size()
-
-          $(`#text-div_${id}`)
-            .mouseover(function () {
-                document.getElementById(`btn-actions-${id}`).style.display = "block"
-            })
-            .mouseout(function () {
-                document.getElementById(`btn-actions-${id}`).style.display = "none"
+            $(`#div-${id}`).keydown(function (e) {
+                if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+                    // document.getElementById("cell_spinner-1").style.display = "block"
+                    // document.getElementById("cell_num-1").style.display = "none"
+                    exec_cell(`run_div-${id}`);
+        
+                }
             });
+
+        } else {
+
+            let md = md_load(id)
+
+            $(".content").append(md);
+
+            let out = json[key]["out"]
+            $(`#cell-${id}`).html(out)
+
+            let md_out = json[key]["md"]
+            // console.log(md_out)
+            md_texts[`text-div_${Number(id)}`] = md_out;
+
+            vars_in_scope[`div_text-${id}`] = ""
+
+            $(`textarea#text-box_${id}`).addClass("text-box")
+            $(`textarea#text-box_${id}`).val(md_out)
+            // update_text_box_size()
+
+            $(`#text-div_${id}`)
+                .mouseover(function () {
+                    document.getElementById(`btn-actions-${id}`).style.display = "block"
+                })
+                .mouseout(function () {
+                    document.getElementById(`btn-actions-${id}`).style.display = "none"
+                });
         }
 
         __code_cell_count = parseInt(id)
-      
+
     }
 }
-
 

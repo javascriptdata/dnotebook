@@ -74,13 +74,10 @@
             aria-haspopup="true" aria-expanded="false">
             Options
           </a>
-          Import: <input type="file"
-          id="import-notebook-file" name="import-notebook-file" style="display: inline;">
-          <button type="button" class="btn btn-lg btn-primary" id="uploadnb">Import</button>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" id="download" href="#">Download Notebook</a>
-            <a class="dropdown-item" id="upload" href="#">Upload Notebook</a>
-            <a class="dropdown-item" id="add-data" href="#">Add Data</a>
+            <a class="dropdown-item" data-toggle="modal" data-target="#uploadNoteModal" href="#">Upload Notebook</a>
+            {{!-- <a class="dropdown-item" id="add-data" href="#">Add Data</a> --}}
 
             <div class="dropdown-divider"></div>
             <a class="nav-link" href="#">Getting Started</a>
@@ -89,9 +86,12 @@
             <a class="dropdown-item" id="add-data" href="#">About Dnotebooks</a>
           </div>
         </li>
-        {{!-- <li class="nav-item">
-          <a class="nav-link" href="#">Getting Started</a>
-        </li> --}}
+
+        <li class="nav-item">
+          <div id="cell-running" class="spinner-border text-info code_symbol" style="display: none;" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </li>
         {{!-- <li class="nav-item">
           <a class="nav-link" href="https://github.com/opensource9ja/notebookjs">Github</a>
         </li> --}}
@@ -117,6 +117,37 @@
       </ul>
     </div>
   </nav>
+
+
+
+
+  {{!-- Notebook upload --}}
+  <div class="modal" id="uploadNoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Upload a Notebook</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          {{!-- Import: <input type="file" id="import-notebook-file" name="import-notebook-file" style="display: inline;"> --}}
+          <form>
+            <div class="form-group">
+              <label for="exampleFormControlFile1">Select a Notebook File</label>
+              <input type="file" class="form-control-file" id="import-notebook-file" name="import-notebook-file">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="uploadnb">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   {{{body}}}
 
