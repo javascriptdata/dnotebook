@@ -11,8 +11,8 @@ const editor = CodeMirror(document.getElementById('div-1'), {
 //run first cell on CTRL ENTER Pressed
 $(`#div-1`).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-        document.getElementById("cell_spinner-1").style.display = "block"
-        document.getElementById("cell_num-1").style.display = "none"
+        // document.getElementById("cell_spinner-1").style.display = "block"
+        // document.getElementById("cell_num-1").style.display = "none"
         exec_cell(`run_div-1`);
 
     }
@@ -73,8 +73,8 @@ function exec_cell(c_id) {
         }
 
         $(`#out_${id}`).html(output);
-        document.getElementById("cell_spinner-1").style.display = "none"
-        document.getElementById("cell_num-1").style.display = "block"
+        // document.getElementById("cell_spinner-1").style.display = "none"
+        // document.getElementById("cell_num-1").style.display = "block"
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -83,8 +83,8 @@ function exec_cell(c_id) {
     } catch (error) {
         $(`#out_${id}`).html(error)
         console.log(error)
-        document.getElementById("cell_spinner-1").style.display = "none"
-        document.getElementById("cell_num-1").style.display = "block"
+        // document.getElementById("cell_spinner-1").style.display = "none"
+        // document.getElementById("cell_num-1").style.display = "block"
 
     }
 }
@@ -179,8 +179,8 @@ function add_new_code_cell(c_id, where) {
     //run cell on CTRL-ENTER Pressed
     $(`#div-${new_id}`).keydown(function (e) {
         if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-            document.getElementById("cell_spinner-1").style.display = "block"
-            document.getElementById("cell_num-1").style.display = "none"
+            // document.getElementById("cell_spinner-1").style.display = "block"
+            // document.getElementById("cell_num-1").style.display = "none"
             exec_cell(`run_div-${new_id}`);
 
         }
@@ -289,8 +289,8 @@ $(document).on("click", "button.run", function () {
         let val = document.getElementById(`text-box_${id}`).value
         show_md(id, val)
     } else {
-        document.getElementById("cell_spinner-1").style.display = "block"
-        document.getElementById("cell_num-1").style.display = "none"
+        // document.getElementById("cell_spinner-1").style.display = "block"
+        // document.getElementById("cell_num-1").style.display = "none"
         exec_cell(this.id);
     }
 })
