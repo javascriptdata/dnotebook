@@ -92,8 +92,7 @@ function add_new_code_cell(c_id, where) {
                 <i class="fas fa-sort-up"></i> Text
             </button>
             </div>
-
-            <button type="button" id="del_btn-${new_id}" class="btn btn-sm btn-danger del"><i
+            <button type="button" id="del-btn_${new_id}" class="btn btn-sm btn-danger del"><i
                     class="fas fa-trash-alt"></i>
                 </button>
         </div>
@@ -247,7 +246,6 @@ function delete_text_cell(id) {
 
 $(document).on("click", "button.run", function () {
     if (this.id.split("_").includes("md")) {
-        console.log("md");
         let id = this.id.split("-")[1]
         let val = document.getElementById(`text-box_${id}`).value
         show_md(id, val)
@@ -257,10 +255,8 @@ $(document).on("click", "button.run", function () {
 })
 
 $(document).on("click", "button.del", function () {
-    console.log(this.id);
-    let id = this.id.split("-")[1]
-    console.log(id);
-    // delete_cell(id)
+    let id = this.id.split("_")[1]
+    delete_cell(id)
 })
 
 

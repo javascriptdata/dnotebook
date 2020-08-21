@@ -90,39 +90,39 @@ function viz(name, callback) {
     return cb
 }
 
-function table(df){
+function table(df) {
 
-    const {col_types, series, columns, index, values} = df;
+    const { col_types, series, columns, index, values } = df;
 
-    
+
     let head = ""
-    if(series){
+    if (series) {
         head += `<th class="${col_types[0]}">${columns}</th>`
-    }else{
+    } else {
 
-        columns.forEach((name,i)=>{
-            head +=`<th class="${col_types[i]}">${name}</th>`
+        columns.forEach((name, i) => {
+            head += `<th class="${col_types[i]}">${name}</th>`
         });
     }
 
     let body = ""
 
-    values.forEach((row,i)=>{
+    values.forEach((row, i) => {
 
         let b_String = `<tr><th>${index[i]}</th>`
 
-        if(series){
+        if (series) {
             b_String += `<td class="${col_types[0]}">${row}</td>`
-        }else{
+        } else {
 
-            row.forEach((v,j)=>{
-                b_String +=`<td class="${col_types[j]}">${v}</td>`
+            row.forEach((v, j) => {
+                b_String += `<td class="${col_types[j]}">${v}</td>`
             });
         }
 
-        b_String +="</tr>"
+        b_String += "</tr>"
 
-        body +=b_String;
+        body += b_String;
     });
 
     const table = `
@@ -140,25 +140,25 @@ function table(df){
     </div>
   `;
 
-  return table;
+    return table;
 
 }
 
-function notebook_json(scope){
+function notebook_json(scope) {
 
     var store = {}
 
-    for(let key in scope){
+    for (let key in scope) {
 
         let id = key.split("-")[1]
-        
+
         let cell_content = scope[key].getValue()
 
         let cell_output = $(`#out_${key}`).html()
 
         store[`cell-${id}`] = {
             "in": cell_content,
-             "out": cell_output
+            "out": cell_output
         }
     }
 
@@ -166,3 +166,26 @@ function notebook_json(scope){
 
     return store
 }
+
+
+//load package scripts
+function LoadPackage(array, callback) {
+    let loader = function (src, handler) {
+        let script = document.createElement("script");
+        script.src = src;
+        script.onload = script.onreadystatechange = function () {
+            script.onreadystatechange = script.onload = null;
+            handler();
+        }
+        let head = document.getElementsByTagName("head")[0];
+        (head || document.body).appendChild(script);
+    };
+    (function run() {
+        if (array.length != 0) {
+            loader(array.shift(), run);
+        } else {
+            callback && callback();
+        }
+    })();
+}
+
