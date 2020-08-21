@@ -50,12 +50,11 @@ function exec_cell(c_id) {
         let output = ("global", eval)(vars_in_scope[id].getValue())
         if (Array.isArray(output)) {
             output = print_val(output)
-        } else if (typeof output == 'object' && output !== null) {
+        }
+         else if (typeof output === 'object' && output !== null) {
             output = JSON.stringify(output)
-            if (output == "{}") {
-                output = ""
-            }
-        } else if (console) {
+        }
+         else if (console) {
             //retreive value from the console funcction
             console.oldLog = console.log;
             console.log = function (value) {
@@ -157,16 +156,13 @@ function add_new_code_cell(c_id, where) {
 
     let editor = CodeMirror(document.getElementById(`div-${new_id}`), {
         lineNumbers: true,
-        tabSize: 4,
+        tabSize: 2,
         mode: 'javascript',
         theme: 'monokai',
-        value: '',
-        extraKeys: { "Ctrl-Space": "autocomplete" },
-        autoCloseBrackets: true
+        value: ''
     });
     vars_in_scope[`div-${new_id}`] = editor
 
-    //show action buttons on hover
     $(`#div-${new_id}`)
         .mouseover(function () {
             $(`#btn-actions-${new_id}`).show()
@@ -267,6 +263,7 @@ function add_new_text_cell(c_id, where) {
             document.getElementById(`btn-actions-${new_id}`).style.display = "none"
         });
 
+
 }
 
 function delete_cell(id) {
@@ -294,7 +291,6 @@ $(document).on("click", "button.run", function () {
         exec_cell(this.id);
     }
 })
-
 
 $(document).on("click", "button.del", function () {
     let id = this.id.split("_")[1]
@@ -337,7 +333,6 @@ function show_md(id, value) {
     $(`#out-text-div_${id}`).html(render_md).show()
     document.getElementById(div_id).style.display = "none"
 }
-
 
 $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]

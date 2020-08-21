@@ -304,6 +304,15 @@ function load_notebook(json) {
                     $(`#btn-actions-${id}`).hide()
                 });
 
+            $(`#div-${id}`).keydown(function (e) {
+                if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+                    // document.getElementById("cell_spinner-1").style.display = "block"
+                    // document.getElementById("cell_num-1").style.display = "none"
+                    exec_cell(`run_div-${id}`);
+        
+                }
+            });
+
         } else {
 
             let md = md_load(id)
