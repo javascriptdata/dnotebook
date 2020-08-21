@@ -246,6 +246,7 @@ function delete_cell(id) {
     } else {
         row_id = `cell-${Number(id)}`
         var div_ele = document.getElementById(row_id);
+        console.log(row_id, $(`#${row_id}`).parent().id)
         div_ele.parentNode.removeChild(div_ele);
         __code_cell_count -= 1
     }
@@ -265,6 +266,7 @@ $(document).on("click", "button.run", function () {
 
 $(document).on("click", "button.del", function () {
     let id = this.id.split("_")[1]
+    console.log(id,this.id, __code_cell_count)
     delete_cell(id)
 })
 

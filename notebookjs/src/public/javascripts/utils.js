@@ -243,7 +243,7 @@ function html_load(new_id){
             </button>
             </div>
 
-            <button type="button" id="del_btn-${new_id}" class="btn btn-sm btn-danger del"><i
+            <button type="button" id="del-btn_${new_id}" class="btn btn-sm btn-danger del"><i
                     class="fas fa-trash-alt"></i>
                 </button>
         </div>
