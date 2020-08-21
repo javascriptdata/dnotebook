@@ -137,7 +137,10 @@
               md_texts[`text-div_${Number(id)}`] = md_out;
 
               vars_in_scope[`div_text-${id}`] = ""
-              update_text_box_size()
+
+              $(`textarea#text-box_${id}`).addClass("text-box")
+              $(`textarea#text-box_${id}`).val(md_out)
+              // update_text_box_size()
 
               $(`#text-div_${id}`)
                 .mouseover(function () {
