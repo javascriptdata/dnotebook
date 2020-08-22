@@ -26,6 +26,7 @@ let vars_in_scope = {
     "div-1": editor
 }
 
+let cells_order = ["div-1"] // store the cells order
 var md_texts = {} //stores markdown text and corresponding div name
 var __code_cell_count = 1
 
@@ -98,7 +99,6 @@ function add_new_code_cell(c_id, where) {
     __code_cell_count += 1
     let last_scope_id = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
     let id = c_id.split("-")[1]
-
     if (where == "down") {
         where = "down"
     } else {
@@ -155,10 +155,14 @@ function add_new_code_cell(c_id, where) {
 
     if (where == "up") {
         divReference.insertAdjacentHTML("beforebegin", html);
+        let current_cell_id = cells_order.indexOf(`div-${id}`)
+        cells_order.splice(current_cell_id,0,`div-${new_id}`)
     } else {
         divReference.insertAdjacentHTML("afterend", html);
+        cells_order[new_id-1] = `div-${new_id}`
     }
 
+    console.log(cells_order)
     let editor = CodeMirror(document.getElementById(`div-${new_id}`), {
         lineNumbers: true,
         tabSize: 2,
@@ -195,7 +199,7 @@ function add_new_text_cell(c_id, where) {
     __code_cell_count += 1
     let last_scope_id = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
     let id = c_id.split("-")[1]
-
+    
     if (where == "down") {
         where = "down"
     } else {
@@ -254,10 +258,14 @@ function add_new_text_cell(c_id, where) {
 
     if (where == "up") {
         divReference.insertAdjacentHTML("beforebegin", html);
+        let current_cell_id = cells_order.indexOf(`div_text-${id}`)
+        cells_order.splice(current_cell_id,0,`div_text-${new_id}`)
     } else {
         divReference.insertAdjacentHTML("afterend", html);
+        cells_order[new_id-1] = `div_text-${new_id}`
     }
 
+    console.log(cells_order)
     vars_in_scope[`div_text-${new_id}`] = ""
 
     update_text_box_size()
@@ -364,7 +372,7 @@ function update_text_box_size() {
 
 
 $("#download").click(function () {
-    let out = notebook_json(vars_in_scope, md_texts);
+    let out = notebook_json(cells_order,vars_in_scope, md_texts);
 
     var blob = new Blob([out], { "type": "application/json" });
     var url = (window.URL || window.webkitURL).createObjectURL(blob);
@@ -383,11 +391,11 @@ $("#download").click(function () {
 
 $("#import-notebook-file").change(() => {
 
-    var files = $("#import-notebook-file")[0].files
+    let files = $("#import-notebook-file")[0].files
     let json_content = null
     if (files.length > 0) {
-        var content = files[0];
-        var reader = new FileReader();
+        let content = files[0];
+        let reader = new FileReader();
         reader.onload = function (t) {
             json_content = t.target.result;
             let json = JSON.parse(json_content)

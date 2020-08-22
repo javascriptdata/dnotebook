@@ -87,16 +87,15 @@ function this_div() {
 }
 
 
-// function viz(name, callback) {
-//     // out_div-1
-//     let id = `#out_div${window.current_cell}`
-//     // $(`${id}`).append(`<div id=${name}></div>`)
+function viz(name, callback) {
+    // out_div-1
+    let id = `#out_div${window.current_cell}`
+    $(`${id}`).append(`<div id=${name}></div>`)
 
-//     let cb = callback(name);
-//     // $("#ploty").remove(`${name}`)
+    let cb = callback(name);
 
-//     return cb
-// }
+    return cb
+}
 
 function table(df) {
 
@@ -152,12 +151,13 @@ function table(df) {
 
 }
 
-function notebook_json(scope, md_scope) {
+function notebook_json(cells_order,scope, md_scope) {
 
     var store = {}
 
-    for (let key in scope) {
+    for (let i=0; i < cells_order.length; i++) {
 
+        let key = cells_order[i];
         let key_split = key.split("-")
         let id = key_split[1]
 
