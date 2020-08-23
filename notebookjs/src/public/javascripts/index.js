@@ -77,6 +77,7 @@ function exec_cell(c_id) {
             }
         }
 
+        // $(`#out_${id}`).empty()
         $(`#out_${id}`).html(output);
         // document.getElementById("cell_spinner-1").style.display = "none"
         // document.getElementById("cell_num-1").style.display = "block"
