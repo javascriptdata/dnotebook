@@ -51,6 +51,7 @@ function exec_cell(c_id) {
 
     try {
         let output = ("global", eval)(vars_in_scope[id].getValue())
+        let command = vars_in_scope[id].getValue()
         if (Array.isArray(output)) {
             output = print_val(output)
         } else if (typeof output === 'object' && output !== null) {
@@ -58,7 +59,7 @@ function exec_cell(c_id) {
             if (output == "{}") {
                 output = ""
             }
-        } else if (console) {
+        } else if (command.includes("console.log(")) {
             //retreive value from the console funcction
             console.oldLog = console.log;
             console.log = function (value) {
@@ -80,7 +81,7 @@ function exec_cell(c_id) {
         }
 
         // $(`#out_${id}`).empty()
-        let command = vars_in_scope[id].getValue()
+        // let command = vars_in_scope[id].getValue()
        if (command.includes("table") || command.includes("plot") || command.includes("console.log(")){
         // $(`#out_${id}`).html("")
         $(`#out_${id}`).html(output);

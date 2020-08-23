@@ -1,9 +1,10 @@
 
 function print_val(val) {
+    /// Neeed refactoring. Lot of duplicated line of code
 
     if (Array.isArray(val[0])) {
 
-        let col_length = val[0].length;
+
         let row_length = val.length;
 
         let data_string = "[";
@@ -12,21 +13,21 @@ function print_val(val) {
             for (let i = 0; i < 10; i++) {
 
                 let row_val = val[i]
-
+                let col_length = row_val.length;
                 data_string += "[";
                 if (col_length > 10) {
 
                     for (let j = 0; j < 10; j++) {
-                        data_string += `${row_val[j]},`
+                        data_string += j== 9 ? `${row_val[j]}`:`${row_val[j]},`
                     }
 
                     data_string += `.......${col_length - 10} more],`
                 } else {
 
                     for (let j = 0; j < col_length; j++) {
-                        data_string += `${row_val[j]},`
+                        data_string += j== (col_length-1) ? `${row_val[j]}` :`${row_val[j]},`
                     }
-                    data_string += "],"
+                    data_string += i == (row_length-1) ? "]" : "],"
                 }
             }
             data_string += `...${row_length - 10} more]`
@@ -35,21 +36,23 @@ function print_val(val) {
             for (let i = 0; i < row_length; i++) {
 
                 let row_val = val[i]
+                let col_length = row_val.length;
 
                 data_string += "[";
                 if (col_length > 10) {
 
                     for (let j = 0; j < 10; j++) {
-                        data_string += `${row_val[j]},`
+                        data_string += j== 9 ? `${row_val[j]}`:`${row_val[j]},`
                     }
 
                     data_string += `.......${col_length - 10} more],`
                 } else {
 
                     for (let j = 0; j < col_length; j++) {
-                        data_string += `${row_val[j]},`
+
+                        data_string += j== (col_length-1) ? `${row_val[j]}` :`${row_val[j]},`
                     }
-                    data_string += "],"
+                    data_string += i == (row_length-1) ? "]" : "],"
                 }
             }
             data_string += "]"
@@ -64,8 +67,7 @@ function print_val(val) {
         let count = row_length > 10 ? 10 : row_length
 
         for (let i = 0; i < count; i++) {
-
-            data_string += `${val[i]},`
+            data_string += i == (count-1) ? `${val[i]}` : `${val[i]},`
         }
 
         let diff = row_length - count;
@@ -104,8 +106,7 @@ function viz(name, callback) {
 
     let id = `#out_${window.current_cell}`
     $(`${id}`).append(`<div id=${name}></div>`)
-
-    return cb
+    let cb = callback(name);
 }
 
 function table(df) {
@@ -389,7 +390,12 @@ function load_notebook(json) {
     }
 }
 
+function forLoop_log(args){
 
-// function show_error_modal(){
+        let id = `#out_${window.current_cell}`
+        
+        $(`${id}`).append(`${args}<br />`)
+    
+}
 
-// }
+console.forlog = forLoop_log
