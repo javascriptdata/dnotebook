@@ -43,49 +43,47 @@ $("#div-1")
 
 
 function exec_cell(c_id) {
+    $(`#out_${id}`).html("")
     let id = c_id.split("_")[1]
     let count = c_id.split("-")[1]
     window.current_cell = id;
 
     try {
-        let command = vars_in_scope[id].getValue()
-        if (command.includes("console.log(") || command.includes("table") || command.includes("plot")) {
-            let output = ("global", eval)(vars_in_scope[id].getValue())
+        let output = ("global", eval)(vars_in_scope[id].getValue())
+        if (Array.isArray(output)) {
+            output = print_val(output)
+        } else if (typeof output === 'object' && output !== null) {
+            output = JSON.stringify(output)
+            if (output == "{}") {
+                output = ""
+            }
+        } else if (console) {
+            //retreive value from the console funcction
+            console.oldLog = console.log;
+            console.log = function (value) {
+                return value;
+            };
+            output = eval(vars_in_scope[id].getValue());
+
             if (Array.isArray(output)) {
                 output = print_val(output)
-            } else if (typeof output === 'object' && output !== null) {
-                output = JSON.stringify(output)
-                if (output == "{}") {
-                    output = ""
-                }
-            } else if (console) {
-                //retreive value from the console funcction
-                console.oldLog = console.log;
-                console.log = function (value) {
-                    return value;
-                };
-                output = eval(vars_in_scope[id].getValue());
-
-                if (Array.isArray(output)) {
-                    output = print_val(output)
-                } else {
-                    if (typeof output === 'object' && output !== null) {
-                        output = JSON.stringify(output)
-                        if (output == "{}") {
-                            output = ""
-                        }
+            } else {
+                if (typeof output === 'object' && output !== null) {
+                    output = JSON.stringify(output)
+                    if (output == "{}") {
+                        output = ""
                     }
-
                 }
-                $(`#out_${id}`).html("");
-                $(`#out_${id}`).html(output);
+
             }
-        } else {
-            ("global", eval)(command)
-            $(`#out_${id}`).html("");
         }
 
-        // $(`#out_${id}`).html(output);
+        // $(`#out_${id}`).empty()
+        let command = vars_in_scope[id].getValue()
+       if (command.includes("table") || command.includes("plot") || command.includes("console.log(")){
+        // $(`#out_${id}`).html("")
+        $(`#out_${id}`).html(output);
+       }
         // document.getElementById("cell_spinner-1").style.display = "none"
         // document.getElementById("cell_num-1").style.display = "block"
 
@@ -94,7 +92,7 @@ function exec_cell(c_id) {
         window.current_cell = div_count
 
     } catch (error) {
-        $(`#out_${id}`).html("");
+        $(`#out_${id}`).html("")
         $(`#out_${id}`).html(error)
         console.log(error)
         // document.getElementById("cell_spinner-1").style.display = "none"
