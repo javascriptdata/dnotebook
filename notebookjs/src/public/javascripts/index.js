@@ -43,10 +43,11 @@ $("#div-1")
 
 
 function exec_cell(c_id) {
-    $(`#out_${id}`).html("")
     let id = c_id.split("_")[1]
     let count = c_id.split("-")[1]
     window.current_cell = id;
+
+    $(`#out_${id}`).html("")
 
     try {
         let output = ("global", eval)(vars_in_scope[id].getValue())
