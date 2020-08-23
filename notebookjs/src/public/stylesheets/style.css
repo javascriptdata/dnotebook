@@ -1,6 +1,6 @@
-/* body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-} */
+body {
+  font: 8px
+}
 
 a {
   color: #00B7FF;
@@ -8,8 +8,8 @@ a {
 
 .container{
   padding: 20px;
-  /* margin-left: 10px; */
-  /* margin-right: 10px; */
+  margin-left: 10px; 
+  margin-right: 10px;
 }
 
 .out-divs{
@@ -71,3 +71,14 @@ table.df-table th, td {
 table.df-table .float32, .int32 {
   text-align: right;
 }
+
+.ow-break-word {
+  overflow-wrap: break-word;
+}
+
+/* body {background: #333;} */
+.log-boolean,
+.log-undefined {color: magenta;}
+.log-object,
+.log-string {color: orange;}
+.log-number {color: cyan;}
