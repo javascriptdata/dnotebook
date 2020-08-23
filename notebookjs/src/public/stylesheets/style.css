@@ -1,6 +1,6 @@
-body {
+/* body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+} */
 
 a {
   color: #00B7FF;
@@ -57,4 +57,17 @@ a {
   position: absolute;
   left: -90px;
   outline: none;
+}
+
+table.df-table {
+  white-space: pre;
+}
+
+table.df-table th, td {
+  padding: 2px 5px;
+  font-variant-numeric: tabular-nums;
+}
+
+table.df-table .float32, .int32 {
+  text-align: right;
 }

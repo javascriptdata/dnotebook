@@ -7,12 +7,14 @@
 var app = require('../app');
 var debug = require('debug')('src:server');
 var http = require('http');
+var opn = require('opn');
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '4400');
 app.set('port', port);
 
 /**
@@ -87,4 +89,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(`Server open at port: ${port}`);
+  console.log(`Open http://localhost:${port} in your preferred browser to start dnotebooks`);
+  opn(`http://localhost:${port}`);
+
 }
