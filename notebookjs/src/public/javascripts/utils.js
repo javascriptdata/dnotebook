@@ -227,7 +227,7 @@ function html_load(new_id) {
         <p id="cell-num" class="code_symbol">[${new_id}]</p>
     </div>
     <div id="div-${new_id}" class="col-md-9">
-        <div id="btn-actions-${new_id}" class="btn-group-horizontal" style="display: none;">
+        <div id="btn-actions-${new_id}" class="btn-group-horizontal text-center" style="display: none;">
             <button type="button" id="run_div-${new_id}" class="btn btn-sm btn-success run"><i
                     class="fas fa-play"></i>Run</button>
             <div class="btn-group" role="group" aria-label="Basic example">
