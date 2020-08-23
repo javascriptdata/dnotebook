@@ -80,22 +80,28 @@ function print_val(val) {
 }
 
 function this_div() {
-    let id = `#out_${window.current_cell}`
+    let id = `cell-${window.current_cell.split("-")[1]}`
     let rand_div_name = `random_div_#${id}`
-    $(`${id}`).append(`<div id=${rand_div_name}></div>`)
+    html = `
+    <div class="col-md-1"></div>
+    <div class="col-md-9" id=${rand_div_name}>
+    </div>
+    <div class="col-md-2"></div>
+    `
+
+    $(`#${id}`).append(html)
     return rand_div_name
 }
 
+// function viz(name, callback) {
+//     // out_div-1
+//     let id = `#out_div${window.current_cell}`
+//     $(`${id}`).append(`<div id=${name}></div>`)
 
-function viz(name, callback) {
-    // out_div-1
-    let id = `#out_div${window.current_cell}`
-    $(`${id}`).append(`<div id=${name}></div>`)
+//     let cb = callback(name);
 
-    let cb = callback(name);
-
-    return cb
-}
+//     return cb
+// }
 
 function table(df) {
 
@@ -151,11 +157,11 @@ function table(df) {
 
 }
 
-function notebook_json(cells_order,scope, md_scope) {
+function notebook_json(cells_order, scope, md_scope) {
 
     var store = {}
 
-    for (let i=0; i < cells_order.length; i++) {
+    for (let i = 0; i < cells_order.length; i++) {
 
         let key = cells_order[i];
         let key_split = key.split("-")
@@ -192,7 +198,9 @@ function notebook_json(cells_order,scope, md_scope) {
 
 
 //load package scripts
-function LoadPackage(array, callback) {
+function load_package(array, callback) {
+
+    document.getElementById("cell-running").style.display = "block"
     let loader = function (src, handler) {
         let script = document.createElement("script");
         script.src = src;
@@ -209,8 +217,35 @@ function LoadPackage(array, callback) {
         } else {
             callback && callback();
         }
+        document.getElementById("cell-running").style.display = "none"
     })();
 }
+
+
+async function load_data(path) {
+    document.getElementById("cell-running").style.display = "block"
+    let df = await dfd.read_csv(path)
+    document.getElementById("cell-running").style.display = "none"
+    return df
+    // id = parseInt(window.current_cell.split("-")[1]) - 1 //window current cell starts from 2
+    // $(`#out_div-${id}`).html(err);
+    // document.getElementById("cell-running").style.display = "none"
+    // return err
+
+    // dfd.read_csv(path).then((df) => {
+    //     document.getElementById("cell-running").style.display = "none"
+    //     return df
+    // }).catch((err) => {
+    //     id = parseInt(window.current_cell.split("-")[1]) - 1 //window current cell starts from 2
+    //     $(`#out_div-${id}`).html(err);
+    //     document.getElementById("cell-running").style.display = "none"
+    //     return err
+    // })
+
+
+}
+
+
 
 function md_load(id) {
 
@@ -309,7 +344,7 @@ function load_notebook(json) {
                     // document.getElementById("cell_spinner-1").style.display = "block"
                     // document.getElementById("cell_num-1").style.display = "none"
                     exec_cell(`run_div-${id}`);
-        
+
                 }
             });
 
@@ -346,3 +381,7 @@ function load_notebook(json) {
     }
 }
 
+
+// function show_error_modal(){
+
+// }

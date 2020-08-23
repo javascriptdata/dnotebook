@@ -48,36 +48,44 @@ function exec_cell(c_id) {
     window.current_cell = id;
 
     try {
-        let output = ("global", eval)(vars_in_scope[id].getValue())
-        if (Array.isArray(output)) {
-            output = print_val(output)
-        } else if (typeof output === 'object' && output !== null) {
-            output = JSON.stringify(output)
-            if (output == "{}") {
-                output = ""
-            }
-        } else if (console) {
-            //retreive value from the console funcction
-            console.oldLog = console.log;
-            console.log = function (value) {
-                return value;
-            };
-            output = eval(vars_in_scope[id].getValue());
-
+        let command = vars_in_scope[id].getValue()
+        if (command.includes("console.log(") || command.includes("table") || command.includes("plot")) {
+            let output = ("global", eval)(vars_in_scope[id].getValue())
             if (Array.isArray(output)) {
                 output = print_val(output)
-            } else {
-                if (typeof output === 'object' && output !== null) {
-                    output = JSON.stringify(output)
-                    if (output == "{}") {
-                        output = ""
-                    }
+            } else if (typeof output === 'object' && output !== null) {
+                output = JSON.stringify(output)
+                if (output == "{}") {
+                    output = ""
                 }
+            } else if (console) {
+                //retreive value from the console funcction
+                console.oldLog = console.log;
+                console.log = function (value) {
+                    return value;
+                };
+                output = eval(vars_in_scope[id].getValue());
 
+                if (Array.isArray(output)) {
+                    output = print_val(output)
+                } else {
+                    if (typeof output === 'object' && output !== null) {
+                        output = JSON.stringify(output)
+                        if (output == "{}") {
+                            output = ""
+                        }
+                    }
+
+                }
+                $(`#out_${id}`).html("");
+                $(`#out_${id}`).html(output);
             }
+        } else {
+            ("global", eval)(command)
+            $(`#out_${id}`).html("");
         }
 
-        $(`#out_${id}`).html(output);
+        // $(`#out_${id}`).html(output);
         // document.getElementById("cell_spinner-1").style.display = "none"
         // document.getElementById("cell_num-1").style.display = "block"
 
@@ -86,6 +94,7 @@ function exec_cell(c_id) {
         window.current_cell = div_count
 
     } catch (error) {
+        $(`#out_${id}`).html("");
         $(`#out_${id}`).html(error)
         console.log(error)
         // document.getElementById("cell_spinner-1").style.display = "none"
@@ -156,13 +165,12 @@ function add_new_code_cell(c_id, where) {
     if (where == "up") {
         divReference.insertAdjacentHTML("beforebegin", html);
         let current_cell_id = cells_order.indexOf(`div-${id}`)
-        cells_order.splice(current_cell_id,0,`div-${new_id}`)
+        cells_order.splice(current_cell_id, 0, `div-${new_id}`)
     } else {
         divReference.insertAdjacentHTML("afterend", html);
-        cells_order[new_id-1] = `div-${new_id}`
+        cells_order[new_id - 1] = `div-${new_id}`
     }
 
-    console.log(cells_order)
     let editor = CodeMirror(document.getElementById(`div-${new_id}`), {
         lineNumbers: true,
         tabSize: 2,
@@ -199,7 +207,7 @@ function add_new_text_cell(c_id, where) {
     __code_cell_count += 1
     let last_scope_id = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
     let id = c_id.split("-")[1]
-    
+
     if (where == "down") {
         where = "down"
     } else {
@@ -259,10 +267,10 @@ function add_new_text_cell(c_id, where) {
     if (where == "up") {
         divReference.insertAdjacentHTML("beforebegin", html);
         let current_cell_id = cells_order.indexOf(`div_text-${id}`)
-        cells_order.splice(current_cell_id,0,`div_text-${new_id}`)
+        cells_order.splice(current_cell_id, 0, `div_text-${new_id}`)
     } else {
         divReference.insertAdjacentHTML("afterend", html);
-        cells_order[new_id-1] = `div_text-${new_id}`
+        cells_order[new_id - 1] = `div_text-${new_id}`
     }
 
     console.log(cells_order)
@@ -372,7 +380,7 @@ function update_text_box_size() {
 
 
 $("#download").click(function () {
-    let out = notebook_json(cells_order,vars_in_scope, md_texts);
+    let out = notebook_json(cells_order, vars_in_scope, md_texts);
 
     var blob = new Blob([out], { "type": "application/json" });
     var url = (window.URL || window.webkitURL).createObjectURL(blob);
@@ -429,14 +437,6 @@ $("#import-notebook-file").change(() => {
 // })
 
 
-
-async function load_data(path) {
-    document.getElementById("cell-running").style.display = "block"
-    let df = await dfd.read_csv(path)
-    document.getElementById("cell-running").style.display = "none"
-    return df
-
-}
 
 
 
