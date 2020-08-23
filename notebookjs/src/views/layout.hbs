@@ -46,6 +46,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <div style="margin-right: 150px;color:white;" id="notebookname"></div>
+
     <div style="margin-right: 200px;" class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
@@ -65,6 +67,7 @@
             Options
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" data-toggle="modal" data-target="#nameNoteModal" href="#">Name Notebook</a>
             <a class="dropdown-item" id="download" href="#">Download Notebook</a>
             <a class="dropdown-item" data-toggle="modal" data-target="#uploadNoteModal" href="#">Upload Notebook</a>
 
@@ -107,6 +110,29 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!-- Notebook Name Modal--}}
+  <div class="modal" id="nameNoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Name Your Notebook</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control-file" name="name-notebook" id="namebook">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closename">Close</button>
         </div>
       </div>
     </div>

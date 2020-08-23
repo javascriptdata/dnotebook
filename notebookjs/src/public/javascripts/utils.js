@@ -99,9 +99,14 @@ function this_div() {
 //     $(`${id}`).append(`<div id=${name}></div>`)
 
 //     let cb = callback(name);
+function viz(name, callback) {
+    // out_div-1
 
-//     return cb
-// }
+    let id = `#out_${window.current_cell}`
+    $(`${id}`).append(`<div id=${name}></div>`)
+
+    return cb
+}
 
 function table(df) {
 
@@ -305,10 +310,11 @@ function html_load(new_id) {
 
 function load_notebook(json) {
 
-
+    cells_order = []
     for (let key in json) {
 
         let id = key.split("-")[1]
+        
 
         if (Object.prototype.hasOwnProperty.call(json[key], "in")) {
             let html = html_load(id)
@@ -326,6 +332,7 @@ function load_notebook(json) {
             editor.getDoc().setValue(input);
 
             vars_in_scope[`div-${id}`] = editor
+            cells_order.push(`div-${id}`)
 
             let out = json[key]["out"]
 
@@ -362,6 +369,7 @@ function load_notebook(json) {
             md_texts[`text-div_${Number(id)}`] = md_out;
 
             vars_in_scope[`div_text-${id}`] = ""
+            cells_order.push(`div_text-${id}`)
 
             $(`textarea#text-box_${id}`).addClass("text-box")
             $(`textarea#text-box_${id}`).val(md_out)

@@ -380,11 +380,13 @@ function update_text_box_size() {
 $("#download").click(function () {
     let out = notebook_json(cells_order, vars_in_scope, md_texts);
 
-    var blob = new Blob([out], { "type": "application/json" });
-    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+    let blob = new Blob([out], { "type": "application/json" });
+    let url = (window.URL || window.webkitURL).createObjectURL(blob);
 
-    var link = document.createElement('a');
-    link.download = 'danfo_notebook.json';
+    let link = document.createElement('a');
+    let text = $("#notebookname").text()
+    let name = text.length > 0 ? `${text}.json` : "Dnotebook.json"
+    link.download = name;
     link.href = url;
 
     var link_pae = $(link);
@@ -435,6 +437,21 @@ $("#import-notebook-file").change(() => {
 // })
 
 
+
+async function load_data(path) {
+    document.getElementById("cell-running").style.display = "block"
+    let df = await dfd.read_csv(path)
+    document.getElementById("cell-running").style.display = "none"
+    return df
+
+}
+
+$("#closename").click(function(){
+
+    let textval = $("#namebook").val()
+    
+    $("#notebookname").html(`<h2>${textval}</h2>`)
+});
 
 
 
