@@ -228,7 +228,7 @@ function load_package(array, callback) {
 }
 
 
-async function load_data(path) {
+async function load_csv(path) {
     document.getElementById("cell-running").style.display = "block"
     let df = await dfd.read_csv(path)
     document.getElementById("cell-running").style.display = "none"

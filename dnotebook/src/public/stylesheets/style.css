@@ -72,13 +72,7 @@ table.df-table .float32, .int32 {
   text-align: right;
 }
 
-.ow-break-word {
-  overflow-wrap: break-word;
+.gs-out-imgs{
+  width: 100%;
+  height: 600px;
 }
-
-/* body {background: #333;} */
-.log-boolean,
-.log-undefined {color: magenta;}
-.log-object,
-.log-string {color: orange;}
-.log-number {color: cyan;}

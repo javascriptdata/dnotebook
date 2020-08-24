@@ -6,10 +6,6 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Danfo Notebooks | Interactive Notebook Interface for JavaScript Developers' });
 });
 
-/* GET home page. */
-router.get('/getting-started', function(req, res, next) {
-  res.render('getting-started', { title: 'Getting Started with Danfo Notebooks | Interactive Notebook Interface for JavaScript Developers' });
-});
 
 /* GET home page. */
 router.get('/about', function(req, res, next) {
