@@ -1,6 +1,6 @@
 {
   "name": "dnotebook",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Jupyter-like library for JavaScript environment. It allows you to create and share pages that contain live code, text and visualizations.",
   "main": "dnotebook/src/bin/www",
   "contributors": [
