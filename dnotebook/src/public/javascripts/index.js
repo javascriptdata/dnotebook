@@ -1,3 +1,4 @@
+//first editor cell
 const editor = CodeMirror(document.getElementById('div-1'), {
     lineNumbers: true,
     tabSize: 4,
@@ -5,30 +6,17 @@ const editor = CodeMirror(document.getElementById('div-1'), {
     theme: 'monokai',
     value: '',
     extraKeys: { "Ctrl-Space": "autocomplete" },
-    autoCloseBrackets: true
+    autoCloseBrackets: true,
+    matchBrackets: true
 });
 
-//run first cell on CTRL ENTER Pressed
+//Run first cell on CTRL ENTER Pressed
 $(`#div-1`).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-        // document.getElementById("cell_spinner-1").style.display = "block"
-        // document.getElementById("cell_num-1").style.display = "none"
         exec_cell(`run_div-1`);
 
     }
 });
-
-
-
-var md = new Remarkable()
-//Global Params
-let vars_in_scope = {
-    "div-1": editor
-}
-
-let cells_order = ["div-1"] // store the cells order
-var md_texts = {} //stores markdown text and corresponding div name
-var __code_cell_count = 1
 
 
 $("#div-1")
@@ -41,26 +29,25 @@ $("#div-1")
 
 
 
-// function clear_cell() {
-//     document.getElementById("log-container").style.display = "none"
-//     $(`#log`).html("")
-    
+var md = new Remarkable()
 
-// }
+//Global Params
+var vars_in_scope = { "div-1": editor }
+var cells_order = ["div-1"] // store the cells in order of creation
+var md_texts = {} //stores markdown text and corresponding div name
+var __code_cell_count = 1 //stores cell count
 
+
+
+/**
+ * Executes a code cell
+ * @param {String} c_id Id of the code cell
+ */
 function exec_cell(c_id) {
-    // document.getElementById("log-container").style.display = "block"
     let id = c_id.split("_")[1]
     let count = c_id.split("-")[1]
     window.current_cell = id;
     $(`#out_${id}`).html("")
-    // console.log(id);
-    // logger(`log-${id.split("-")[1]}`, `log_container-${id.split("-")[1]}`, true)
-
-
-    // let command = vars_in_scope[id].getValue()
-    // console.log(command);
-    // logger(`log-container-${id.split("-")[1]}`, `log-${id.split("-")[1]}`)
 
     try {
         let output = ("global", eval)(vars_in_scope[id].getValue())
@@ -73,7 +60,7 @@ function exec_cell(c_id) {
                 output = ""
             }
         } else if (command.includes("console.log(")) {
-            //retreive value from the console funcction
+            //retreive value from the console function
             console.oldLog = console.log;
             console.log = function (value) {
                 return value;
@@ -95,14 +82,9 @@ function exec_cell(c_id) {
 
         }
 
-        // $(`#out_${id}`).empty()
-        // let command = vars_in_scope[id].getValue()
-       if (command.includes("table") || command.includes("plot") || command.includes("console.log(")){
-        // $(`#out_${id}`).html("")
-        $(`#out_${id}`).html(output);
-       }
-        // document.getElementById("cell_spinner-1").style.display = "none"
-        // document.getElementById("cell_num-1").style.display = "block"
+        if (command.includes("table") || command.includes("plot") || command.includes("console.log(")) {
+            $(`#out_${id}`).html(output);
+        }
 
         count = parseInt(count) + 1
         let div_count = `div-${count}`
@@ -112,13 +94,16 @@ function exec_cell(c_id) {
         $(`#out_${id}`).html("")
         $(`#out_${id}`).html(error)
         console.log(error)
-        // document.getElementById("cell_spinner-1").style.display = "none"
-        // document.getElementById("cell_num-1").style.display = "block"
 
     }
 }
 
 
+/**
+ * Creates a new cell in specified position
+ * @param {String} c_id ID of the current cell
+ * @param {String} where Position to place the cell. (up/down)
+ */
 function add_new_code_cell(c_id, where) {
     __code_cell_count += 1
     let last_scope_id = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
@@ -192,7 +177,8 @@ function add_new_code_cell(c_id, where) {
         theme: 'monokai',
         value: '',
         extraKeys: { "Ctrl-Space": "autocomplete" },
-        autoCloseBrackets: true
+        autoCloseBrackets: true,
+        matchBrackets: true
     });
     vars_in_scope[`div-${new_id}`] = editor
 
@@ -208,8 +194,6 @@ function add_new_code_cell(c_id, where) {
     //run cell on CTRL-ENTER Pressed
     $(`#div-${new_id}`).keydown(function (e) {
         if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-            // document.getElementById("cell_spinner-1").style.display = "block"
-            // document.getElementById("cell_num-1").style.display = "none"
             exec_cell(`run_div-${new_id}`);
 
         }
@@ -217,6 +201,11 @@ function add_new_code_cell(c_id, where) {
 
 }
 
+/**
+ * Creates a new text cell in specified position
+ * @param {String} c_id ID of the current cell
+ * @param {String} where Position to place the cell. (up/down)
+ */
 function add_new_text_cell(c_id, where) {
     __code_cell_count += 1
     let last_scope_id = parseInt(Object.keys(vars_in_scope).pop().split("-")[1])
@@ -287,7 +276,7 @@ function add_new_text_cell(c_id, where) {
         cells_order[new_id - 1] = `div_text-${new_id}`
     }
 
-    console.log(cells_order)
+    // console.log(cells_order)
     vars_in_scope[`div_text-${new_id}`] = ""
 
     update_text_box_size()
@@ -303,13 +292,17 @@ function add_new_text_cell(c_id, where) {
 
 }
 
+/**
+ * Deletes a cell by specified ID
+ * @param {*} id 
+ */
 function delete_cell(id) {
     if (__code_cell_count == 1) {
         document.getElementsByClassName("del").disable = true
     } else {
         row_id = `cell-${Number(id)}`
         var div_ele = document.getElementById(row_id);
-        console.log(row_id, $(`#${row_id}`).parent().id)
+        // console.log(row_id, $(`#${row_id}`).parent().id)
         div_ele.parentNode.removeChild(div_ele);
         __code_cell_count -= 1
     }
@@ -323,8 +316,6 @@ $(document).on("click", "button.run", function () {
         let val = document.getElementById(`text-box_${id}`).value
         show_md(id, val)
     } else {
-        // document.getElementById("cell_spinner-1").style.display = "block"
-        // document.getElementById("cell_num-1").style.display = "none"
         exec_cell(this.id);
     }
 })

@@ -1,77 +1,70 @@
 
-(function(global){
+(function (global) {
+    /**
+     * Formats an array into a Dom friendly format
+     * @param {Array} val 
+     */
     function print_val(val) {
         /// Neeed refactoring. Lot of duplicated line of code
-
         if (Array.isArray(val[0])) {
-
-
             let row_length = val.length;
-
             let data_string = "[";
             if (row_length > 10) {
 
                 for (let i = 0; i < 10; i++) {
-
                     let row_val = val[i]
                     let col_length = row_val.length;
                     data_string += "[";
                     if (col_length > 10) {
-
                         for (let j = 0; j < 10; j++) {
-                            data_string += j== 9 ? `${row_val[j]}`:`${row_val[j]},`
+                            data_string += j == 9 ? `${row_val[j]}` : `${row_val[j]},`
                         }
-
                         data_string += `.......${col_length - 10} more],`
                     } else {
 
                         for (let j = 0; j < col_length; j++) {
-                            data_string += j== (col_length-1) ? `${row_val[j]}` :`${row_val[j]},`
+                            data_string += j == (col_length - 1) ? `${row_val[j]}` : `${row_val[j]},`
                         }
-                        data_string += i == (row_length-1) ? "]" : "],"
+                        data_string += i == (row_length - 1) ? "]" : "],"
                     }
                 }
                 data_string += `...${row_length - 10} more]`
             }
             else {
                 for (let i = 0; i < row_length; i++) {
-
                     let row_val = val[i]
                     let col_length = row_val.length;
-
                     data_string += "[";
+
                     if (col_length > 10) {
-
                         for (let j = 0; j < 10; j++) {
-                            data_string += j== 9 ? `${row_val[j]}`:`${row_val[j]},`
+                            data_string += j == 9 ? `${row_val[j]}` : `${row_val[j]},`
                         }
-
                         data_string += `.......${col_length - 10} more],`
-                    } else {https://medium.com/better-programming/how-to-create-your-own-event-emitter-in-javascript-fbd5db2447c4
 
+                    } else {
                         for (let j = 0; j < col_length; j++) {
-
-                            data_string += j== (col_length-1) ? `${row_val[j]}` :`${row_val[j]},`
+                            data_string += j == (col_length - 1) ? `${row_val[j]}` : `${row_val[j]},`
                         }
-                        data_string += i == (row_length-1) ? "]" : "],"
+                        data_string += i == (row_length - 1) ? "]" : "],"
                     }
                 }
                 data_string += "]"
             }
             return data_string
+
         } else {
 
             let row_length = val.length;
-
             let data_string = "["
-
             let count = row_length > 10 ? 10 : row_length
 
             for (let i = 0; i < count; i++) {
-                data_string += i == (count-1) ? `${val[i]}` : `${val[i]},`
+                data_string += i == (count - 1) ? `${val[i]}` : `${val[i]},`
             }
 
             let diff = row_length - count;
+
             if (diff > 0) {
                 data_string += `....${diff} more]`
             } else {
@@ -82,8 +75,10 @@
         }
     }
 
+    /**
+     * Returns the id of the current cell's output div
+     */
     function this_div() {
-        // let id = `out-${window.current_cell.split("-")[1]}`
         let id = `#out_${window.current_cell}`
         let rand_div_name = `random_div_#${id}`
         html = `
@@ -92,12 +87,16 @@
         </div>
         <div class="col-md-2"></div>
         `
-
         $(`${id}`).append(html)
         return rand_div_name
     }
 
 
+    /**
+     * Creates multiple divs for plotting in an output cell
+     * @param {String} name of the div to create
+     * @param {Function} callback 
+     */
     function viz(name, callback) {
         // utility function to enabling ploting
         // create the ploting div needed
@@ -107,63 +106,62 @@
         let cb = callback(name);
     }
 
+    /**
+     * Displays Danfo DataFrame/Series in a formated table
+     * @param {DataFrame} df 
+     */
     function table(df) {
-        //generate table for dataframes and series
-
         const { col_types, series, columns, index, values } = df;
-
-
         let head = ""
+
         if (series) {
             head += `<th class="${col_types[0]}">${columns}</th>`
         } else {
-
             columns.forEach((name, i) => {
                 head += `<th class="${col_types[i]}">${name}</th>`
             });
         }
 
         let body = ""
-
         values.forEach((row, i) => {
-
             let b_String = `<tr><th>${index[i]}</th>`
 
             if (series) {
                 b_String += `<td class="${col_types[0]}">${row}</td>`
             } else {
-
                 row.forEach((v, j) => {
                     b_String += `<td class="${col_types[j]}">${v}</td>`
                 });
             }
 
             b_String += "</tr>"
-
             body += b_String;
         });
 
         const table = `
-        <div style="overflow: auto; max-height: 300px;"><table class="df-table" border="1">
-        <thead>
-            <tr>
-            <th></th>
-            ${head}
-            </tr>
-        </thead>
-        <tbody>
-            ${body}
-        </tbody>
-        </table>
-        </div>
-    `;
-
+            <div style="overflow: auto; max-height: 300px;"><table class="df-table" border="1">
+            <thead>
+                <tr>
+                <th></th>
+                ${head}
+                </tr>
+            </thead>
+            <tbody>
+                ${body}
+            </tbody>
+            </table>
+            </div>
+        `
         return table;
-
     }
 
+    /**
+     * Internal function to convert notebook source to json format
+     * @param {*} cells_order 
+     * @param {*} scope 
+     * @param {*} md_scope 
+     */
     function notebook_json(cells_order, scope, md_scope) {
-        //convert notebook to json
 
         var store = {}
 
@@ -174,7 +172,6 @@
             let id = key_split[1]
 
             let type = key_split[0].split("_")[1]
-
             if (type == "text") {
 
                 let md_out = md_scope[`text-div_${Number(id)}`]
@@ -186,7 +183,6 @@
             }
             else {
                 let cell_content = scope[key].getValue()
-
                 let cell_output = $(`#out_${key}`).html()
 
                 store[`cell-${id}`] = {
@@ -198,12 +194,16 @@
         }
 
         store = JSON.stringify(store);
-
         return store
     }
 
 
-    //load package scripts
+
+    /**
+     * load package scripts via CDN into scope
+     * @param {Array} array of package CDNs to load
+     * @param {*} callback 
+     */
     function load_package(array, callback) {
 
         document.getElementById("cell-running").style.display = "block"
@@ -228,41 +228,32 @@
     }
 
 
+    /**
+     * Helper function to load CSV data into Danfo.js Data Structure
+     * @param {String} path to CSV data. 
+     */
     async function load_csv(path) {
         document.getElementById("cell-running").style.display = "block"
         let df = await dfd.read_csv(path)
         document.getElementById("cell-running").style.display = "none"
         return df
-        // id = parseInt(window.current_cell.split("-")[1]) - 1 //window current cell starts from 2
-        // $(`#out_div-${id}`).html(err);
-        // document.getElementById("cell-running").style.display = "none"
-        // return err
-
-        // dfd.read_csv(path).then((df) => {
-        //     document.getElementById("cell-running").style.display = "none"
-        //     return df
-        // }).catch((err) => {
-        //     id = parseInt(window.current_cell.split("-")[1]) - 1 //window current cell starts from 2
-        //     $(`#out_div-${id}`).html(err);
-        //     document.getElementById("cell-running").style.display = "none"
-        //     return err
-        // })
-
-
     }
 
 
-    // markdown component
-    //generate markdown cells when loading notebook
+
+    /**
+     * Internal function to generate markdown cells when loading notebook
+     * @param {*} id of the current cell
+     */
     function md_load(id) {
-
         let md = `<div class="row" style="margin-top: 10px;" id="cell-${id}"></div>`
-
         return md;
     }
 
-    //html component
-    //generate html cells {code and output block} when loading notebook
+    /**
+     * Internal function to generate html cells {code and output block} when loading notebook
+     * @param {*} new_id 
+     */
     function html_load(new_id) {
 
         let html = `
@@ -312,18 +303,19 @@
         return html;
     }
 
-    //parse the json to notebook
+
+    /**
+     * Internal function to parse the json to notebook
+     * @param {*} json 
+     */
     function load_notebook(json) {
-
         cells_order = []
-        for (let key in json) {
 
+        for (let key in json) {
             let id = key.split("-")[1]
-            
 
             if (Object.prototype.hasOwnProperty.call(json[key], "in")) {
                 let html = html_load(id)
-
                 $(".content").append(html)
 
                 const editor = CodeMirror(document.getElementById(`div-${id}`), {
@@ -331,7 +323,10 @@
                     tabSize: 1,
                     mode: 'javascript',
                     theme: 'monokai',
-                    value: ''
+                    value: '',
+                    extraKeys: { "Ctrl-Space": "autocomplete" },
+                    autoCloseBrackets: true,
+                    matchBrackets: true
                 });
                 let input = json[key]["in"]
                 editor.getDoc().setValue(input);
@@ -340,9 +335,7 @@
                 cells_order.push(`div-${id}`)
 
                 let out = json[key]["out"]
-
                 $(`#out_div-${id}`).html(out);
-
                 $(`#div-${id}`)
                     .mouseover(function () {
                         $(`#btn-actions-${id}`).show()
@@ -353,26 +346,20 @@
 
                 $(`#div-${id}`).keydown(function (e) {
                     if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
-                        // document.getElementById("cell_spinner-1").style.display = "block"
-                        // document.getElementById("cell_num-1").style.display = "none"
                         exec_cell(`run_div-${id}`);
 
                     }
                 });
 
             } else {
-
                 let md = md_load(id)
-
                 $(".content").append(md);
 
                 let out = json[key]["out"]
                 $(`#cell-${id}`).html(out)
 
                 let md_out = json[key]["md"]
-                // console.log(md_out)
                 md_texts[`text-div_${Number(id)}`] = md_out;
-
                 vars_in_scope[`div_text-${id}`] = ""
                 cells_order.push(`div_text-${id}`)
 
@@ -394,12 +381,15 @@
         }
     }
 
-    function forLoop_log(args){
+    
+    /**
+     * Helper function to easily log output from for loops in Dom
+     * @param {*} args 
+     */
+    function forLoop_log(args) {
+        let id = `#out_${window.current_cell}`
+        $(`${id}`).append(`${args}<br />`)
 
-            let id = `#out_${window.current_cell}`
-            
-            $(`${id}`).append(`${args}<br />`)
-        
     }
 
     console.forlog = forLoop_log
