@@ -321,8 +321,27 @@ $(document).on("click", "button.run", function () {
 })
 
 $(document).on("click", "button.del", function () {
-    let id = this.id.split("_")[1]
-    console.log(id, this.id, __code_cell_count)
+    let id_split = this.id.split("_")
+    let id = id_split[1]
+    let btn_type = id_split[0].split("-")[1]
+
+    if(btn_type =="text"){
+
+        let div_scope = `div_text-${id}`
+        let md_scope = `text-div_${id}`
+
+        delete md_texts[md_scope]
+        delete vars_in_scope[div_scope]
+
+        let cell_index = cells_order.indexOf(div_scope)
+        cells_order.splice(cell_index,1) 
+    }else{
+        let div_scope = `div-${id}`
+        delete vars_in_scope[div_scope]
+
+        let cell_index = cells_order.indexOf(div_scope)
+        cells_order.splice(cell_index,1) 
+    }
     delete_cell(id)
 })
 
