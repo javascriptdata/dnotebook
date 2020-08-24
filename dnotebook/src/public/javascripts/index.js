@@ -41,13 +41,26 @@ $("#div-1")
 
 
 
+// function clear_cell() {
+//     document.getElementById("log-container").style.display = "none"
+//     $(`#log`).html("")
+    
+
+// }
 
 function exec_cell(c_id) {
+    // document.getElementById("log-container").style.display = "block"
     let id = c_id.split("_")[1]
     let count = c_id.split("-")[1]
     window.current_cell = id;
-
     $(`#out_${id}`).html("")
+    // console.log(id);
+    // logger(`log-${id.split("-")[1]}`, `log_container-${id.split("-")[1]}`, true)
+
+
+    // let command = vars_in_scope[id].getValue()
+    // console.log(command);
+    // logger(`log-container-${id.split("-")[1]}`, `log-${id.split("-")[1]}`)
 
     try {
         let output = ("global", eval)(vars_in_scope[id].getValue())
@@ -78,6 +91,8 @@ function exec_cell(c_id) {
                 }
 
             }
+            console.log(output)
+
         }
 
         // $(`#out_${id}`).empty()
@@ -152,10 +167,9 @@ function add_new_code_cell(c_id, where) {
 
     </div>
     <div class="col-md-2"></div>
-    <div class="col-md-1"></div>
-    <div id="out_div-${new_id}" class="col-md-9 out-divs">
 
-    </div>
+    <div class="col-md-1"></div>
+    <div id="out_div-${new_id}" class="col-md-9 out-divs"></div>
     <div class="col-md-2"></div>
 </div>
 `
@@ -382,13 +396,12 @@ function update_text_box_size() {
 $("#download").click(function () {
     let out = notebook_json(cells_order, vars_in_scope, md_texts);
 
-    let blob = new Blob([out], { "type": "application/json" });
-    let url = (window.URL || window.webkitURL).createObjectURL(blob);
+    var blob = new Blob([out], { "type": "application/json" });
+    var url = (window.URL || window.webkitURL).createObjectURL(blob);
 
-    let link = document.createElement('a');
-    let text = $("#notebookname").text()
-    let name = text.length > 0 ? `${text}.json` : "Dnotebook.json"
-    link.download = name;
+    var link = document.createElement('a');
+    var name = document.getElementById("namebook").value
+    link.download = `${name}.json`;
     link.href = url;
 
     var link_pae = $(link);
@@ -439,22 +452,45 @@ $("#import-notebook-file").change(() => {
 // })
 
 
+// rewireLoggingToElement(
+//     () => document.getElementById("log"),
+//     () => document.getElementById("log-container"), true);
 
-async function load_data(path) {
-    document.getElementById("cell-running").style.display = "block"
-    let df = await dfd.read_csv(path)
-    document.getElementById("cell-running").style.display = "none"
-    return df
-
-}
-
-$("#closename").click(function(){
-
-    let textval = $("#namebook").val()
-    
-    $("#notebookname").html(`<h2>${textval}</h2>`)
-});
+// function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
+//     fixLoggingFunc('log');
+//     fixLoggingFunc('debug');
+//     fixLoggingFunc('warn');
+//     fixLoggingFunc('error');
+//     fixLoggingFunc('info');
 
 
+//     function fixLoggingFunc(name) {
+//         console['old' + name] = console[name];
+//         console[name] = function (...arguments) {
+//             const output = produceOutput(name, arguments);
+//             const eleLog = eleLocator();
 
+//             if (autoScroll) {
+//                 const eleContainerLog = eleOverflowLocator();
+//                 const isScrolledToBottom = eleContainerLog.scrollHeight - eleContainerLog.clientHeight <= eleContainerLog.scrollTop + 1;
+//                 eleLog.innerHTML += output + "<br>";
+//                 if (isScrolledToBottom) {
+//                     eleContainerLog.scrollTop = eleContainerLog.scrollHeight - eleContainerLog.clientHeight;
+//                 }
+//             } else {
+//                 eleLog.innerHTML += output + "<br>";
+//             }
 
+//             console['old' + name].apply(undefined, arguments);
+//         };
+//     }
+
+//     function produceOutput(name, args) {
+//         return args.reduce((output, arg) => {
+//             return output +
+//                 "<span class=\"log-" + (typeof arg) + " log-" + name + "\">" +
+//                 (typeof arg === "object" && (JSON || {}).stringify ? JSON.stringify(arg) : arg) +
+//                 "</span>&nbsp;";
+//         }, '');
+//     }
+// }

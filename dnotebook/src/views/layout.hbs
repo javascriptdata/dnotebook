@@ -34,11 +34,13 @@
   <link rel='stylesheet' href='stylesheets/show-hint.css' />
   <script src="javascripts/addons/javascript-hint.js"></script>
   <script src="javascripts/addons/closebrackets.js"></script>
+  <script src="javascripts/addons/matchbrackets.js"></script>
+
 
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <a class="navbar-brand" href="/"><img style="width: 40px; width: 40px; margin-left: 5px; border-radius: 10px;"
         src="images/danfo.svg" /> notebook</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -51,7 +53,7 @@
     <div style="margin-right: 200px;" class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/getting-started">
+          <a class="nav-link" href="https://dnotebook.jsdata.org/getting-started">
             Getting Started
           </a>
         </li>
@@ -60,22 +62,18 @@
             About
           </a>
         </li>
-
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/opensource9ja/notebookjs">Github</a>
+        </li>
         <li class="nav-item dropdown active">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             Options
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" data-toggle="modal" data-target="#nameNoteModal" href="#">Name Notebook</a>
+            <a class="dropdown-item" data-toggle="modal" data-target="#nameNoteModal" href="#">Rename Notebook</a>
             <a class="dropdown-item" id="download" href="#">Download Notebook</a>
             <a class="dropdown-item" data-toggle="modal" data-target="#uploadNoteModal" href="#">Upload Notebook</a>
-
-            <div class="dropdown-divider"></div>
-            <a class="nav-link" href="/geting-started">Getting Started</a>
-            <a class="dropdown-item" id="download" href="https://github.com/opensource9ja/notebookjs">Github</a>
-            <a class="dropdown-item" id="upload" href="#">Danfo.js</a>
-            <a class="dropdown-item" id="add-data" href="/about">About Dnotebooks</a>
           </div>
         </li>
 
@@ -127,7 +125,7 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control-file" name="name-notebook" id="namebook">
+              <input type="text" class="form-control-file" name="name-notebook" id="namebook" value="untitled">
             </div>
           </form>
         </div>
