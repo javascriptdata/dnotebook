@@ -1,7 +1,7 @@
 {
   "name": "dnotebook",
   "version": "0.0.1",
-  "description": "A JavaScript Notebook App",
+  "description": "Jupyter-like library for JavaScript environment. It allows you to create and share pages that contain live code, text and visualizations.",
   "main": "dnotebook/src/bin/www",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

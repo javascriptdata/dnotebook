@@ -40,11 +40,10 @@ The official documentation can be found [here](https://danfo.jsdata.org) -->
 ## Discussion and Development
 Development discussions take place on our [issues](https://github.com/opensource9ja/dnotebook/issues) tab. 
 
-## Contributing to Danfo
+## Contributing to Dnotebook
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
 
-#### Licence [MIT](https://github.com/opensource9ja/danfojs/blob/master/LICENCE)
+#### Licence [MIT](https://github.com/opensource9ja/dnotebook/blob/master/LICENCE)
 
 #### Created by [Rising Odegua](https://github.com/risenW) and [Stephen Oni](https://github.com/steveoni)
 
-<a href="https://www.producthunt.com/posts/danfo-js?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-danfo-js" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=233871&theme=light" alt="Danfo.js - Open Source JavaScript library for manipulating data. | Product Hunt Embed" style="width: 250px; height: 54px;" width="250px" height="54px" /></a>
