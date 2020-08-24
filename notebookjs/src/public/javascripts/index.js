@@ -91,6 +91,8 @@ function exec_cell(c_id) {
                 }
 
             }
+            console.log(output)
+
         }
 
         // $(`#out_${id}`).empty()
@@ -165,13 +167,9 @@ function add_new_code_cell(c_id, where) {
 
     </div>
     <div class="col-md-2"></div>
-    <div class="col-md-1"></div>
-    <div id="log_container-${new_id}" class="col-md-9 out-divs">
-    <pre id="log-${new_id}"></pre>
-</div>
-    <div id="out_div-${new_id}" class="col-md-9 out-divs">
 
-    </div>
+    <div class="col-md-1"></div>
+    <div id="out_div-${new_id}" class="col-md-9 out-divs"></div>
     <div class="col-md-2"></div>
 </div>
 `
@@ -402,7 +400,8 @@ $("#download").click(function () {
     var url = (window.URL || window.webkitURL).createObjectURL(blob);
 
     var link = document.createElement('a');
-    link.download = 'danfo_notebook.json';
+    var name = document.getElementById("namebook").value
+    link.download = `${name}.json`;
     link.href = url;
 
     var link_pae = $(link);

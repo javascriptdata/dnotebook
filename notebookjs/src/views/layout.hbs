@@ -34,11 +34,13 @@
   <link rel='stylesheet' href='stylesheets/show-hint.css' />
   <script src="javascripts/addons/javascript-hint.js"></script>
   <script src="javascripts/addons/closebrackets.js"></script>
+  <script src="javascripts/addons/matchbrackets.js"></script>
+
 
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <a class="navbar-brand" href="/"><img style="width: 40px; width: 40px; margin-left: 5px; border-radius: 10px;"
         src="images/danfo.svg" /> notebook</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -67,7 +69,7 @@
             Options
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" data-toggle="modal" data-target="#nameNoteModal" href="#">Name Notebook</a>
+            <a class="dropdown-item" data-toggle="modal" data-target="#nameNoteModal" href="#">Rename Notebook</a>
             <a class="dropdown-item" id="download" href="#">Download Notebook</a>
             <a class="dropdown-item" data-toggle="modal" data-target="#uploadNoteModal" href="#">Upload Notebook</a>
 
@@ -127,7 +129,7 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control-file" name="name-notebook" id="namebook">
+              <input type="text" class="form-control-file" name="name-notebook" id="namebook" value="untitled">
             </div>
           </form>
         </div>
