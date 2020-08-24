@@ -82,7 +82,8 @@ function print_val(val) {
 }
 
 function this_div() {
-    let id = `cell-${window.current_cell.split("-")[1]}`
+    // let id = `out-${window.current_cell.split("-")[1]}`
+    let id = `#out_${window.current_cell}`
     let rand_div_name = `random_div_#${id}`
     html = `
     <div class="col-md-1"></div>
@@ -91,7 +92,7 @@ function this_div() {
     <div class="col-md-2"></div>
     `
 
-    $(`#${id}`).append(html)
+    $(`${id}`).append(html)
     return rand_div_name
 }
 
