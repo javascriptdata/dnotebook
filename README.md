@@ -22,25 +22,25 @@ Dnotebook is hosted on NPM, and can installed via package managers like npm and 
 npm install dnotebook
 ```
 
-### Example usage in the browser
+### Example usage
 After installing dnotebook, you can start the server by running the command `dnotebook` in the terminal. This opens a new notebook in your default browser.
 
-```sh
-dnotebook
-```
 
-![](assets/node-rec.gif)
+![](assets/test-dnotes.gif)
 
+
+Download the notebook shown above [here](assets/test-notebook.json). To view and interact with the notebook without installing anything, go to [playnotebook.jsdata.org](https://playnotebook.jsdata.org/) and upload it.
 
 #### [See the Official Getting Started Guide](https://dnotebook.jsdata.org/getting-started)
+
 
 <!-- ## Documentation
 The official documentation can be found [here](https://danfo.jsdata.org) -->
 
-## Discussion and Development
+### Discussion and Development
 Development discussions take place on our [issues](https://github.com/opensource9ja/dnotebook/issues) tab. 
 
-## Contributing to Dnotebook
+### Contributing to Dnotebook
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
 
 #### Licence [MIT](https://github.com/opensource9ja/dnotebook/blob/master/LICENCE)
