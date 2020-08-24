@@ -5,21 +5,20 @@
 
 -----------------
 
-**Dnotebooks** is a Jupyter-like library for javaScript environment. It allows you to create and share pages that contain live code, text and visualizations in a textbook-like manner.
+**Dnotebook** allows you to create and share pages that contain live code, text and visualizations in a textbook-like manner.
 
-## What can it be used for?
-Dnotebooks helps you to:
+### It helps you to:
 - Easily perform interactive data exploration and analysis using efficient JavaScript packages like Danfo.js.
 - Easily build, train and prototype machine learning models using different tools like Tensorflow.js
 - Learn JavaScript in an interactive/visual style. This can hasten learning and understanding.
 - Plain Experimentation/Prototyping. Any experimentation performed in JavaScript can run on Dnotebooks.
 
 
-## How to install
+### How to install
 Dnotebook is hosted on NPM, and can installed via package managers like npm and yarn
 
 ```sh
-npm install dnotebook
+npm install -g dnotebook
 ```
 
 ### Example usage
@@ -29,7 +28,7 @@ After installing dnotebook, you can start the server by running the command `dno
 ![](assets/test-dnotes.gif)
 
 
-Download the notebook shown above [here](assets/test-notebook.json). To view and interact with the notebook without installing anything, go to [playnotebook.jsdata.org](https://playnotebook.jsdata.org/) and upload it.
+You can download the notebook shown above [here](assets/test-notebook.json). To view and interact with the notebook without installing anything, go to [playnotebook.jsdata.org](https://playnotebook.jsdata.org/) and upload it.
 
 #### [See the Official Getting Started Guide](https://dnotebook.jsdata.org/getting-started)
 
