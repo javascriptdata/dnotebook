@@ -1,11 +1,11 @@
 {
-  "name": "notebookjs",
+  "name": "dnotebook",
   "version": "0.0.1",
   "description": "A JavaScript Notebook App",
-  "main": "notebookjs/src/bin/www",
+  "main": "dnotebook/src/bin/www",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node notebookjs/src/bin/www"
+    "start": "node dnotebook/src/bin/www"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +19,6 @@
     "opn": "^6.0.0"
   },
   "bin": {
-    "dnotebook": "./notebookjs/src/bin/www"
+    "dnotebook": "./dnotebook/src/bin/www"
   }
 }
