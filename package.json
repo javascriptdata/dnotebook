@@ -3,12 +3,23 @@
   "version": "0.0.1",
   "description": "Jupyter-like library for JavaScript environment. It allows you to create and share pages that contain live code, text and visualizations.",
   "main": "dnotebook/src/bin/www",
+  "contributors": [
+    {
+      "name": "Rising Odegua"
+    },
+    {
+      "name": "Stephen Oni"
+    }
+  ],
+  "files": [
+    "dnotebook/src/"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dnotebook/src/bin/www"
+    "start": "node dnotebook/src/bin/www",
+    "patch": "npm version patch",
+    "publish": "npm publish"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -20,5 +31,22 @@
   },
   "bin": {
     "dnotebook": "./dnotebook/src/bin/www"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opensource9ja/danfojs.git"
+  },
+  "keywords": [
+    "Notebook",
+    "Interactive-analysis",
+    "live-code",
+    "Jupyter-Notebook",
+    "Danfojs"
+  ],
+  "author": "Rising Odegua <risingodegua@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opensource9ja/dnotebook/issues"
+  },
+  "homepage": "https://github.com/opensource9ja/dnotebook#readme"
 }
