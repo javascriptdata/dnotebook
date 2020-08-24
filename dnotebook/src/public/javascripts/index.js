@@ -447,7 +447,6 @@ $("#import-notebook-file").change(() => {
         }
         reader.readAsText(content);
     }
-    $("#uploadNoteModal").modal('hide');
 })
 
 

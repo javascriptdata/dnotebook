@@ -365,7 +365,7 @@
 
                 $(`textarea#text-box_${id}`).addClass("text-box")
                 $(`textarea#text-box_${id}`).val(md_out)
-                // update_text_box_size()
+                update_text_box_size()
 
                 $(`#text-div_${id}`)
                     .mouseover(function () {
@@ -381,7 +381,21 @@
         }
     }
 
-    
+
+
+    /**
+     * Helper function to update text box size dynamically
+     */
+    function update_text_box_size() {
+        $('textarea').each(function () {
+            this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+        }).on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    }
+
+
     /**
      * Helper function to easily log output from for loops in Dom
      * @param {*} args 
@@ -401,7 +415,7 @@
     global.notebook_json = notebook_json
     global.load_notebook = load_notebook
     global.load_package = load_package
-    global.load_data = load_csv
+    global.load_csv = load_csv
     global.table = table
 
 })(window)
