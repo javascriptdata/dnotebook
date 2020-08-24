@@ -22,6 +22,10 @@ app.get('/', function(req, res) {
   res.render('index', { title: 'Danfo Notebooks | Interactive Notebook Interface for JavaScript Developers' });
 });
 
+app.get('/demo', function(req, res) {
+  res.render('demo', { title: 'Danfo Notebooks | Interactive Notebook Interface for JavaScript Developers', demo:true });
+});
+
 
 app.get('/getting-started', function (req, res) {
   res.render('getting-started', { title: 'Getting Started with Danfo Notebooks | Interactive Notebook Interface for JavaScript Developers' });

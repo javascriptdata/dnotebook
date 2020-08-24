@@ -462,7 +462,6 @@ $("#import-notebook-file").change(() => {
             let json = JSON.parse(json_content)
 
             $(".content").empty()
-
             load_notebook(json);
         }
         reader.readAsText(content);

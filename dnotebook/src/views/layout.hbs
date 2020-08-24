@@ -147,6 +147,17 @@
   </nav>
   <script src="javascripts/index.js"></script>
   <script src="javascripts/utils.js"></script>
+  {{#if demo}}
+  <script src="javascripts/temp_data.js"></script>
+
+    <script>
+        $(document).ready(function(){
+                $(".content").empty()
+                load_notebook(json);
+        })
+    </script>
+  {{/if}}
+
 </body>
 
 </html>

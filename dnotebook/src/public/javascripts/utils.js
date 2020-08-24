@@ -185,14 +185,14 @@
                 let cell_content = scope[key].getValue()
                 let cell_output = $(`#out_${key}`).html()
 
-                store[`cell-${id}`] = {
+                    store[`cell-${id}`] = {
                     "in": cell_content,
                     "out": cell_output
                 }
             }
 
         }
-
+        
         store = JSON.stringify(store);
         return store
     }
