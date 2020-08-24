@@ -46,7 +46,7 @@ function print_val(val) {
                     }
 
                     data_string += `.......${col_length - 10} more],`
-                } else {
+                } else {https://medium.com/better-programming/how-to-create-your-own-event-emitter-in-javascript-fbd5db2447c4
 
                     for (let j = 0; j < col_length; j++) {
 
@@ -95,12 +95,7 @@ function this_div() {
     return rand_div_name
 }
 
-// function viz(name, callback) {
-//     // out_div-1
-//     let id = `#out_div${window.current_cell}`
-//     $(`${id}`).append(`<div id=${name}></div>`)
 
-//     let cb = callback(name);
 function viz(name, callback) {
     // out_div-1
 
