@@ -302,7 +302,6 @@ function delete_cell(id) {
     } else {
         row_id = `cell-${Number(id)}`
         var div_ele = document.getElementById(row_id);
-        // console.log(row_id, $(`#${row_id}`).parent().id)
         div_ele.parentNode.removeChild(div_ele);
         __code_cell_count -= 1
     }
@@ -310,6 +309,9 @@ function delete_cell(id) {
 }
 
 
+/**
+ * Executes a cell on button run click
+ */
 $(document).on("click", "button.run", function () {
     if (this.id.split("_").includes("md")) {
         let id = this.id.split("-")[1]
@@ -320,13 +322,19 @@ $(document).on("click", "button.run", function () {
     }
 })
 
+
+/**
+ * Deletes a cell on button delete click
+ */
 $(document).on("click", "button.del", function () {
     let id = this.id.split("_")[1]
-    console.log(id, this.id, __code_cell_count)
     delete_cell(id)
 })
 
 
+/**
+ * Adds a code cell on button add-code click
+ */
 $(document).on("click", "button.add-code", function () {
     let where;
     if (this.id.split("_").includes("down")) {
@@ -337,6 +345,9 @@ $(document).on("click", "button.add-code", function () {
     add_new_code_cell(this.id, where)
 })
 
+/**
+ * Adds a markdown cell on button add-text click
+ */
 $(document).on("click", "button.add-text", function () {
     let where;
     if (this.id.split("_").includes("down")) {
@@ -344,16 +355,22 @@ $(document).on("click", "button.add-text", function () {
     } else {
         where = "up"
     }
-    // console.log(this.id);
     add_new_text_cell(this.id, where)
 })
 
+
+/**
+ * Displays text box on double click of a text
+ */
 $(document).on("dblclick", "textarea.text-box", function () {
     let id = this.id.split("_")[1]
     show_md(id, this.value)
 
 })
 
+/**
+ * Displays rendered Markdown text
+ */
 function show_md(id, value) {
     div_id = `text-div_${id}`
     md_texts[div_id] = value //stores the markdown text for the corresponding div
@@ -362,18 +379,23 @@ function show_md(id, value) {
     document.getElementById(div_id).style.display = "none"
 }
 
+/**
+ * Displays rendered Markdown on double click
+ */
 $(document).on("dblclick", "div.text-out-box", function () {
     let id = this.id.split("_")[1]
     md_id = `text-div_${id}`
     out_id = `out-text-div_${id}`
-    // md_txt = md_texts[md_id]
-
     document.getElementById(md_id).style.display = "block"
     document.getElementById(out_id).style.display = "none"
 
 })
 
 
+
+/**
+ * Helper function to update text box size dynamically
+ */
 function update_text_box_size() {
     $('textarea').each(function () {
         this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
@@ -384,6 +406,9 @@ function update_text_box_size() {
 }
 
 
+/**
+ * Initiates download function for Notebook
+ */
 $("#download").click(function () {
     let out = notebook_json(cells_order, vars_in_scope, md_texts);
 
@@ -402,7 +427,9 @@ $("#download").click(function () {
 });
 
 
-
+/**
+ * Internal function to import new Notebook
+ */
 $("#import-notebook-file").change(() => {
 
     let files = $("#import-notebook-file")[0].files
@@ -420,68 +447,18 @@ $("#import-notebook-file").change(() => {
         }
         reader.readAsText(content);
     }
-    // $("#uploadNoteModal").modal('hide');
+    $("#uploadNoteModal").modal('hide');
 })
 
-// $("#uploadnb").click(function () {
 
-//     var files = $("#import-notebook-file")[0].files
-//     let json_content = null
-//     if (files.length > 0) {
-//         var content = files[0];
-//         var reader = new FileReader();
-//         reader.onload = function (t) {
-//             json_content = t.target.result;
-//             let json = JSON.parse(json_content)
-
-//             $(".content").empty()
-
-//             load_notebook(json);
-//         }
-//         reader.readAsText(content);
-//     }
-// })
-
-
-// rewireLoggingToElement(
-//     () => document.getElementById("log"),
-//     () => document.getElementById("log-container"), true);
-
-// function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
-//     fixLoggingFunc('log');
-//     fixLoggingFunc('debug');
-//     fixLoggingFunc('warn');
-//     fixLoggingFunc('error');
-//     fixLoggingFunc('info');
-
-
-//     function fixLoggingFunc(name) {
-//         console['old' + name] = console[name];
-//         console[name] = function (...arguments) {
-//             const output = produceOutput(name, arguments);
-//             const eleLog = eleLocator();
-
-//             if (autoScroll) {
-//                 const eleContainerLog = eleOverflowLocator();
-//                 const isScrolledToBottom = eleContainerLog.scrollHeight - eleContainerLog.clientHeight <= eleContainerLog.scrollTop + 1;
-//                 eleLog.innerHTML += output + "<br>";
-//                 if (isScrolledToBottom) {
-//                     eleContainerLog.scrollTop = eleContainerLog.scrollHeight - eleContainerLog.clientHeight;
-//                 }
-//             } else {
-//                 eleLog.innerHTML += output + "<br>";
-//             }
-
-//             console['old' + name].apply(undefined, arguments);
-//         };
-//     }
-
-//     function produceOutput(name, args) {
-//         return args.reduce((output, arg) => {
-//             return output +
-//                 "<span class=\"log-" + (typeof arg) + " log-" + name + "\">" +
-//                 (typeof arg === "object" && (JSON || {}).stringify ? JSON.stringify(arg) : arg) +
-//                 "</span>&nbsp;";
-//         }, '');
-//     }
-// }
+/**
+ * Helper function to update text box size dynamically
+ */
+function update_text_box_size() {
+    $('textarea').each(function () {
+        this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+}
