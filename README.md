@@ -28,7 +28,7 @@ After installing dnotebook, you can start the server by running the command `dno
 ![](assets/test-dnotes.gif)
 
 
-You can download the notebook shown above [here](assets/test-notebook.json). To view and interact with the notebook without installing anything, go to [playnotebook.jsdata.org](https://playnotebook.jsdata.org/) and upload it.
+You can download the notebook shown above [here](assets/test-notebook.json). To view and interact with the notebook without installing anything, go to [playnotebook.jsdata.org](https://playnotebook.jsdata.org/demo).
 
 #### [See the Official Getting Started Guide](https://dnotebook.jsdata.org/getting-started)
 
