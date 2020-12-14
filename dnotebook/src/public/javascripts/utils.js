@@ -388,7 +388,7 @@
      */
     function update_text_box_size() {
         $('textarea').each(function () {
-            this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+            this.setAttribute('style', 'overflow-y:hidden;');
         }).on('input', function () {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
