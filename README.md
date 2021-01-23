@@ -1,10 +1,5 @@
 
-<div align="center">
-  <img src="dnotebook/src/public/images/dnotebook.png"><br>
-</div>
-
------------------
-
+# DNOTEBOOK
 **Dnotebook** allows you to create and share pages that contain live code, text and visualizations in a textbook-like manner.
 
 ### It helps you to:
@@ -38,6 +33,9 @@ The official documentation can be found [here](https://danfo.jsdata.org) -->
 
 ### Discussion and Development
 Development discussions take place on our [issues](https://github.com/opensource9ja/dnotebook/issues) tab. 
+
+>> We are recreating Dnotebook to use React and incorporating some modern designs. See development repo [here](https://github.com/opensource9ja/dnotebook-react)
+
 
 ### Contributing to Dnotebook
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
