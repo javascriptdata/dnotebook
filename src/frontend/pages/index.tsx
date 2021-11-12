@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
 import CodeEditor from '../components/CodeEditor'
+import CodeServerAPI from '../lib/server/code_runner'
 
 const Home: NextPage = () => {
   const [code, setCode] = useState('')
@@ -15,6 +16,13 @@ const Home: NextPage = () => {
 
   const handleCodeSubmit = () => {
     console.log(code, currLanguage)
+    CodeServerAPI.runCode(code, currLanguage)
+      .then((response) => {
+        setOutput(response.output)
+        console.log(response)
+      }).catch((error) => {
+        console.log(error)
+      })
   }
 
   return (
@@ -28,6 +36,11 @@ const Home: NextPage = () => {
         onCodeChange={handleCodeChange}
       />
       <button onClick={handleCodeSubmit}>Submit</button>
+      <br />
+      <textarea
+      className="m-2 w-96 h-96"
+        value={output}
+      />
     </div>
   )
 }
