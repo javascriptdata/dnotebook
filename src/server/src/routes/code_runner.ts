@@ -3,12 +3,10 @@ import { runCode } from '../runner'
 
 const codeRunnerRoute = express.Router();
 
-codeRunnerRoute.post('/run', (req, res) => {
+codeRunnerRoute.post('/run', async (req, res) => {
     const { code, language } = req.body;
-    const result = runCode(code, language);
-    res.send({
-        output: result,
-    });
+    const result = await runCode(code, language);
+    res.send(result);
 })
 
 export default codeRunnerRoute;
