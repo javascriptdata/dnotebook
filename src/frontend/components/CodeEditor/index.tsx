@@ -6,10 +6,12 @@ let CodeMirror: any
 const api = ["javascript", "markdown"]
 
 type Props = {
+    cellId: string,
     language?: string,
     onLanguageChange?: (language: string) => void,
-    code?: string,
-    onCodeChange?: (code: string, language: string) => void,
+    content?: string,
+    onCellChange?: (cellId: string, content: string, language: string) => void,
+    onCellRun?: (cellId: string) => void,
 }
 
 class CodeEditor extends Component<Props> {
@@ -24,7 +26,7 @@ class CodeEditor extends Component<Props> {
         CodeMirror = require('react-codemirror2')
         require("codemirror/lib/codemirror.css");
         require("codemirror/mode/javascript/javascript");
-        require("codemirror/theme/yeti.css");
+        require("codemirror/theme/3024-night.css");
         require("codemirror/addon/edit/closebrackets");
         require("codemirror/addon/edit/matchbrackets");
         require("codemirror/addon/hint/javascript-hint");
@@ -45,15 +47,20 @@ class CodeEditor extends Component<Props> {
         if (onLanguageChange) onLanguageChange(language)
     }
 
-    codeChangeHandler(editor: any, data: any, value: string) {
+    cellChangeHandler(editor: any, data: any, value: string) {
         const language = editor.options.mode
-        const { onCodeChange } = this.props
-        if (onCodeChange) onCodeChange(value, language)
+        const { cellId, onCellChange } = this.props
+        if (onCellChange) onCellChange(cellId, value, language)
+    }
+
+    handleCellRun() {
+        const { cellId, onCellRun } = this.props
+        if (onCellRun) onCellRun(cellId)
     }
 
     render() {
         const { render, selectedMode } = this.state
-        const { code } = this.props
+        const { cellId, content } = this.props
         if (!render) {
             return null
         }
@@ -67,11 +74,11 @@ class CodeEditor extends Component<Props> {
                     ))}
                 </select>
                 <UnControlled
-                    value={code}
-                    onChange={this.codeChangeHandler.bind(this)}
+                    value={content}
+                    onChange={this.cellChangeHandler.bind(this)}
                     options={{
                         mode: selectedMode,
-                        theme: 'yeti',
+                        theme: '3024-night',
                         lineNumbers: true,
                         lineWrapping: true,
                         autoCloseBrackets: true,
@@ -81,21 +88,24 @@ class CodeEditor extends Component<Props> {
                         },
                     }}
                 />
+                <button onClick={this.handleCellRun.bind(this)}>Submit</button>
             </Fragment>
         )
     }
 }
 
 CodeEditor.propTypes = {
-    code: PropTypes.string,
-    onCodeChange: PropTypes.func,
+    cellId: PropTypes.string,
+    content: PropTypes.string,
+    onCellChange: PropTypes.func,
     onLanguageChange: PropTypes.func,
     language: PropTypes.string,
+    handleCellRun: PropTypes.func,
 }
 
 CodeEditor.defaultProps = {
     code: '',
-    onCodeChange: () => { },
+    onCellChange: () => { },
     onLanguageChange: () => { },
     language: 'javascript',
 }

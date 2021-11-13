@@ -4,23 +4,53 @@ import { useState } from 'react'
 import CodeEditor from '../components/CodeEditor'
 import CodeServerAPI from '../lib/server/code_runner'
 
-const Home: NextPage = () => {
-  const [code, setCode] = useState('')
-  const [currLanguage, setCurrLanguage] = useState('javascript')
-  const [output, setOutput] = useState('')
+type outputError = {
+  name?: string,
+  output?: string,
+  hasErrors?: boolean,
+  stack?: any
+}
 
-  const handleCodeChange = (code: string, language: string) => {
-    setCode(code)
-    setCurrLanguage(language)
+type output = {
+  logs?: string,
+  output: string,
+  hasErrors: boolean
+}
+
+type cellObject = {
+  [cellId: string]: { content: string, language: string }
+}
+
+const Home: NextPage = () => {
+  const [cellObject, setCellObject] = useState<cellObject>({})
+  const [currCellLanguage, setCurrCellLanguage] = useState('javascript')
+  const [output, setOutput] = useState<output>({ output: '', hasErrors: false })
+  const [outputError, setOutputError] = useState<outputError>({})
+  const [hasError, setHasError] = useState(false)
+
+  const handleCellChange = (cellId: string, value: string, language: string) => {
+    const newCellObj = { ...cellObject, [cellId]: { content: value, language } }
+    setCellObject(newCellObj)
+    setCurrCellLanguage(language)
   }
 
-  const handleCodeSubmit = () => {
-    console.log(code, currLanguage)
-    CodeServerAPI.runCode(code, currLanguage)
+  const handleCellRun = (cellId: string) => {
+    const content = cellObject[cellId].content
+    CodeServerAPI.runCode(content, currCellLanguage)
       .then((response) => {
-        setOutput(response.output)
-        console.log(response)
+        if (response.hasErrors) {
+          setOutputError(response)
+          setHasError(true)
+          setOutput({ output: '', hasErrors: false })
+        } else {
+          setOutput(response)
+          setHasError(false)
+          setOutputError({})
+        }
       }).catch((error) => {
+        setOutputError({
+          ...error,
+        })
         console.log(error)
       })
   }
@@ -33,14 +63,28 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <CodeEditor
-        onCodeChange={handleCodeChange}
+        cellId={"1"}
+        onCellChange={handleCellChange}
+        onCellRun={handleCellRun}
       />
-      <button onClick={handleCodeSubmit}>Submit</button>
+      <CodeEditor
+        cellId={"2"}
+        onCellChange={handleCellChange}
+        onCellRun={handleCellRun}
+      />
       <br />
-      <textarea
-      className="m-2 w-96 h-96"
-        value={output}
-      />
+      <br />
+      {hasError ? (
+        <div className="text-red-400 p-3">
+          <h3><b>{outputError.name}</b></h3>
+          {outputError.output}
+        </div>
+      ) : (
+        <textarea
+          className="m-2 w-96 h-96"
+          value={output.output}
+        />
+      )}
     </div>
   )
 }
