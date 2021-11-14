@@ -32,6 +32,9 @@ class ServerAPI {
     async runCodeInNodeJs(code: string, jsFlavor: string, callback: (accumulatedResult: string) => void) {
         fetch(`${SERVER_URL}/nodejs/run`, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 code,
                 jsFlavor,
@@ -46,8 +49,26 @@ class ServerAPI {
                         return;
                     }
                     const text = new TextDecoder("utf-8").decode(value);
-                    textAccumulator += text + "\n";
-                    callback(textAccumulator)
+                    try {
+                        const textInJson = JSON.parse(text)
+
+                        if (typeof textInJson === 'object' && textInJson !== null) {
+
+                            if ("___$hasError" in textInJson) {
+                                callback(textInJson)
+
+                            } else {
+                                textAccumulator += text
+                                callback(textAccumulator)
+                            }
+                        } else {
+                            textAccumulator += text
+                            callback(textAccumulator)
+                        }
+                    } catch (error) {
+                        callback(text)
+                    }
+
                     read();
                 });
                 read();
