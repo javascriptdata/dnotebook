@@ -18,7 +18,7 @@ async function replEvalCode(code: string) {
     return runNodeCode(code);
 }
 
-const runNodeCode = (code: string, jsFlavor?: string, callback?: (intermediateResult: any) => void) => {
+const runNodeCode = async (code: string, jsFlavor?: string, callback?: (intermediateResult: any) => void) => {
     try {
         // Code may come in any flavor of JS, so we need to convert it to pre-ES5
         const regeneratedCode = transformSync(code, {
@@ -33,13 +33,13 @@ const runNodeCode = (code: string, jsFlavor?: string, callback?: (intermediateRe
             }
         };
 
-        const result = vm.runInNewContext(regeneratedCode, replServer.context, {
+        const result = await vm.runInNewContext(regeneratedCode, replServer.context, {
             displayErrors: true,
         })
 
         formatAndReturnOutput(result, callback);
     } catch (err: any) {
-        callback && callback({ output: err.message, name: err.name, hasErrors: true });
+        callback && callback({ output: err.message, name: err.name, __$hasError: true });
     }
 }
 
