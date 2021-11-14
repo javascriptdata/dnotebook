@@ -4,10 +4,9 @@
       "@babel/preset-env",
       {
         "targets": {
-          "node": "current"
+          "esmodules": true
         }
       }
     ]
-  ],
-  "plugins": ["@babel/plugin-transform-runtime"]
+  ]
 }

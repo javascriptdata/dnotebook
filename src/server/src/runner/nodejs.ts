@@ -22,9 +22,20 @@ const runNodeCode = async (code: string, jsFlavor?: string, callback?: (intermed
     try {
         // Code may come in any flavor of JS, so we need to convert it to pre-ES5
         const regeneratedCode = transformSync(code, {
-            presets: ['@babel/preset-env'],
+            presets: [
+                [
+                    "@babel/preset-env",
+                    {
+                        "targets": {
+                            "esmodules": true
+                        }
+                    }
+                ]
+            ],
         })?.code || code;
 
+        const startTime = Date.now();
+        
         //Write console logs to call back. This ensures that general console.logs or console.logs in loops
         // are sent to the client.
         replServer.context.console = {
@@ -37,13 +48,15 @@ const runNodeCode = async (code: string, jsFlavor?: string, callback?: (intermed
             displayErrors: true,
         })
 
-        formatAndReturnOutput(result, callback);
+        const duration = (Date.now() - startTime) / 1000;
+        formatAndReturnOutput({ result, duration }, callback); //This signifies that the code has finished executing
     } catch (err: any) {
+        console.log(err)
         callback && callback({ output: err.message, name: err.name, __$hasError: true });
     }
 }
 
-const formatAndReturnOutput = (output: string, callback: any) => {
+const formatAndReturnOutput = (output: any, callback: any) => {
     if (output) {
         //output of some babel transformations will return "use strict" as final result
         // hence we check and return empty string if it is there
