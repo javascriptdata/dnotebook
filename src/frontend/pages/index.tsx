@@ -34,20 +34,14 @@ const Home: NextPage = () => {
     setCurrCellLanguage(language)
   }
 
+  const handleCellRunCallback = (accumulatedResult: string) => {
+    setOutput({ output: accumulatedResult, hasErrors: false })
+  }
+
   const handleCellRun = (cellId: string) => {
     const content = cellObject[cellId].content
-    CodeServerAPI.runCode(content, currCellLanguage)
-      .then((response) => {
-        if (response.hasErrors) {
-          setOutputError(response)
-          setHasError(true)
-          setOutput({ output: '', hasErrors: false })
-        } else {
-          setOutput(response)
-          setHasError(false)
-          setOutputError({})
-        }
-      }).catch((error) => {
+    CodeServerAPI.exec(content, currCellLanguage, handleCellRunCallback)
+      .catch((error) => {
         setOutputError({
           ...error,
         })
