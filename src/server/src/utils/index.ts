@@ -8,40 +8,8 @@ import { Response } from "express";
  * @param intermediateResult Intermediate result(s) sent from code execution
  */
 const callbackWriter = (res: Response, intermediateResult: any) => {
-    if (typeof intermediateResult === 'object' && intermediateResult !== null) {
-        if (intermediateResult.hasOwnProperty('duration')) {
-            const finalResult = formatOutputBeforeSending(intermediateResult.result)
-            if (finalResult === "") {
-                res.end(JSON.stringify({
-                    data: null,
-                    executionIsComplete: true,
-                    duration: intermediateResult.duration
-                }));
-            } else {
-                res.write(JSON.stringify({
-                    data: finalResult,
-                    executionIsComplete: true,
-                    duration: intermediateResult.duration
-                }));
-                res.end();
-            }
-
-        } else {
-            const fResult = formatOutputBeforeSending(intermediateResult);
-            res.write(JSON.stringify({
-                data: fResult,
-                executionIsComplete: false,
-                duration: intermediateResult.duration
-            }));
-        }
-    } else {
-        const fResult = formatOutputBeforeSending(intermediateResult);
-        res.write(JSON.stringify({
-            data: fResult,
-            executionIsComplete: false,
-            duration: intermediateResult.duration
-        }));
-    }
+    const fResult = formatOutputBeforeSending(intermediateResult);
+    res.write(fResult);
 };
 
 /**
