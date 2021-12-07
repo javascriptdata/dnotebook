@@ -1,3 +1,5 @@
+import { outputError } from '../typings/types'
+
 const SERVER_URL = process.env.NEXT_PUBLIC_CODE_SERVER_URL
 class ServerAPI {
     /**
@@ -9,14 +11,14 @@ class ServerAPI {
      * @returns A promise that resolves when the execution is finished.
      * @throws Error if the language is not supported.
      */
-    async exec(content: string, language: string, callback: (accumulatedResult: string) => void) {
+    async exec(content: string, language: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
         if (["javascript"].includes(language)) {
             // TODO: Get the flavor of javascript used from the selected language.
             const jsFlavor = "ES6"; //Temporarily hardcoded for now.
             return this.runCodeInNodeJs(content, jsFlavor, callback);
         } else if (language === "markdown") {
             //TODO: process markdown
-            return callback("Done MARKDOWN")
+            // return callback("Done MARKDOWN")
         } else {
             throw new Error("Language not supported");
         }
@@ -29,7 +31,7 @@ class ServerAPI {
      * @param callback A callback that is called with the result/intermediate result of the execution.
      * @returns A promise that resolves when the execution is finished.
      * */
-    async runCodeInNodeJs(code: string, jsFlavor: string, callback: (accumulatedResult: string) => void) {
+    async runCodeInNodeJs(code: string, jsFlavor: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
         fetch(`${SERVER_URL}/nodejs/run`, {
             method: 'POST',
             headers: {
@@ -51,22 +53,20 @@ class ServerAPI {
                     const text = new TextDecoder("utf-8").decode(value);
                     try {
                         const textInJson = JSON.parse(text)
-
                         if (typeof textInJson === 'object' && textInJson !== null) {
-
-                            if ("___$hasError" in textInJson) {
-                                callback(textInJson)
-
+                            if (Object.keys(textInJson).includes("__$hasError")) {
+                                callback(textInJson, true) //format error before return
                             } else {
                                 textAccumulator += text
-                                callback(textAccumulator)
+                                callback(textAccumulator, false)
                             }
                         } else {
                             textAccumulator += text
-                            callback(textAccumulator)
+                            callback(textAccumulator, false)
                         }
                     } catch (error) {
-                        callback(text)
+                        textAccumulator += text
+                        callback(textAccumulator, false)
                     }
 
                     read();

@@ -3,29 +3,14 @@ import Head from 'next/head'
 import { useState } from 'react'
 import CodeEditor from '../components/CodeEditor'
 import CodeServerAPI from '../lib/server/code_runner'
+import { cellObject, outputError } from '../lib/typings/types'
 
-type outputError = {
-  name?: string,
-  output?: string,
-  hasErrors?: boolean,
-  stack?: any
-}
-
-type output = {
-  logs?: string,
-  output: string,
-  hasErrors: boolean
-}
-
-type cellObject = {
-  [cellId: string]: { content: string, language: string }
-}
 
 const Home: NextPage = () => {
   const [cellObject, setCellObject] = useState<cellObject>({})
   const [currCellLanguage, setCurrCellLanguage] = useState('javascript')
-  const [output, setOutput] = useState<output>({ output: '', hasErrors: false })
-  const [outputError, setOutputError] = useState<outputError>({})
+  const [output, setOutput] = useState("")
+  const [outputError, setOutputError] = useState("")
   const [hasError, setHasError] = useState(false)
 
   const handleCellChange = (cellId: string, value: string, language: string) => {
@@ -34,8 +19,19 @@ const Home: NextPage = () => {
     setCurrCellLanguage(language)
   }
 
-  const handleCellRunCallback = (accumulatedResult: string) => {
-    setOutput({ output: accumulatedResult, hasErrors: false })
+  const handleCellRunCallback = (accumulatedResult: string | outputError, hasErrors: boolean) => {
+    if (hasErrors) {
+      setHasError(true)
+      //format error message for displaying
+      const errorMessage = (accumulatedResult as outputError).output.split('\n')[0]
+      const errorName = (accumulatedResult as outputError).name
+      const fullErrorMessage = errorName + ': ' + errorMessage
+      setOutputError(fullErrorMessage)
+    } else {
+      setHasError(false)
+      setOutput(accumulatedResult as string)
+
+    }
   }
 
   const handleCellRun = (cellId: string) => {
@@ -69,14 +65,13 @@ const Home: NextPage = () => {
       <br />
       <br />
       {hasError ? (
-        <div className="text-red-400 p-3">
-          <h3><b>{outputError.name}</b></h3>
-          {outputError.output}
+        <div className="text-red-400 p-3" dangerouslySetInnerHTML={{ __html: outputError }}>
+
         </div>
       ) : (
         <textarea
           className="m-2 w-96 h-96"
-          value={output.output}
+          value={output}
         />
       )}
     </div>
