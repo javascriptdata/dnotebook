@@ -12,10 +12,8 @@ class ServerAPI {
      * @throws Error if the language is not supported.
      */
     async exec(content: string, language: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
-        if (["javascript"].includes(language)) {
-            // TODO: Get the flavor of javascript used from the selected language.
-            const jsFlavor = "ES6"; //Temporarily hardcoded for now.
-            return this.runCodeInNodeJs(content, jsFlavor, callback);
+        if (["javascript", "bash"].includes(language)) {
+            return this.executeInNodeJs(content, language, callback);
         } else if (language === "markdown") {
             //TODO: process markdown
             // return callback("Done MARKDOWN")
@@ -31,7 +29,11 @@ class ServerAPI {
      * @param callback A callback that is called with the result/intermediate result of the execution.
      * @returns A promise that resolves when the execution is finished.
      * */
-    async runCodeInNodeJs(code: string, jsFlavor: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
+    async executeInNodeJs(
+        code: string,
+        language: string,
+        callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
+
         fetch(`${SERVER_URL}/nodejs/run`, {
             method: 'POST',
             headers: {
@@ -39,7 +41,7 @@ class ServerAPI {
             },
             body: JSON.stringify({
                 code,
-                jsFlavor,
+                language
             }),
         })
             .then(response => response.body)

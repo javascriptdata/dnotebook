@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 let CodeMirror: any
 
-const api = ["javascript", "markdown"]
+const api = ["javascript", "markdown", "bash"]
 
 type Props = {
     cellId: string,

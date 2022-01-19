@@ -18,24 +18,32 @@ async function replEvalCode(code: string) {
     return runNodeCode(code);
 }
 
-const runNodeCode = async (code: string, jsFlavor?: string, callback?: (intermediateResult: any) => void) => {
+const runNodeCode = async (code: string, language?: string, callback?: (intermediateResult: any) => void) => {
+
     try {
-        // Code may come in any flavor of JS, so we need to convert it to pre-ES5
-        const regeneratedCode = transformSync(code, {
-            presets: [
-                [
-                    "@babel/preset-env",
-                    {
-                        "targets": {
-                            "esmodules": true
+        let wrappedCode;
+
+        if (language === "bash") {
+            wrappedCode = generateBashCode(code)
+        } else {
+            // Code may come in any flavor of JS, so we need to convert it to pre-ES5
+            const regeneratedCode = transformSync(code, {
+                presets: [
+                    [
+                        "@babel/preset-env",
+                        {
+                            "targets": {
+                                "esmodules": true
+                            }
                         }
-                    }
-                ]
-            ],
-        })?.code || code;
-        //wrap generated code in async function
-        const wrappedCode = `(async () => {${regeneratedCode}})()`;
-        
+                    ]
+                ],
+            })?.code || code;
+            //wrap generated code in async function
+            wrappedCode = `(async () => {${regeneratedCode}})()`;
+        }
+
+
         //Write console logs to call back. This ensures that general console.logs or console.logs in loops
         // are sent to the client.
         replServer.context.console = {
@@ -55,6 +63,7 @@ const runNodeCode = async (code: string, jsFlavor?: string, callback?: (intermed
         console.log(err)
         callback && callback({ output: err.message, name: err.name, __$hasError: true });
     }
+
 }
 
 const formatAndReturnOutput = (output: any, callback: any) => {
@@ -62,6 +71,21 @@ const formatAndReturnOutput = (output: any, callback: any) => {
     // hence we check and return empty string if it is there
     const foutput = output == "use strict" ? "" : output
     callback(foutput);
+}
+
+const generateBashCode = (code: string) => {
+    return `
+    let util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+    exec('${code}')
+        .then(({ stdout, stderr }) => {
+            console.log(stdout)
+            console.log(stderr)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    `
 }
 
 export {
