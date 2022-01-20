@@ -8,23 +8,10 @@ import { Response } from "express";
  * @param intermediateResult Intermediate result(s) sent from code execution
  */
 const callbackWriter = (res: Response, intermediateResult: any) => {
-    const fResult = formatOutputBeforeSending(intermediateResult);
-    res.write(fResult);
+    res.write(intermediateResult);
 };
 
-/**
- * Formats the intermediate result before sending it to the client.
- * The main format here is the check for undefined values. This is important because
- * the response writer cannot write undefined values to the output stream.
- * @param value Any value
- * @returns 
- */
-const formatOutputBeforeSending = (value: any) => {
-    const fResult = value === undefined ? "" : JSON.stringify(value) + '\n';
-    return fResult;
+export {
+    callbackWriter
 }
 
-export {
-    callbackWriter,
-    formatOutputBeforeSending
-}
