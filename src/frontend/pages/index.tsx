@@ -2,11 +2,10 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
 import CodeEditor from '../components/CodeEditor'
-import CodeServerAPI from '../lib/interpreter/server'
+import NodejsInterpreter from '../lib/interpreter/server'
 import MenuBar from '../components/MenuBar'
 import { cellObject, outputError } from '../lib/typings/types'
 import { useSelector, useDispatch } from 'react-redux';
-
 
 const Home: NextPage = () => {
   const { interpreterMode } = useSelector((state: any) => state.app)
@@ -41,7 +40,7 @@ const Home: NextPage = () => {
   const handleCellRun = (cellId: string) => {
     const content = cellObject[cellId].content
     if (interpreterMode === 'node') {
-      CodeServerAPI.exec(content, currCellLanguage, handleCellRunCallback)
+      NodejsInterpreter.exec(content, currCellLanguage, handleCellRunCallback)
         .catch((error) => {
           setOutputError({
             ...error,
@@ -75,14 +74,11 @@ const Home: NextPage = () => {
       <br />
       <br />
       {hasError ? (
-        <div className="text-red-400 p-3" dangerouslySetInnerHTML={{ __html: outputError }}>
-
-        </div>
+        <div className="text-red-400 p-3" dangerouslySetInnerHTML={{ __html: outputError }}></div>
       ) : (
-        <textarea
-          className="m-2 w-96 h-96"
-          value={output}
-        />
+        <div>
+          <div className="p-3" dangerouslySetInnerHTML={{ __html: output }}></div>
+        </div>
       )}
     </div>
   )

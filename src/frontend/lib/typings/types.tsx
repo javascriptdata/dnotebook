@@ -7,3 +7,9 @@ export type outputError = {
 export type cellObject = {
     [cellId: string]: { content: string, language: string }
 }
+
+export type InterpreterInput = {
+    content: string;
+    language: string;
+    callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void;
+}

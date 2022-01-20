@@ -3,7 +3,7 @@ import { outputError } from '../typings/types'
 const SERVER_URL = process.env.NEXT_PUBLIC_CODE_SERVER_URL
 class ServerAPI {
     /**
-     * Executes the code in the given language. Intermediary results like those in
+     * Executes the code in the given language via the server. Intermediary results like those in
      * loops and other functions are sent to the callback.
      * @param content The code/content to execute/compile.
      * @param language The language the content is written in.

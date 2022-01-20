@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    interpreterMode: "browser",
+    interpreterMode: "node",
 }
 
 const appReducer = createSlice({
