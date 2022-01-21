@@ -8,26 +8,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.7.1",
+    "ace-builds": "^1.4.13",
     "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
-    "codemirror": "^5.63.3",
+    "brace": "^0.11.1",
     "next": "12.0.3",
     "postcss": "^8.3.11",
     "react": "17.0.2",
-    "react-codemirror2": "^7.2.1",
+    "react-ace": "^9.5.0",
     "react-dom": "17.0.2",
     "react-redux": "^7.2.6",
-    "react-textarea-autosize": "^8.3.3",
     "tailwindcss": "^2.2.19"
   },
   "devDependencies": {
     "@types/node": "16.11.7",
     "@types/react": "17.0.34",
-    "@types/react-codemirror": "^1.0.6",
     "eslint": "7",
     "eslint-config-next": "12.0.3",
-    "typescript": "4.4.4",
-    "@babel/preset-env": "^7.16.10",
-    "@reduxjs/toolkit": "^1.7.1"
+    "typescript": "4.4.4"
   }
 }
