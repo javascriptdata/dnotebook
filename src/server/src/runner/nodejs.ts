@@ -32,7 +32,7 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
             wrappedCode = generateBashCode(code)
         } else {
             // Code may come in any flavor of JS, so we need to convert it to pre-ES5
-            const regeneratedCode = transformSync(code, {
+            wrappedCode = transformSync(code, {
                 presets: [
                     [
                         "@babel/preset-env",
@@ -44,10 +44,7 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
                     ]
                 ],
             })?.code || code;
-            //wrap generated code in async function
-            wrappedCode = `(async () => {${regeneratedCode}})()`;
         }
-
 
         //Write console logs to call back. This ensures that general console.logs or console.logs in loops
         // are sent to the client.
