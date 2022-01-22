@@ -27,3 +27,5 @@ export type NotebookConfig = {
     width: string,
     height: string,
 }
+
+export type LangaugeOption = "typescript" | "javascript" | "bash" | "html" | "json" | "markdown"

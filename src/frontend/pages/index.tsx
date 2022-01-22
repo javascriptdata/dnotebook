@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
-import MenuBar from '../components/MenuBar'
+import MenuBar from '../components/MenuBar/notebookOptionsBar'
 import NoteBookCell from '../components/Cell';
 
 
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       </Head>
       <MenuBar />
 
-      <div>
+      <div className='container'>
         <NoteBookCell cellId={"1"} />
         <br />
         <NoteBookCell cellId={"2"} />

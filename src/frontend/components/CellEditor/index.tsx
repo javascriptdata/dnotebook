@@ -42,7 +42,13 @@ const Editor = ({ cellId, name, mode }: CellProps) => {
             fontSize={notebookConfig.cellFontSize}
             name={name}
             width={notebookConfig.width}
-            height={notebookConfig.height}
+            style={{
+                margin: "2px"
+            }}
+            maxLines={Infinity}
+            cursorStart={2}
+            minLines={4}
+            wrapEnabled={true}
             setOptions={{
                 enableBasicAutocompletion: notebookConfig.cellEnableBasicAutocompletion,
                 enableLiveAutocompletion: notebookConfig.cellEnableLiveAutocompletion,
