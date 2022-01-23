@@ -46,7 +46,7 @@ const Editor = ({ cellId, name, mode, content }: CellProps) => {
                 margin: "2px"
             }}
             maxLines={Infinity}
-            cursorStart={2}
+            cursorStart={1}
             minLines={4}
             wrapEnabled={true}
             setOptions={{

@@ -12,13 +12,28 @@ class ServerAPI {
      * @throws Error if the language is not supported.
      */
     async exec(content: string, language: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
-        if (["javascript", "bash", "sh", "powershell"].includes(language)) {
+        if (["typescript", "javascript", "bash", "sh", "powershell"].includes(language)) {
             return this.executeInNodeJs(content, language, callback);
+            
         } else if (language === "markdown") {
             //TODO: process markdown
             // return callback("Done MARKDOWN")
+
+        } else if (language === "json") {
+
+            let json = JSON.parse(content);
+            json = JSON.stringify(json, null, 2);
+            json = `<pre><code>${json} </code></pre>`
+            return callback(json, false)
+
+        } else if (language === "html") {
+
+            let html = `<embed src="data:text/html;charset=utf-8;base64,${btoa(content)}" />`
+            return callback(html, false)
+
         } else {
-            throw new Error("Language not supported");
+
+           return callback(`Language ${language} not supported!`, true)
         }
     }
 
