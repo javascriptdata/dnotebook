@@ -21,17 +21,21 @@
     "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
     "brace": "^0.11.1",
+    "marked": "^4.0.10",
     "next": "12.0.3",
     "postcss": "^8.3.11",
     "react": "17.0.2",
     "react-ace": "^9.5.0",
     "react-dom": "17.0.2",
     "react-redux": "^7.2.6",
-    "tailwindcss": "^2.2.19"
+    "tailwindcss": "^2.2.19",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/marked": "^4.0.1",
     "@types/node": "16.11.7",
     "@types/react": "17.0.34",
+    "@types/uuid": "^8.3.4",
     "eslint": "7",
     "eslint-config-next": "12.0.3",
     "typescript": "4.4.4"

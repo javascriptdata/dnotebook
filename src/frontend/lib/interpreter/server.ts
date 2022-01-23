@@ -1,4 +1,5 @@
 import { outputError } from '../typings/types'
+import { marked } from "marked"
 
 const SERVER_URL = process.env.NEXT_PUBLIC_CODE_SERVER_URL
 class ServerAPI {
@@ -14,11 +15,11 @@ class ServerAPI {
     async exec(content: string, language: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
         if (["typescript", "javascript", "bash", "sh", "powershell"].includes(language)) {
             return this.executeInNodeJs(content, language, callback);
-            
-        } else if (language === "markdown") {
-            //TODO: process markdown
-            // return callback("Done MARKDOWN")
 
+        } else if (language === "markdown") {
+            let md = marked.parse(content);
+            callback(md, false);
+            
         } else if (language === "json") {
 
             let json = JSON.parse(content);
@@ -33,7 +34,7 @@ class ServerAPI {
 
         } else {
 
-           return callback(`Language ${language} not supported!`, true)
+            return callback(`Language ${language} not supported!`, true)
         }
     }
 

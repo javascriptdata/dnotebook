@@ -1,6 +1,7 @@
+import { CellLanguages } from "../typings/types";
 
 
-const cellLanguages = {
+const cellLanguages: CellLanguages = {
     "typescript": {
         value: "typescript",
         name: "TypeScript",

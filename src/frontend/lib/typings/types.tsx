@@ -10,11 +10,20 @@ export type InterpreterInput = {
     callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void;
 }
 
-export type CellProps = {
-    cellId: string;
-    name: string;
-    mode: string;
+export type NbCell = {
+    id: string;
+    mode: LangaugeOption;
     content: string;
+    output: any;
+    outputError?: any;
+}
+
+export type Notebook = {
+    cellIds: string[];
+    cells: {
+        [key: string]: NbCell
+    }
+    config: Partial<NotebookConfig>;
 }
 
 export type NotebookConfig = {
@@ -29,4 +38,21 @@ export type NotebookConfig = {
     height: string,
 }
 
-export type LangaugeOption = "typescript" | "javascript" | "bash" | "html" | "json" | "markdown"
+export type LangaugeOption = "typescript" | "javascript" | "sh" | "html" | "json" | "markdown"
+
+export type CellLanguages = {
+    [id: string]: {
+        value: string;
+        name: string;
+        extensions: string[];
+    }
+}
+
+export type AppState = {
+    interpreterMode: string;
+    cellIds: string[];
+    cells: {
+        [key: string]: NbCell
+    }
+    config: Partial<NotebookConfig>;
+}

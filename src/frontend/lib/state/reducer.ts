@@ -1,14 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { AppState } from "../typings/types";
+import { v4 as uuid_v4 } from "uuid";
 
-const initialState = {
+const initialId = uuid_v4()
+
+const initialState: AppState = {
     interpreterMode: "node",
-    notebookCells: {
-        "1": {
+    cellIds: [initialId],
+    cells: {
+        [initialId]: {
+            id: initialId,
             content: "",
-            language: "javascript"
-        }
+            mode: "javascript",
+            output: ""
+        },
     },
-    notebookConfig: {
+    config: {
         cellTheme: "monokai",
         cellFontSize: 14,
         cellEnableBasicAutocompletion: true,
@@ -17,7 +24,7 @@ const initialState = {
         cellShowLineNumbers: false,
         cellTabSize: 2,
         width: "100%",
-    },
+    }
 }
 
 const appReducer = createSlice({
@@ -27,15 +34,23 @@ const appReducer = createSlice({
         setInterpreterMode: (state, action) => {
             state.interpreterMode = action.payload;
         },
-        updateNotebookCells: (state, action) => {
-            state.notebookCells = action.payload;
-        }
+        updateCellIds: (state, action) => {
+            state.cellIds = action.payload;
+        },
+        updateCells: (state, action) => {
+            state.cells = action.payload;
+        },
+        updateConfig: (state, action) => {
+            state.config = action.payload;
+        },
     }
 });
 
 export const {
     setInterpreterMode,
-    updateNotebookCells
+    updateCellIds,
+    updateCells,
+    updateConfig,
 } = appReducer.actions;
 
 export default appReducer.reducer;

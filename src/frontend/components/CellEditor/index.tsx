@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateNotebookCells } from "../../lib/state/reducer"
-import { CellProps, NotebookConfig } from "../../lib/typings/types";
+import { updateCells } from "../../lib/state/reducer"
+import { AppState, NbCell } from "../../lib/typings/types";
 
 const AceEditor = dynamic(
     async () => {
@@ -22,26 +22,28 @@ const AceEditor = dynamic(
 );
 
 
-const Editor = ({ cellId, name, mode, content }: CellProps) => {
-    const { notebookCells, notebookConfig, }: { notebookCells: any, notebookConfig: NotebookConfig } = useSelector((state: any) => state.app)
+const Editor = ({ cell }: { cell: NbCell }) => {
+    const { config, cells } = useSelector((state: { app: AppState }) => state.app)
+
     const dispatch = useDispatch();
-    const [code, updateCode] = useState(content);
+    const [code, updateCode] = useState(cell?.content);
 
     const handleCodeChange = (newCode: any) => {
         updateCode(newCode);
-        const newNoteBookCells = { ...notebookCells, [cellId]: { content: newCode, language: mode } };
-        dispatch(updateNotebookCells(newNoteBookCells));
-    }
+        const newCurrCell = { ...cell, content: newCode }
 
+        const newCells = { ...cells, [cell.id]: newCurrCell }
+        dispatch(updateCells(newCells))
+    }
+    
     return (
         <AceEditor
-            mode={mode}
-            theme={notebookConfig.cellTheme}
+            mode={cell.mode}
+            theme={config.cellTheme}
             value={code}
             onChange={handleCodeChange}
-            fontSize={notebookConfig.cellFontSize}
-            name={name}
-            width={notebookConfig.width}
+            fontSize={config.cellFontSize}
+            width={config.width}
             style={{
                 margin: "2px"
             }}
@@ -50,11 +52,11 @@ const Editor = ({ cellId, name, mode, content }: CellProps) => {
             minLines={4}
             wrapEnabled={true}
             setOptions={{
-                enableBasicAutocompletion: notebookConfig.cellEnableBasicAutocompletion,
-                enableLiveAutocompletion: notebookConfig.cellEnableLiveAutocompletion,
-                enableSnippets: notebookConfig.cellEnableSnippets,
-                showLineNumbers: notebookConfig.cellShowLineNumbers,
-                tabSize: notebookConfig.cellTabSize,
+                enableBasicAutocompletion: config.cellEnableBasicAutocompletion,
+                enableLiveAutocompletion: config.cellEnableLiveAutocompletion,
+                enableSnippets: config.cellEnableSnippets,
+                showLineNumbers: config.cellShowLineNumbers,
+                tabSize: config.cellTabSize,
             }}
         />
     );

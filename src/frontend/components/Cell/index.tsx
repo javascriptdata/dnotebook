@@ -3,26 +3,25 @@ import CellOutputRenderer from "../CellOutputRenderer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import NodejsInterpreter from '../../lib/interpreter/server'
-import { LangaugeOption, outputError } from '../../lib/typings/types'
+import { LangaugeOption, outputError, NbCell, AppState } from '../../lib/typings/types'
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
-import CellOptionsBar from "../MenuBar/cellOptionsBar"
-import { updateNotebookCells } from "../../lib/state/reducer"
+import CellOptionsBar from "../MenuBar/cellOptions"
+import { updateCells, updateCellIds } from "../../lib/state/reducer"
 
 
-const NoteBookCell = ({ cellId }: { cellId: string }) => {
+const NoteBookCell = ({ cell }: { cell: NbCell }) => {
     const dispatch = useDispatch();
-    const { notebookCells, interpreterMode } = useSelector((state: any) => state.app)
+    const { cells, cellIds, interpreterMode } = useSelector((state: { app: AppState }) => state.app)
 
     const [cellIsRunning, setCellIsRunning] = useState(false)
     const [output, setOutput] = useState("")
     const [outputError, setOutputError] = useState("")
     const [hasError, setHasError] = useState(false)
-    const [currCell, setCurrCell] = useState(notebookCells[cellId])
-    
 
-    const handleCellRunCallback = (accumulatedResult: string | outputError, hasErrors: boolean) => {
+
+    const cellRunCallback = (accumulatedResult: string | outputError, hasErrors: boolean) => {
         if (hasErrors) {
             setHasError(true)
             //format error message for displaying
@@ -39,9 +38,8 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
     }
 
     const handleCellRun = () => {
-        const currentCell = notebookCells[cellId]
-        const content = currentCell?.content
-        const language = currentCell?.language
+        const content = cell.content
+        const language = cell.mode
 
         if (!content || content.trim() === '') {
             return
@@ -51,7 +49,7 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
         setOutputError("")
 
         if (interpreterMode === 'node') {
-            NodejsInterpreter.exec(content, language, handleCellRunCallback)
+            NodejsInterpreter.exec(content, language, cellRunCallback)
                 .catch((error) => {
                     setOutputError({
                         ...error,
@@ -65,24 +63,12 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
         }
     }
 
-    const handleCellLanguageChange = (language: LangaugeOption) => {
-        const newCurrCell = {...notebookCells[cellId], language}
-        setCurrCell(newCurrCell)
-        //update global notebook state
-        const newNoteBookCell = { ...notebookCells };
-        newNoteBookCell[cellId] = newCurrCell
-        dispatch(updateNotebookCells(newNoteBookCell))
-    }
-
     return (
         <div>
             <div className="grid grid-rows-1 grid-cols-12">
                 <div className="col-span-7"></div>
                 <div className="col-span-5">
-                    <CellOptionsBar
-                        language={currCell?.language}
-                        handleCellLanguageChange={handleCellLanguageChange}
-                    />
+                    <CellOptionsBar cell={cell} />
                 </div>
             </div>
             <div className="grid grid-cols-12">
@@ -110,12 +96,7 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
                 </div>
 
                 <div className="col-span-11">
-                    <CellEditor
-                        cellId={cellId}
-                        name={cellId}
-                        content={currCell.content}
-                        mode={currCell.language}
-                    />
+                    <CellEditor cell={cell} />
                     <CellOutputRenderer
                         hasError={hasError}
                         output={output}
