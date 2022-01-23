@@ -22,10 +22,10 @@ const AceEditor = dynamic(
 );
 
 
-const Editor = ({ cellId, name, mode }: CellProps) => {
+const Editor = ({ cellId, name, mode, content }: CellProps) => {
     const { notebookCells, notebookConfig, }: { notebookCells: any, notebookConfig: NotebookConfig } = useSelector((state: any) => state.app)
     const dispatch = useDispatch();
-    const [code, updateCode] = useState("");
+    const [code, updateCode] = useState(content);
 
     const handleCodeChange = (newCode: any) => {
         updateCode(newCode);

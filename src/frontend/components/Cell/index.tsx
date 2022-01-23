@@ -13,12 +13,14 @@ import { updateNotebookCells } from "../../lib/state/reducer"
 
 const NoteBookCell = ({ cellId }: { cellId: string }) => {
     const dispatch = useDispatch();
+    const { notebookCells, interpreterMode } = useSelector((state: any) => state.app)
+
     const [cellIsRunning, setCellIsRunning] = useState(false)
     const [output, setOutput] = useState("")
     const [outputError, setOutputError] = useState("")
     const [hasError, setHasError] = useState(false)
-
-    const { notebookCells, interpreterMode } = useSelector((state: any) => state.app)
+    const [currCell, setCurrCell] = useState(notebookCells[cellId])
+    
 
     const handleCellRunCallback = (accumulatedResult: string | outputError, hasErrors: boolean) => {
         if (hasErrors) {
@@ -44,7 +46,6 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
         if (!content || content.trim() === '') {
             return
         }
-
         setCellIsRunning(true)
         setOutput("")
         setOutputError("")
@@ -66,6 +67,8 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
 
     const handleCellLanguageChange = (language: LangaugeOption) => {
         const newCurrCell = {...notebookCells[cellId], language}
+        setCurrCell(newCurrCell)
+        //update global notebook state
         const newNoteBookCell = { ...notebookCells };
         newNoteBookCell[cellId] = newCurrCell
         dispatch(updateNotebookCells(newNoteBookCell))
@@ -77,7 +80,7 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
                 <div className="col-span-7"></div>
                 <div className="col-span-5">
                     <CellOptionsBar
-                        language={notebookCells[cellId]?.language}
+                        language={currCell?.language}
                         handleCellLanguageChange={handleCellLanguageChange}
                     />
                 </div>
@@ -110,7 +113,8 @@ const NoteBookCell = ({ cellId }: { cellId: string }) => {
                     <CellEditor
                         cellId={cellId}
                         name={cellId}
-                        mode={"javascript"}
+                        content={currCell.content}
+                        mode={currCell.language}
                     />
                     <CellOutputRenderer
                         hasError={hasError}

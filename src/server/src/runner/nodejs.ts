@@ -28,7 +28,7 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
     try {
         let wrappedCode;
 
-        if (language === "bash") {
+        if (language && ["bash", "sh", "powershell"].includes(language)) {
             wrappedCode = generateBashCode(code)
         } else {
             // Code may come in any flavor of JS, so we need to convert it to pre-ES5
@@ -51,7 +51,7 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
         replServer.context.console = {
             log: (...args: any[]) => {
                 let argsString = args[0]
-                if (argsString === Object(argsString)){
+                if (argsString === Object(argsString)) {
                     argsString = JSON.stringify(args[0])
                 }
                 formatAndReturnOutput(argsString, callback);

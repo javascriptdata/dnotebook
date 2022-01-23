@@ -14,6 +14,7 @@ export type CellProps = {
     cellId: string;
     name: string;
     mode: string;
+    content: string;
 }
 
 export type NotebookConfig = {

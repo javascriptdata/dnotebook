@@ -27,7 +27,7 @@ const cellLanguages = {
         extensions: [".html", ".htm"],
     },
     "bash": {
-        value: "bash",
+        value: "sh",
         name: "Bash",
         extensions: [".sh", ".bash"],
     },

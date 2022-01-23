@@ -2,7 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     interpreterMode: "node",
-    notebookCells: {},
+    notebookCells: {
+        "1": {
+            content: "",
+            language: "javascript"
+        }
+    },
     notebookConfig: {
         cellTheme: "monokai",
         cellFontSize: 14,

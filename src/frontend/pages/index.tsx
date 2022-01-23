@@ -18,8 +18,6 @@ const Home: NextPage = () => {
 
       <div className='container'>
         <NoteBookCell cellId={"1"} />
-        <br />
-        <NoteBookCell cellId={"2"} />
       </div>
     </div>
   )
