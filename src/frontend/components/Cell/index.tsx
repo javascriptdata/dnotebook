@@ -6,9 +6,9 @@ import NodejsInterpreter from '../../lib/interpreter/server'
 import { outputError, NbCell, AppState } from '../../lib/typings/types'
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
-import CancelIcon from '@mui/icons-material/Cancel';
+import LoadingButton from '@mui/lab/LoadingButton';
 import CellOptionsBar from "../MenuBar/cellOptions"
-import { updateCells, updateCellIds } from "../../lib/state/reducer"
+import { updateCells } from "../../lib/state/reducer"
 import { cleanErrorMessage } from "../../lib/helpers/utils"
 
 const NoteBookCell = ({ cell }: { cell: NbCell }) => {
@@ -27,7 +27,6 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
             setHasError(true)
             const fullErrorMessage = cleanErrorMessage(accumulatedResult as outputError)
             setOutputError(fullErrorMessage)
-            setCellIsRunning(false)
 
             const newCurrCell = { ...cell, output: "", outputError: fullErrorMessage }
             const newCells = { ...cells, [cell.id]: newCurrCell }
@@ -36,12 +35,15 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
         } else {
             setHasError(false)
             setOutput(accumulatedResult as string)
-            setCellIsRunning(false)
 
             const newCurrCell = { ...cell, output: accumulatedResult as string, outputError: "" }
             const newCells = { ...cells, [cell.id]: newCurrCell }
             dispatch(updateCells(newCells))
+
         }
+
+        setCellIsRunning(false)
+
     }
 
     const handleCellRun = () => {
@@ -70,6 +72,7 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
         }
     }
 
+
     return (
         <section>
             <section className="grid grid-rows-1 text-right">
@@ -79,13 +82,8 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
                 <div className="col-span-1 text-right">
                     {
                         cellIsRunning ? (
-                            <IconButton
-                                aria-label="delete"
-                                onClick={() => handleCellRun()}
-                                color="warning"
-                            >
-                                <CancelIcon />
-                            </IconButton>
+                            <LoadingButton loading ></LoadingButton>
+
                         ) : (
                             <IconButton
                                 aria-label="delete"

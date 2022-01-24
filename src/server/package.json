@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "build && node build/index.js",
+    "start": "yarn build && node build/index.js",
     "test": "nyc mocha --require ts-node/register tests/**/*.test.ts",
     "test:clean": "yarn build:clean && yarn test",
     "dev": "nodemon -L --exec ts-node ./src/index.ts",

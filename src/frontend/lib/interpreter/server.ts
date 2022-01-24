@@ -14,7 +14,7 @@ class ServerAPI {
      * @throws Error if the language is not supported.
      */
     async exec(content: string, language: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
-        if (["typescript", "javascript", "bash", "sh", "powershell"].includes(language)) {
+        if (["typescript", "javascript", "bash", "sh", "powershell", "process"].includes(language)) {
             return this.executeInNodeJs(content, language, callback);
 
         } else if (language === "markdown") {
