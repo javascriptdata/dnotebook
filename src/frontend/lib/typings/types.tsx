@@ -1,7 +1,7 @@
 export type outputError = {
     name: string,
     output: string,
-    __$hasErrors?: boolean,
+    __$hasError?: boolean,
 }
 
 export type InterpreterInput = {

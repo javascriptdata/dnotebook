@@ -1,5 +1,6 @@
 import { outputError } from '../typings/types'
 import { marked } from "marked"
+import { formatErrorMessage } from "../helpers/utils"
 
 const SERVER_URL = process.env.NEXT_PUBLIC_CODE_SERVER_URL
 class ServerAPI {
@@ -17,20 +18,35 @@ class ServerAPI {
             return this.executeInNodeJs(content, language, callback);
 
         } else if (language === "markdown") {
-            let md = marked.parse(content);
-            callback(md, false);
-            
+            try {
+                let md = marked.parse(content);
+                callback(md, false);
+            } catch (e: any) {
+                const errMsg = formatErrorMessage(e)
+                return callback(errMsg, true)
+            }
+
         } else if (language === "json") {
 
-            let json = JSON.parse(content);
-            json = JSON.stringify(json, null, 2);
-            json = `<pre><code>${json} </code></pre>`
-            return callback(json, false)
+            try {
+                let json = JSON.parse(content);
+                json = JSON.stringify(json, null, 2);
+                json = `<pre><code>${json} </code></pre>`
+                return callback(json, false)
+            } catch (e: any) {
+                const errMsg = formatErrorMessage(e)
+                return callback(errMsg, true)
+            }
 
         } else if (language === "html") {
 
-            let html = `<embed src="data:text/html;charset=utf-8;base64,${btoa(content)}" />`
-            return callback(html, false)
+            try {
+                let html = `<embed src="data:text/html;charset=utf-8;base64,${btoa(content)}" />`
+                return callback(html, false)
+            } catch (e: any) {
+                const errMsg = formatErrorMessage(e)
+                return callback(errMsg, true)
+            }
 
         } else {
 

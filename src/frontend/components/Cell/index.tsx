@@ -3,17 +3,17 @@ import CellOutputRenderer from "../CellOutputRenderer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import NodejsInterpreter from '../../lib/interpreter/server'
-import { LangaugeOption, outputError, NbCell, AppState } from '../../lib/typings/types'
+import { outputError, NbCell, AppState } from '../../lib/typings/types'
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CellOptionsBar from "../MenuBar/cellOptions"
 import { updateCells, updateCellIds } from "../../lib/state/reducer"
-
+import { cleanErrorMessage } from "../../lib/helpers/utils"
 
 const NoteBookCell = ({ cell }: { cell: NbCell }) => {
     const dispatch = useDispatch();
-    const { cells, cellIds, interpreterMode } = useSelector((state: { app: AppState }) => state.app)
+    const { cells, interpreterMode } = useSelector((state: { app: AppState }) => state.app)
 
     const [cellIsRunning, setCellIsRunning] = useState(false)
     const [output, setOutput] = useState("")
@@ -22,18 +22,25 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
 
 
     const cellRunCallback = (accumulatedResult: string | outputError, hasErrors: boolean) => {
+
         if (hasErrors) {
             setHasError(true)
-            //format error message for displaying
-            const errorMessage = (accumulatedResult as outputError).output.split('\n')[0]
-            const errorName = (accumulatedResult as outputError).name
-            const fullErrorMessage = errorName + ': ' + errorMessage
+            const fullErrorMessage = cleanErrorMessage(accumulatedResult as outputError)
             setOutputError(fullErrorMessage)
             setCellIsRunning(false)
+
+            const newCurrCell = { ...cell, output: "", outputError: fullErrorMessage }
+            const newCells = { ...cells, [cell.id]: newCurrCell }
+            dispatch(updateCells(newCells))
+
         } else {
             setHasError(false)
             setOutput(accumulatedResult as string)
             setCellIsRunning(false)
+
+            const newCurrCell = { ...cell, output: accumulatedResult as string, outputError: "" }
+            const newCells = { ...cells, [cell.id]: newCurrCell }
+            dispatch(updateCells(newCells))
         }
     }
 
@@ -64,14 +71,11 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
     }
 
     return (
-        <div>
-            <div className="grid grid-rows-1 grid-cols-12">
-                <div className="col-span-7"></div>
-                <div className="col-span-5">
-                    <CellOptionsBar cell={cell} />
-                </div>
-            </div>
-            <div className="grid grid-cols-12">
+        <section>
+            <section className="grid grid-rows-1 text-right">
+                <CellOptionsBar cell={cell} />
+            </section>
+            <section className="grid grid-cols-12">
                 <div className="col-span-1 text-right">
                     {
                         cellIsRunning ? (
@@ -104,8 +108,8 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
                     />
                 </div>
 
-            </div>
-        </div>
+            </section>
+        </section>
     )
 }
 
