@@ -74,10 +74,10 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
                     <CopyIcon />
                 </IconButton>
                 <FormControl >
-                    <InputLabel id={`cell-lang-select-${cell.id}`}>Language</InputLabel>
+                    <InputLabel id={`cell-lang-select`}>Language</InputLabel>
                     <Select
-                        labelId={`cell-lang-select-${cell.id}`}
-                        id={`cell-lang-select-${cell.id}`}
+                        labelId={`cell-lang-select`}
+                        id={`cell-lang-select`}
                         value={cell.mode}
                         label="language"
                         onChange={handleCellLanguageChange}
@@ -85,7 +85,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
                         {
                             languages.map((language, i: number) => (
                                 <MenuItem
-                                    key={i}
+                                    key={uuid_v4()}
                                     value={cellLanguages[language].value}
                                 >
                                     {cellLanguages[language].name}

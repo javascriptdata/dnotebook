@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         {
           cellIds.map((cellId: string, i: number) => {
             const cell: NbCell = cells[cellId]
-            return <div key={i}><NoteBookCell cell={cell} /></div>
+            return <div key={cellId}><NoteBookCell cell={cell} /></div>
           })
         }
 
