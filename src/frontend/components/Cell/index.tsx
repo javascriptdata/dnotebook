@@ -72,6 +72,11 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
         }
     }
 
+    const handleKeyPress = (e: any) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            handleCellRun()
+        }
+    }
 
     return (
         <section>
@@ -97,7 +102,9 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
 
                 </div>
 
-                <div className="col-span-11">
+                <div className="col-span-11"
+                 onKeyPress={handleKeyPress}
+                >
                     <CellEditor cell={cell} />
                     <CellOutputRenderer
                         hasError={hasError}
