@@ -11,7 +11,29 @@ const callbackWriter = (res: Response, intermediateResult: any) => {
     res.write(intermediateResult);
 };
 
+const formatAndReturnOutput = (output: any, callback: any) => {
+    //output of some babel transformations will return "use strict" as final result, hence we check and return empty string if it is there.
+    //I also append an HTML break to the result. This is necessary to avoid the browser from buffering the output.
+    const foutput = output == "use strict" ? "" : output + "<br />";
+    callback(foutput);
+}
+
+const generateBashCode = (code: string) => {
+    return `
+    exec('${code}')
+        .then(({ stdout, stderr }) => {
+            console.log(stdout)
+            console.log(stderr)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    `
+}
+
 export {
-    callbackWriter
+    callbackWriter,
+    formatAndReturnOutput,
+    generateBashCode
 }
 

@@ -1,7 +1,9 @@
 import repl from 'repl';
 import vm from 'vm';
 import { transformSync } from "@babel/core";
-const util = require('util');
+import { formatAndReturnOutput, generateBashCode } from '../utils';
+import CONFIG from '../config/env';
+import util from 'util';
 const exec = util.promisify(require('child_process').exec);
 
 //A simple repl server to evaluate code from the browser
@@ -19,20 +21,28 @@ replServer.context.require = require;
 replServer.context.exec = exec;
 replServer.context.util = util;
 
+
 async function replEvalCode(code: string) {
-    return runNodeCode(code);
+    return runNodeCode({ code });
 }
 
-const runNodeCode = async (code: string, language?: string, callback?: (intermediateResult: any) => void) => {
+type RunNodeCodeOptions = {
+    code: string,
+    language?: string,
+    callback?: (intermediateResult: any) => void
+}
 
-    try {
-        let wrappedCode;
 
-        if (language && ["bash", "sh", "powershell"].includes(language)) {
-            wrappedCode = generateBashCode(code)
-        } else {
-            // Code may come in any flavor of JS, so we need to convert it to pre-ES5
-            wrappedCode = transformSync(code, {
+const runNodeCode = async ({ code, language, callback }: RunNodeCodeOptions) => {
+    switch (language) {
+
+        case "bash" || "sh" || "powershell":
+            const bashCode = generateBashCode(code);
+            runJsCodeInContext({ code: bashCode, callback });
+            break;
+
+        case "javascript":
+            const transformedJsCode = transformSync(code, {
                 presets: [
                     [
                         "@babel/preset-env",
@@ -44,7 +54,24 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
                     ]
                 ],
             })?.code || code;
-        }
+            runJsCodeInContext({ code: `${transformedJsCode}\nconsole.log('')`, callback })
+
+            break;
+
+        case "process":
+            handleProcessCmds(code, callback);
+            break;
+
+        default:
+            throw new Error(`Language ${language} is not supported`);
+    }
+
+
+
+}
+
+const runJsCodeInContext = async ({ code, callback }: RunNodeCodeOptions) => {
+    try {
 
         //Write console logs to call back. This ensures that general console.logs or console.logs in loops
         // are sent to the client.
@@ -58,7 +85,7 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
             }
         };
 
-        const result = await vm.runInNewContext(wrappedCode, replServer.context, {
+        const result = await vm.runInNewContext(code, replServer.context, {
             displayErrors: true,
         })
 
@@ -70,29 +97,25 @@ const runNodeCode = async (code: string, language?: string, callback?: (intermed
         let errMsg = JSON.stringify({ output: err.message, name: err.name, __$hasError: true })
         callback && callback(errMsg);
     }
-
 }
 
-const formatAndReturnOutput = (output: any, callback: any) => {
-    //output of some babel transformations will return "use strict" as final result, hence we check and return empty string if it is there.
-    //I also append an HTML break to the result. This is necessary to avoid the browser from buffering the output.
-    const foutput = output == "use strict" ? "" : output + "<br />";
-    callback(foutput);
+const handleProcessCmds = async (code: string, callback: any) => {
+    switch (code) {
+        case "stop":
+            stopServer(callback);
+            break;
+        default:
+            break;
+    }
 }
 
-const generateBashCode = (code: string) => {
-    return `
-    exec('${code}')
-        .then(({ stdout, stderr }) => {
-            console.log(stdout)
-            console.log(stderr)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    `
+const stopServer = async (callback: any) => {
+    console.log("Stopping running cell")
+    replServer.context.process.exit();
+    callback("STOPPED CELL SUCCESSFULLY!");
+
 }
 
 export {
-    runNodeCode
+    runNodeCode,
 }
