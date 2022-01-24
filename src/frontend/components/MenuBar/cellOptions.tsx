@@ -17,6 +17,9 @@ import { v4 as uuid_v4 } from "uuid";
 export default function CellOptions({ cell }: { cell: NbCell }) {
     const dispatch = useDispatch();
     const { cells, cellIds } = useSelector((state: { app: AppState }) => state.app)
+    const languages = Object.keys(cellLanguages) as LangaugeOption[];
+
+    const currentCellIdIndex = cellIds.indexOf(cell.id)
 
     const handleCellLanguageChange = (e: any) => {
         const language = e.target.value as LangaugeOption
@@ -43,7 +46,29 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         dispatch(updateCellIds(newCellIds))
     }
 
-    const languages = Object.keys(cellLanguages) as LangaugeOption[];
+    const handleMoveCurrentCellUp = () => {
+        const newCellIds = [...cellIds]
+        const currentCellIdIndex = cellIds.indexOf(cell.id)
+
+        newCellIds.splice(currentCellIdIndex - 1, 0, cell.id)
+        newCellIds.splice(currentCellIdIndex + 1, 1)
+
+        dispatch(updateCellIds(newCellIds))
+    }
+
+    const handleMoveCurrentCellDown = () => {
+        const newCellIds = [...cellIds]
+        
+        const currentCellIdIndex = cellIds.indexOf(cell.id)
+        const downCellId = newCellIds[currentCellIdIndex + 1]
+        const downCellIdIndex = newCellIds.indexOf(downCellId)
+
+        newCellIds.splice(currentCellIdIndex, 1, downCellId)
+        newCellIds.splice(downCellIdIndex, 1, cell.id)
+
+        dispatch(updateCellIds(newCellIds))                                                                                                                              
+    }
+
 
     return (
         <div className="h-10">
@@ -58,12 +83,16 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
                 <IconButton
                     aria-label="delete"
                     color="secondary"
+                    disabled={currentCellIdIndex === 0}
+                    onClick={handleMoveCurrentCellUp}
                 >
                     <UpArrowIcon />
                 </IconButton>
                 <IconButton
                     aria-label="delete"
                     color="secondary"
+                    disabled={currentCellIdIndex === cellIds.length - 1}
+                    onClick={handleMoveCurrentCellDown}
                 >
                     <DownArrowIcon />
                 </IconButton>
