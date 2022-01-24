@@ -36,11 +36,10 @@ type RunNodeCodeOptions = {
 const runNodeCode = async ({ code, language, callback }: RunNodeCodeOptions) => {
     switch (language) {
 
-        case "bash" || "sh" || "powershell":
+        case "sh":
             const bashCode = generateBashCode(code);
             runJsCodeInContext({ code: bashCode, callback });
             break;
-
         case "javascript":
             const transformedJsCode = transformSync(code, {
                 presets: [
