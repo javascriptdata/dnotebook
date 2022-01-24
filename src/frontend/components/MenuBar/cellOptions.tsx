@@ -4,6 +4,8 @@ import DownArrowIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import CopyIcon from '@mui/icons-material/CopyAll';
+import CopyAllTwoToneIcon from '@mui/icons-material/CopyAllTwoTone';
+import DeleteIcon from '@mui/icons-material/Delete';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -13,11 +15,14 @@ import { AppState, LangaugeOption, NbCell } from "../../lib/typings/types";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCells, updateCellIds } from "../../lib/state/reducer"
 import { v4 as uuid_v4 } from "uuid";
+import { useState } from "react";
 
 export default function CellOptions({ cell }: { cell: NbCell }) {
     const dispatch = useDispatch();
     const { cells, cellIds } = useSelector((state: { app: AppState }) => state.app)
     const languages = Object.keys(cellLanguages) as LangaugeOption[];
+
+    const [copied, setCopied] = useState(false);
 
     const currentCellIdIndex = cellIds.indexOf(cell.id)
 
@@ -58,7 +63,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
 
     const handleMoveCurrentCellDown = () => {
         const newCellIds = [...cellIds]
-        
+
         const currentCellIdIndex = cellIds.indexOf(cell.id)
         const downCellId = newCellIds[currentCellIdIndex + 1]
         const downCellIdIndex = newCellIds.indexOf(downCellId)
@@ -66,9 +71,32 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         newCellIds.splice(currentCellIdIndex, 1, downCellId)
         newCellIds.splice(downCellIdIndex, 1, cell.id)
 
-        dispatch(updateCellIds(newCellIds))                                                                                                                              
+        dispatch(updateCellIds(newCellIds))
     }
 
+    const handleDeleteCurrentCell = () => {
+        const newCellIds = [...cellIds]
+        const currentCellIdIndex = cellIds.indexOf(cell.id)
+        newCellIds.splice(currentCellIdIndex, 1)
+
+        dispatch(updateCellIds(newCellIds))
+    }
+
+    const handleCopyCurrentCellContentToClipBoard = async () => {
+        const cellContent = cell.content
+        if ('clipboard' in navigator) {
+            await navigator.clipboard.writeText(cellContent);
+        } else {
+            document.execCommand('copy', true, cellContent);
+        }
+
+        setCopied(true);
+        setTimeout(() => {
+            setCopied(false);
+        }, 2000);
+
+        return;
+    }
 
     return (
         <div className="h-10">
@@ -99,8 +127,16 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
                 <IconButton
                     aria-label="delete"
                     color="secondary"
+                    onClick={handleCopyCurrentCellContentToClipBoard}
                 >
-                    <CopyIcon />
+                    {copied ? <CopyAllTwoToneIcon /> : <CopyIcon />}
+                </IconButton>
+                <IconButton
+                    aria-label="delete"
+                    color="warning"
+                    onClick={handleDeleteCurrentCell}
+                >
+                    <DeleteIcon />
                 </IconButton>
                 <FormControl >
                     <InputLabel id={`cell-lang-select`}>Language</InputLabel>
