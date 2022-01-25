@@ -16,7 +16,7 @@ const initialState: AppState = {
         },
     },
     config: {
-        cellTheme: "github",
+        cellTheme: "monokai",
         cellFontSize: 14,
         cellEnableBasicAutocompletion: true,
         cellEnableLiveAutocompletion: true,
