@@ -1,39 +1,38 @@
-import { Response } from "express";
-
-/**
- * A callback function that is called with intermediate results as the
- * code VM executes each code and returns a value.
- * This function writes in streaming mode to the response.
- * @param res Express response object
- * @param intermediateResult Intermediate result(s) sent from code execution
- */
-const callbackWriter = (res: Response, intermediateResult: any) => {
-    res.write(intermediateResult);
-};
-
-const formatAndReturnOutput = (output: any, callback: any) => {
-    //output of some babel transformations will return "use strict" as final result, hence we check and return empty string if it is there.
-    //I also append an HTML break to the result. This is necessary to avoid the browser from buffering the output.
-    const foutput = output == "use strict" ? "" : output + "<br />";
-    callback(foutput);
-}
 
 const generateBashCode = (code: string) => {
+    let formatedCmd = code.trim().split(" ")
+    let cmd = formatedCmd[0]
+    let args = formatedCmd.slice(1).slice().map(arg => `"${arg}"`).join(",")
+
     return `
-    exec('${code}')
-        .then(({ stdout, stderr }) => {
-            console.log(stdout)
-            console.log(stderr)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    spw = spawn("${cmd}", [${args}])
+    str = ""
+
+    spw.stdout.on('data', (data) => {
+        str += data.toString();
+
+        let lines = str.split('\\n');
+
+        for (let i = 0; i < lines.length; i++) {
+            if (i == lines.length - 1) {
+                str = lines[i];
+            } else {
+                res.write(lines[i] + '<br />');
+            }
+        }
+    });
+
+    spw.on('close', function (code) {
+        res.end(str);
+    });
+
+    spw.on('error', function (data) {
+        res.end('stderr: ' + data);
+    });
     `
 }
 
 export {
-    callbackWriter,
-    formatAndReturnOutput,
     generateBashCode
 }
 
