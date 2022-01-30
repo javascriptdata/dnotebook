@@ -34,7 +34,7 @@ The official documentation can be found [here](https://danfo.jsdata.org) -->
 ### Discussion and Development
 Development discussions take place on our [issues](https://github.com/opensource9ja/dnotebook/issues) tab. 
 
->> We are recreating Dnotebook to use React and incorporating some modern designs. See development repo [here](https://github.com/opensource9ja/dnotebook-react)
+>> We are redesigning Dnotebook to feel more native. Track progress in this epic issue, and [ref/typescript](https://github.com/javascriptdata/dnotebook/tree/ref/typescript) branch.
 
 
 ### Contributing to Dnotebook
