@@ -2,7 +2,10 @@
 # DNOTEBOOK
 **Dnotebook** allows you to create and share pages that contain live code, text and visualizations in a textbook-like manner.
 
-### It helps you to:
+
+> We are redesigning Dnotebook to feel more native. Track progress in this epic [issue](https://github.com/javascriptdata/dnotebook/issues/10), and [ref/typescript](https://github.com/javascriptdata/dnotebook/tree/ref/typescript) branch.
+
+### Features:
 - Easily perform interactive data exploration and analysis using efficient JavaScript packages like Danfo.js.
 - Easily build, train and prototype machine learning models using different tools like Tensorflow.js
 - Learn JavaScript in an interactive/visual style. This can hasten learning and understanding.
@@ -33,9 +36,6 @@ The official documentation can be found [here](https://danfo.jsdata.org) -->
 
 ### Discussion and Development
 Development discussions take place on our [issues](https://github.com/opensource9ja/dnotebook/issues) tab. 
-
->> We are redesigning Dnotebook to feel more native. Track progress in this epic issue, and [ref/typescript](https://github.com/javascriptdata/dnotebook/tree/ref/typescript) branch.
-
 
 ### Contributing to Dnotebook
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
