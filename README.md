@@ -9,38 +9,34 @@
 - Plain Experimentation/Prototyping. Any experimentation performed in JavaScript can run on Dnotebooks.
 
 
-### How to install
-Dnotebook is hosted on NPM, and can installed via package managers like npm and yarn
-
+## Developers
+* Clone the repo
 ```sh
-npm install -g dnotebook
+git clone https://github.com/javascriptdata/dnotebook.git
+cd dnotebook
+git checkout ref/typescript
 ```
 
-### Example usage
-After installing dnotebook, you can start the server by running the command `dnotebook` in the terminal. This opens a new notebook in your default browser.
+* Install packages with `yarn`. `yarn` is our preferred package manager
 
+```sh
+yarn install
+```
+* Run the app in dev mode
 
-![](assets/test-dnotes.gif)
+```sh
+yarn dev
+```
 
+* Open your browser and navigate to `http://localhost:3000/`
 
-You can download the notebook shown above [here](assets/test-notebook.json). To view and interact with the notebook without installing anything, go to [playnotebook.jsdata.org](https://playnotebook.jsdata.org/demo).
-
-#### [See the Official Getting Started Guide](https://dnotebook.jsdata.org/getting-started)
-
-
-<!-- ## Documentation
-The official documentation can be found [here](https://danfo.jsdata.org) -->
 
 ### Discussion and Development
-Development discussions take place on our [issues](https://github.com/opensource9ja/dnotebook/issues) tab. 
-
->> We are recreating Dnotebook to use React and incorporating some modern designs. See development repo [here](https://github.com/opensource9ja/dnotebook-react)
-
+Development discussions take place on our [issues](https://github.com/javascriptdata/dnotebook/issues/10) tab. 
 
 ### Contributing to Dnotebook
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
 
 #### Licence [MIT](https://github.com/opensource9ja/dnotebook/blob/master/LICENCE)
 
-#### Created by [Rising Odegua](https://github.com/risenW) and [Stephen Oni](https://github.com/steveoni)
 
