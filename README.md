@@ -3,7 +3,7 @@
 **Dnotebook** allows you to create and share pages that contain live code, text and visualizations in a textbook-like manner.
 
 
-> We are redesigning Dnotebook to feel more native. Track progress in this epic [issue](https://github.com/javascriptdata/dnotebook/issues/10), and [ref/typescript](https://github.com/javascriptdata/dnotebook/tree/ref/typescript) branch.
+> We are redesigning Dnotebook to feel more native. Track progress in this epic [issue](https://github.com/javascriptdata/dnotebook/issues/10), [project board](https://github.com/javascriptdata/dnotebook/projects/1), or [ref/typescript](https://github.com/javascriptdata/dnotebook/tree/ref/typescript) branch.
 
 ### Features:
 - Easily perform interactive data exploration and analysis using efficient JavaScript packages like Danfo.js.
