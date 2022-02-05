@@ -36,6 +36,8 @@ export type NotebookConfig = {
     cellTabSize: number,
     width: string,
     height: string,
+    notebookThemeMode: string,
+    autosaveNotebook: boolean,
 }
 
 export type LangaugeOption = "typescript" | "javascript" | "sh" | "html" | "markdown"

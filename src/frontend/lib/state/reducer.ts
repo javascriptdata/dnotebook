@@ -24,6 +24,8 @@ const initialState: AppState = {
         cellShowLineNumbers: false,
         cellTabSize: 2,
         width: "100%",
+        notebookThemeMode: "light",
+        autosaveNotebook: true,
     }
 }
 

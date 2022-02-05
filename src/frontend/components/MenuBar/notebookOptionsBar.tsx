@@ -9,7 +9,7 @@ import EditMenu from '../IconMenu/edit'
 import ViewMenu from '../IconMenu/view'
 import RunMenu from '../IconMenu/run'
 import ServerMenu from '../IconMenu/server'
-import SettingsMenu from '../IconMenu/settings'
+import SettingsModal from '../Modals/Settings';
 
 const MenuBar = () => {
     const dispatch = useDispatch();
@@ -19,7 +19,6 @@ const MenuBar = () => {
         "view-menu": false,
         "run-menu": false,
         "server-menu": false,
-        "settings-menu": false
     })
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -38,23 +37,19 @@ const MenuBar = () => {
         setActiveMenuOptions(newActiveMenuOption)
     };
 
-    const modeChangeHandler = (value: string) => {
-        dispatch(setInterpreterMode(value))
-    }
+    // const handleServerStop = () => {
+    //     const killCellProcessCmd = `stop`;
+    //     const language = "process"
+    //     NodejsInterpreter.exec(killCellProcessCmd, language, (resp) => {
+    //         console.log(resp)
+    //     })
+    // }
 
-    const handleServerStop = () => {
-        const killCellProcessCmd = `stop`;
-        const language = "process"
-        NodejsInterpreter.exec(killCellProcessCmd, language, (resp) => {
-            console.log(resp)
-        })
-    }
-
-    const handleNotebookRestart = () => {
-        //TODO: Save current notebook to local storage
-        //TODO: Reload notebook the page from local storage
-        console.log("Restarting notebook")
-    }
+    // const handleNotebookRestart = () => {
+    //     //TODO: Save current notebook to local storage
+    //     //TODO: Reload notebook the page from local storage
+    //     console.log("Restarting notebook")
+    // }
 
     return (
         <div className="border-b-2 mb-2 mt-20">
@@ -143,46 +138,14 @@ const MenuBar = () => {
                     </Menu>
                 </div>
 
-                <div >
-                    <Button
-                        id="settings-menu"
-                        variant={activeMenuOption["settings-menu"] ? "outlined" : "text"}
-                        onClick={handleMenuClick}
-                    >
-                        <span className='normal-case'>Settings</span>
+                <div>
+                    <Button>
+                        <span className='normal-case'> < SettingsModal /></span>
                     </Button>
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={activeMenuOption["settings-menu"]}
-                        onClose={handleMenuClick}
-                    >
-                        < SettingsMenu />
-                    </Menu>
                 </div>
 
             </div>
         </div>
-
-        // <div>
-        //     <select
-        //         onChange={(e: any) => modeChangeHandler(e.target.value)}>
-        //         {INTERPRETER_MODES.map((mode, index) => (
-        //             <option key={index} value={mode}>{mode}</option>
-        //         ))}
-        //     </select>
-        // </div>
-        // <button
-        //     onClick={handleServerStop}
-        // >
-        //     Stop Server
-        // </button>
-        // <button
-        //     onClick={handleNotebookRestart}
-        // >
-        //     Restart
-        // </button> 
-
-
     )
 }
 
