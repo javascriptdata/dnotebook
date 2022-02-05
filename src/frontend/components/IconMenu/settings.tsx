@@ -5,33 +5,24 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import SaveIcon from '@mui/icons-material/Save';
 import FormatIndentIncreaseIcon from '@mui/icons-material/FormatIndentIncrease';
 import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
 import TextDecreaseIcon from '@mui/icons-material/TextDecrease';
-import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 
 export default function SettingsMenu() {
   return (
     <Paper sx={{ width: 320, maxWidth: '100%' }}>
       <MenuList>
-
-        <MenuItem>
-          <ListItemIcon>
-            <WysiwygIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Theme</ListItemText>
-        </MenuItem>
-        <Divider /> 
-
         <MenuItem>
           <ListItemIcon>
             <SaveIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Autosave Notebook</ListItemText>
         </MenuItem>
-        <Divider /> 
+        <Divider />
 
         <MenuItem>
           <ListItemIcon>
@@ -53,12 +44,13 @@ export default function SettingsMenu() {
           </ListItemIcon>
           <ListItemText>Decrease Text Editor Size</ListItemText>
         </MenuItem>
+        <Divider />
 
         <MenuItem>
           <ListItemIcon>
-            <IntegrationInstructionsIcon fontSize="small" />
+            <SettingsIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Text Editor Theme</ListItemText>
+          <ListItemText>Advance</ListItemText>
         </MenuItem>
 
       </MenuList>
