@@ -6,14 +6,20 @@ import Menu from '@mui/material/Menu';
 import { useState } from 'react';
 import FileMenu from '../IconMenu/file'
 import EditMenu from '../IconMenu/edit'
-
-const INTERPRETER_MODES = ["browser", "node"]
+import ViewMenu from '../IconMenu/view'
+import RunMenu from '../IconMenu/run'
+import ServerMenu from '../IconMenu/server'
+import SettingsMenu from '../IconMenu/settings'
 
 const MenuBar = () => {
     const dispatch = useDispatch();
     const [activeMenuOption, setActiveMenuOptions] = useState({
         "file-menu": false,
         "edit-menu": false,
+        "view-menu": false,
+        "run-menu": false,
+        "server-menu": false,
+        "settings-menu": false
     })
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -85,6 +91,75 @@ const MenuBar = () => {
                         < EditMenu />
                     </Menu>
                 </div>
+
+                <div >
+                    <Button
+                        id="view-menu"
+                        variant={activeMenuOption["view-menu"] ? "outlined" : "text"}
+                        onClick={handleMenuClick}
+                    >
+                        <span className='normal-case'>View</span>
+                    </Button>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={activeMenuOption["view-menu"]}
+                        onClose={handleMenuClick}
+                    >
+                        < ViewMenu />
+                    </Menu>
+                </div>
+
+                <div >
+                    <Button
+                        id="run-menu"
+                        variant={activeMenuOption["run-menu"] ? "outlined" : "text"}
+                        onClick={handleMenuClick}
+                    >
+                        <span className='normal-case'>Run</span>
+                    </Button>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={activeMenuOption["run-menu"]}
+                        onClose={handleMenuClick}
+                    >
+                        < RunMenu />
+                    </Menu>
+                </div>
+
+                <div >
+                    <Button
+                        id="server-menu"
+                        variant={activeMenuOption["server-menu"] ? "outlined" : "text"}
+                        onClick={handleMenuClick}
+                    >
+                        <span className='normal-case'>Server</span>
+                    </Button>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={activeMenuOption["server-menu"]}
+                        onClose={handleMenuClick}
+                    >
+                        < ServerMenu />
+                    </Menu>
+                </div>
+
+                <div >
+                    <Button
+                        id="settings-menu"
+                        variant={activeMenuOption["settings-menu"] ? "outlined" : "text"}
+                        onClick={handleMenuClick}
+                    >
+                        <span className='normal-case'>Settings</span>
+                    </Button>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={activeMenuOption["settings-menu"]}
+                        onClose={handleMenuClick}
+                    >
+                        < SettingsMenu />
+                    </Menu>
+                </div>
+
             </div>
         </div>
 

@@ -6,10 +6,14 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Typography from '@mui/material/Typography';
-import ContentCut from '@mui/icons-material/ContentCut';
-import ContentCopy from '@mui/icons-material/ContentCopy';
-import ContentPaste from '@mui/icons-material/ContentPaste';
-import Cloud from '@mui/icons-material/Cloud';
+import FileNew from '@mui/icons-material/AddBox';
+import FileOpen from '@mui/icons-material/OpenInNew';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import SaveIcon from '@mui/icons-material/Save';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+
 
 export default function FileMenu() {
   return (
@@ -17,37 +21,64 @@ export default function FileMenu() {
       <MenuList>
         <MenuItem>
           <ListItemIcon>
-            <ContentCut fontSize="small" />
+            <FileNew fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Cut</ListItemText>
+          <ListItemText>New</ListItemText>
           <Typography variant="body2" color="text.secondary">
-            ⌘X
+            ⌘N
           </Typography>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <ContentCopy fontSize="small" />
+            <FileOpen fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Copy</ListItemText>
+          <ListItemText>Open</ListItemText>
           <Typography variant="body2" color="text.secondary">
-            ⌘C
+            ⌘O
           </Typography>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <ContentPaste fontSize="small" />
+            <DriveFileRenameOutlineIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Paste</ListItemText>
+          <ListItemText>Rename Notebook</ListItemText>
           <Typography variant="body2" color="text.secondary">
-            ⌘V
+            ⌘R
+          </Typography>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <SaveIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Save Notebook</ListItemText>
+          <Typography variant="body2" color="text.secondary">
+            ⌘S
+          </Typography>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <SaveAltIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Download</ListItemText>
+          <Typography variant="body2" color="text.secondary">
+            ⌘D
+          </Typography>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <ImportExportIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Export Notebook As...</ListItemText>
+          <Typography variant="body2" color="text.secondary">
+            ⌘DE
           </Typography>
         </MenuItem>
         <Divider />
         <MenuItem>
           <ListItemIcon>
-            <Cloud fontSize="small" />
+            <PowerSettingsNewIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Web Clipboard</ListItemText>
+          <ListItemText>Shut Down</ListItemText>
         </MenuItem>
       </MenuList>
     </Paper>

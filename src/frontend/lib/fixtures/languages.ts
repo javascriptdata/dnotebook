@@ -12,11 +12,11 @@ const cellLanguages: CellLanguages = {
         name: "JavaScript",
         extensions: [".js", ".jsx"],
     },
-    "json": {
-        value: "json",
-        name: "JSON",
-        extensions: [".json"],
-    },
+    // "json": {
+    //     value: "json",
+    //     name: "JSON",
+    //     extensions: [".json"],
+    // },
     "markdown": {
         value: "markdown",
         name: "Markdown",

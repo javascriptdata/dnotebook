@@ -38,7 +38,7 @@ export type NotebookConfig = {
     height: string,
 }
 
-export type LangaugeOption = "typescript" | "javascript" | "sh" | "html" | "json" | "markdown"
+export type LangaugeOption = "typescript" | "javascript" | "sh" | "html" | "markdown"
 
 export type CellLanguages = {
     [id: string]: {

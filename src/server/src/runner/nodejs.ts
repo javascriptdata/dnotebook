@@ -82,10 +82,10 @@ const runJsCodeInContext = async ({ code, res }: any) => {
 
         await vm.runInNewContext(code, replServer.context, {
             displayErrors: true,
+            microtaskMode: "afterEvaluate"
         })
 
     } catch (err: any) {
-        console.log(err)
         let errMsg = formatErrorOutput(err)
         res.write(`${errMsg}<br />`);
         res.end();

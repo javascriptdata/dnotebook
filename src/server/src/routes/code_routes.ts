@@ -1,5 +1,5 @@
 import express from 'express';
-import { runNodeCode } from '../runner/nodejs'
+import { runNodeCode } from '../runner/nodejs';
 
 const codeRoute = express.Router();
 
