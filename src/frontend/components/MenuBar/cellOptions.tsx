@@ -19,7 +19,10 @@ import { useState } from "react";
 
 export default function CellOptions({ cell }: { cell: NbCell }) {
     const dispatch = useDispatch();
-    const { cells, cellIds } = useSelector((state: { app: AppState }) => state.app)
+    const { notebooks, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
+    const notebook = notebooks[activeNotebookName]
+    const { cellIds, cells } = notebook
+
     const languages = Object.keys(cellLanguages) as LangaugeOption[];
 
     const [copied, setCopied] = useState(false);
@@ -30,7 +33,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         const language = e.target.value as LangaugeOption
         const newCurrCell = { ...cell, mode: language }
         const newCells = { ...cells, [cell.id]: newCurrCell }
-        dispatch(updateCells(newCells))
+        dispatch(updateCells({ newCells, activeNotebookName }))
     }
 
     const handleAddNewCellBelowCurrentCell = () => {
@@ -47,8 +50,8 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         newCellIds.splice(topCellIdIndex + 1, 0, newId)
 
         const newCells = { ...cells, [newId]: newCell }
-        dispatch(updateCells(newCells))
-        dispatch(updateCellIds(newCellIds))
+        dispatch(updateCells({ newCells, activeNotebookName }))
+        dispatch(updateCellIds({ newCellIds, activeNotebookName }))
     }
 
     const handleMoveCurrentCellUp = () => {
@@ -58,7 +61,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         newCellIds.splice(currentCellIdIndex - 1, 0, cell.id)
         newCellIds.splice(currentCellIdIndex + 1, 1)
 
-        dispatch(updateCellIds(newCellIds))
+        dispatch(updateCellIds({ newCellIds, activeNotebookName }))
     }
 
     const handleMoveCurrentCellDown = () => {
@@ -71,7 +74,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         newCellIds.splice(currentCellIdIndex, 1, downCellId)
         newCellIds.splice(downCellIdIndex, 1, cell.id)
 
-        dispatch(updateCellIds(newCellIds))
+        dispatch(updateCellIds({ newCellIds, activeNotebookName }))
     }
 
     const handleDeleteCurrentCell = () => {
@@ -79,7 +82,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
         const currentCellIdIndex = cellIds.indexOf(cell.id)
         newCellIds.splice(currentCellIdIndex, 1)
 
-        dispatch(updateCellIds(newCellIds))
+        dispatch(updateCellIds({ newCellIds, activeNotebookName }))
     }
 
     const handleCopyCurrentCellContentToClipBoard = async () => {
@@ -134,6 +137,7 @@ export default function CellOptions({ cell }: { cell: NbCell }) {
                 <IconButton
                     aria-label="delete"
                     color="warning"
+                    disabled={currentCellIdIndex === 0}
                     onClick={handleDeleteCurrentCell}
                 >
                     <DeleteIcon />

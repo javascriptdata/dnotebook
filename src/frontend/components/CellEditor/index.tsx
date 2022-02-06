@@ -23,9 +23,12 @@ const AceEditor = dynamic(
 
 
 const Editor = ({ cell }: { cell: NbCell }) => {
-    const { config, cells } = useSelector((state: { app: AppState }) => state.app)
-
     const dispatch = useDispatch();
+
+    const { notebooks, activeNotebookName, config } = useSelector((state: { app: AppState }) => state.app)
+    const notebook = notebooks[activeNotebookName]
+    const { cells } = notebook
+
     const [code, updateCode] = useState(cell?.content);
 
     const handleCodeChange = (newCode: any) => {
@@ -33,7 +36,7 @@ const Editor = ({ cell }: { cell: NbCell }) => {
         const newCurrCell = { ...cell, content: newCode }
 
         const newCells = { ...cells, [cell.id]: newCurrCell }
-        dispatch(updateCells(newCells))
+        dispatch(updateCells({ newCells, activeNotebookName }))
     }
     
     return (

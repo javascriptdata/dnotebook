@@ -19,11 +19,12 @@ export type NbCell = {
 }
 
 export type Notebook = {
+    notebookId: string;
+    name: string;
     cellIds: string[];
     cells: {
         [key: string]: NbCell
     }
-    config: Partial<NotebookConfig>;
 }
 
 export type NotebookConfig = {
@@ -50,11 +51,12 @@ export type CellLanguages = {
     }
 }
 
+
 export type AppState = {
     interpreterMode: string;
-    cellIds: string[];
-    cells: {
-        [key: string]: NbCell
+    activeNotebookName: string;
+    notebooks:  {
+        [key: string]: Notebook
     }
     config: Partial<NotebookConfig>;
 }

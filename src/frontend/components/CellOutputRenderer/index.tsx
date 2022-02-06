@@ -1,13 +1,14 @@
+import { NbCell } from "../../lib/typings/types";
 
 
-const cellOutputRenderer = ({ output, hasError, outputError }: { output: string, hasError: boolean, outputError: string }) => {
+const cellOutputRenderer = ({ cell }: { cell: NbCell }) => {
     return (
         <div>
-            {hasError ? (
-                <div className="text-red-400 p-3" dangerouslySetInnerHTML={{ __html: outputError }}></div>
+            {cell.outputError !== "" ? (
+                <div className="text-red-400 p-3" dangerouslySetInnerHTML={{ __html: cell.outputError }}></div>
             ) : (
                 <div>
-                    <div className="p-3" dangerouslySetInnerHTML={{ __html: output }}></div>
+                    <div className="p-3" dangerouslySetInnerHTML={{ __html: cell.output }}></div>
                 </div>
             )}
         </div>

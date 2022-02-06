@@ -3,6 +3,13 @@ import { marked } from "marked"
 import { formatErrorMessage } from "../helpers/utils"
 
 const SERVER_URL = process.env.NEXT_PUBLIC_CODE_SERVER_URL
+
+type ExecProps = {
+    content: string,
+    language: string,
+    activeNotebookName: string,
+    callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void
+}
 class ServerAPI {
     /**
      * Executes the code in the given language via the server. Intermediary results like those in
@@ -13,9 +20,9 @@ class ServerAPI {
      * @returns A promise that resolves when the execution is finished.
      * @throws Error if the language is not supported.
      */
-    async exec(content: string, language: string, callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
+    async exec({ content, language, callback, activeNotebookName }: ExecProps) {
         if (["typescript", "javascript", "bash", "sh", "powershell", "process"].includes(language)) {
-            return this.executeInNodeJs(content, language, callback);
+            return this.executeInNodeJs({ content, language, callback, activeNotebookName });
 
         } else if (language === "markdown") {
             try {
@@ -61,10 +68,7 @@ class ServerAPI {
      * @param callback A callback that is called with the result/intermediate result of the execution.
      * @returns A promise that resolves when the execution is finished.
      * */
-    async executeInNodeJs(
-        code: string,
-        language: string,
-        callback: (accumulatedResult: string | outputError, hasErrors: boolean) => void) {
+    async executeInNodeJs({ content, language, callback, activeNotebookName }: ExecProps) {
 
         fetch(`${SERVER_URL}/nodejs/run`, {
             method: 'POST',
@@ -72,8 +76,9 @@ class ServerAPI {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                code,
-                language
+                content,
+                language,
+                activeNotebookName
             }),
         })
             .then(response => response.body)

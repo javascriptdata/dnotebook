@@ -13,7 +13,10 @@ import { cleanErrorMessage } from "../../lib/helpers/utils"
 
 const NoteBookCell = ({ cell }: { cell: NbCell }) => {
     const dispatch = useDispatch();
-    const { cells, interpreterMode } = useSelector((state: { app: AppState }) => state.app)
+    const { notebooks, activeNotebookName, interpreterMode } = useSelector((state: { app: AppState }) => state.app)
+    const notebook = notebooks[activeNotebookName]
+    const { cells } = notebook
+
 
     const [cellIsRunning, setCellIsRunning] = useState(false)
     const [output, setOutput] = useState("")
@@ -30,7 +33,7 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
 
             const newCurrCell = { ...cell, output: "", outputError: fullErrorMessage }
             const newCells = { ...cells, [cell.id]: newCurrCell }
-            dispatch(updateCells(newCells))
+            dispatch(updateCells({ newCells, activeNotebookName }))
 
         } else {
             setHasError(false)
@@ -38,7 +41,7 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
 
             const newCurrCell = { ...cell, output: accumulatedResult as string, outputError: "" }
             const newCells = { ...cells, [cell.id]: newCurrCell }
-            dispatch(updateCells(newCells))
+            dispatch(updateCells({ newCells, activeNotebookName }))
 
         }
 
@@ -58,7 +61,7 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
         setOutputError("")
 
         if (interpreterMode === 'node') {
-            NodejsInterpreter.exec(content, language, cellRunCallback)
+            NodejsInterpreter.exec({ content, language, callback: cellRunCallback, activeNotebookName })
                 .catch((error) => {
                     setOutputError({
                         ...error,
@@ -103,14 +106,10 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
                 </div>
 
                 <div className="col-span-11"
-                 onKeyPress={handleKeyPress}
+                    onKeyPress={handleKeyPress}
                 >
                     <CellEditor cell={cell} />
-                    <CellOutputRenderer
-                        hasError={hasError}
-                        output={output}
-                        outputError={outputError}
-                    />
+                    <CellOutputRenderer cell={cell} />
                 </div>
 
             </section>
