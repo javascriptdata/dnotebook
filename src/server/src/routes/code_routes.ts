@@ -6,12 +6,13 @@ const codeRoute = express.Router();
 
 
 codeRoute.post('/nodejs/run', async (req, res) => {
-    const { code, language } = req.body;
+    const { content, language, activeNotebookName } = req.body;
+    console.log({ content, language, activeNotebookName });
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-control": "no-cache"
     });
-    runNodeCode({ code, language, res });
+    runNodeCode({ code: content, language, res });
 })
 
 
