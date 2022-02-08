@@ -10,18 +10,18 @@ export default function NotebookTabPanel() {
     const dispatch = useDispatch();
     const { notebooks } = useSelector((state: { app: AppState }) => state.app)
     const tabNames = Object.keys(notebooks)
-    const [value, setValue] = useState(0);
+    const [tabValue, setTabValue] = useState(0);
 
     const handleChange = (event: any, newValue: number) => {
         const currentNotebookTab = notebooks[event.target.innerText]
         dispatch(updateActiveNotebookName(currentNotebookTab.name));
-        setValue(newValue);
+        setTabValue(newValue);
     };
 
     return (
         <div className='col-span-12 border-l-2 ml-52'>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example">
                     {
                         tabNames.map((name, i) => {
                             return <Tab style={{ textTransform: "none" }} key={i} label={name} />

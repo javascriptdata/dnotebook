@@ -82,12 +82,14 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
     }
 
     return (
-        <section>
-            <section className="grid grid-rows-1 text-right">
+        <section className="p-2">
+            <section className="col-span-12 text-right">
                 <CellOptionsBar cell={cell} />
             </section>
-            <section className="grid grid-cols-12">
-                <div className="col-span-1 text-right">
+            <section>
+                <div className="flex"
+                    onKeyPress={handleKeyPress}
+                >
                     {
                         cellIsRunning ? (
                             <LoadingButton loading ></LoadingButton>
@@ -102,13 +104,9 @@ const NoteBookCell = ({ cell }: { cell: NbCell }) => {
                             </IconButton>
                         )
                     }
-
-                </div>
-
-                <div className="col-span-11"
-                    onKeyPress={handleKeyPress}
-                >
                     <CellEditor cell={cell} />
+                </div>
+                <div className="flex ml-8">
                     <CellOutputRenderer cell={cell} />
                 </div>
 

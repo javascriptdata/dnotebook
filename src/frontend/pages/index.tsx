@@ -32,12 +32,14 @@ const Home: NextPage = () => {
             <MenuBar />
           </section>
 
-          <section style={{ height: "650px" }} className='grid grid-cols-12 p-2 overflow-y-scroll'>
+          <section style={{ height: "650px" }} className='grid overflow-y-scroll'>
             <div className='fixed'>
               <SideBar />
             </div>
-            <NotebookTabPanel />
-            <Notebook />
+            <div>
+              <NotebookTabPanel />
+              <Notebook />
+            </div>
           </section>
         </div>
       </div>
