@@ -7,35 +7,46 @@ import { transformSync } from "@babel/core";
 import { RunNodeCodeOptions } from "../types";
 import { generateBashCode } from '../utils';
 
-//A simple repl server to evaluate code from the browser
-const replServer = repl.start({
-    prompt: '',
-    eval: replEvalCode,
-    ignoreUndefined: true,
-    terminal: true,
-    useColors: true,
-    useGlobal: false
-});
+const ReplKernelManager: any = {}
 
-replServer.context.__dirname = process.cwd();
-replServer.context.require = require;
-replServer.context.spawn = spawn;
-replServer.context.util = util;
+//A simple repl server to evaluate code from the browser
+function getDefaultReplServer() {
+    const replServer = repl.start({
+        prompt: '',
+        eval: replEvalCode,
+        ignoreUndefined: true,
+        terminal: true,
+        useColors: true,
+        useGlobal: false
+    });
+
+    replServer.context.__dirname = process.cwd();
+    replServer.context.require = require;
+    replServer.context.spawn = spawn;
+    replServer.context.util = util;
+
+    return replServer
+
+}
 
 async function replEvalCode(code: string) {
     /**@ts-ignore */
     return runNodeCode({ code });
 }
 
-const runNodeCode = ({ code, res, language }: RunNodeCodeOptions) => {
+const runNodeCode = ({ code, res, language, activeNotebookName }: RunNodeCodeOptions) => {
+    //switch kernel depending on active notebook
+    ReplKernelManager[activeNotebookName] = ReplKernelManager[activeNotebookName] || getDefaultReplServer()
+
     switch (language) {
 
         case "sh":
             const bashCode = generateBashCode(code);
-            runJsCodeInContext({ code: bashCode, res });
+            runJsCodeInContext({ code: bashCode, res, activeNotebookName });
             break;
         case "javascript":
             try {
+                //Transpile all JS code to ES5 version
                 let transformedJsCode = transformSync(code, {
                     presets: [
                         [
@@ -50,7 +61,7 @@ const runNodeCode = ({ code, res, language }: RunNodeCodeOptions) => {
                 })?.code || code;
 
                 transformedJsCode = `${transformedJsCode}\nconsole.log('')`
-                runJsCodeInContext({ code: transformedJsCode, res })
+                runJsCodeInContext({ code: transformedJsCode, res, activeNotebookName })
 
             } catch (err) {
                 let errMsg = formatErrorOutput(err)
@@ -61,7 +72,7 @@ const runNodeCode = ({ code, res, language }: RunNodeCodeOptions) => {
             break;
 
         case "process":
-            handleProcessCmds(code, res);
+            handleProcessCmds({ code, res, activeNotebookName });
             break;
 
         default:
@@ -69,18 +80,18 @@ const runNodeCode = ({ code, res, language }: RunNodeCodeOptions) => {
     }
 }
 
-const runJsCodeInContext = async ({ code, res }: any) => {
+const runJsCodeInContext = async ({ code, res, activeNotebookName }: any) => {
     try {
         //Ensures all console.log statements in code are written to the response
-        replServer.context.console = {
+        ReplKernelManager[activeNotebookName].console = {
             log: (...args: any[]) => {
                 res.write(`${args[0]}<br />`);
             }
         };
 
-        replServer.context.res = res;
-
-        await vm.runInNewContext(code, replServer.context, {
+        ReplKernelManager[activeNotebookName].res = res;
+        
+        await vm.runInNewContext(code, ReplKernelManager[activeNotebookName], {
             displayErrors: true,
             microtaskMode: "afterEvaluate"
         })
@@ -96,20 +107,20 @@ const formatErrorOutput = (err: any) => {
     return JSON.stringify({ output: err.message, name: err.name, __$hasError: true })
 }
 
-const handleProcessCmds = async (code: string, res: Response) => {
+const handleProcessCmds = async ({ code, res, activeNotebookName }: { code: string, res: Response, activeNotebookName: string }) => {
     switch (code) {
         case "stop":
-            stopKernel(res);
+            stopKernel(res, activeNotebookName);
             break;
         default:
             break;
     }
 }
 
-const stopKernel = async (res: Response) => {
+const stopKernel = async (res: Response, activeNotebookName: string) => {
     console.log("Stopping running kernel...")
-    replServer.context.process.exit();
-    res.write("STOPPED");
+    ReplKernelManager[activeNotebookName].process.exit();
+    res.end("Kernel Stopped Successfully");
 }
 
 export {
