@@ -62,15 +62,42 @@ const runNodeCode = ({ code, res, language, activeNotebookName }: RunNodeCodeOpt
 
                 transformedJsCode = `${transformedJsCode}\nconsole.log('')`
                 runJsCodeInContext({ code: transformedJsCode, res, activeNotebookName })
-
+                break;
             } catch (err) {
                 let errMsg = formatErrorOutput(err)
                 res.write(`${errMsg}<br />`);
                 res.end();
+                break;
             }
 
             break;
+        case "typescript":
+            try {
+                //Transpile all TS code to ES5 version in child process
+                const tsCode = transformSync(code, {
+                    presets: [
+                        [
+                            "@babel/preset-env",
+                            {
+                                "targets": {
+                                    "esmodules": true
+                                }
+                            }
+                        ]
+                    ],
+                    plugins: [
+                        "@babel/plugin-transform-typescript"
+                    ]
+                })?.code || code;
 
+                runJsCodeInContext({ code: tsCode, res, activeNotebookName })
+                break;
+            } catch (err) {
+                let errMsg = formatErrorOutput(err)
+                res.write(`${errMsg}<br />`);
+                res.end();
+                break;
+            }
         case "process":
             handleProcessCmds({ code, res, activeNotebookName });
             break;
