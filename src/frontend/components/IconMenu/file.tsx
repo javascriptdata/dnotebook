@@ -1,64 +1,94 @@
-import * as React from 'react';
-import { useDispatch } from "react-redux";
-import { setDirectories } from "../../lib/state/reducer";
-import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Typography from '@mui/material/Typography';
-import ContentCut from '@mui/icons-material/ContentCut';
-import ContentCopy from '@mui/icons-material/ContentCopy';
-import ContentPaste from '@mui/icons-material/ContentPaste';
-import Cloud from '@mui/icons-material/Cloud';
-import { openFile, openFolder } from "../../lib/utils/fileSystem";
+import React, { useState } from "react";
+import Paper from "@mui/material/Paper";
+import MenuList from "@mui/material/MenuList";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Typography from "@mui/material/Typography";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import ContentPaste from "@mui/icons-material/ContentPaste";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import Cloud from "@mui/icons-material/Cloud";
+import FileList from "./fileList";
 
 export default function FileMenu() {
-  const dispatch = useDispatch();
-  async function onFolderSelect() {
-    const folders = await openFolder();
-    console.log(folders);
-    dispatch(setDirectories(folders))
-  }
+  const [activeMenuOption, setActiveMenuOptions] = useState({
+    "file-menu": false,
+    "edit-menu": false,
+  });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const id = event.currentTarget.id;
+    setAnchorEl(event.currentTarget);
+    //@ts-ignore */
+    const selectedMenuOptionState = activeMenuOption[id];
+    const newActiveMenuOption: any = {};
+
+    Object.keys(activeMenuOption).forEach((key) => {
+      newActiveMenuOption[key] = false;
+    });
+    newActiveMenuOption[id] = !selectedMenuOptionState;
+    setActiveMenuOptions(newActiveMenuOption);
+  };
+  const listStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+  };
+  const fontSize = {
+    fontSize: "13px",
+    width: "70px",
+  };
+  const arrowStyle = {
+    width: "15px",
+    marginLeft: "20px",
+  };
   return (
-    <Paper sx={{ width: 320, maxWidth: "100%" }}>
+    <div>
       <MenuList>
-        <MenuItem onClick={() => openFile()}>
-          <ListItemIcon>
-            <ContentCut fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Open File</ListItemText>
-          <Typography variant="body2" color="text.secondary">
-            ⌘X
-          </Typography>
-        </MenuItem>
-        <MenuItem onClick={() => onFolderSelect()}>
-          <ListItemIcon>
-            <ContentCopy fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Open Folder</ListItemText>
-          <Typography variant="body2" color="text.secondary">
-            ⌘C
-          </Typography>
+        <div>
+          <MenuItem
+            style={listStyle}
+            id="file-menu"
+            variant={activeMenuOption["file-menu"] ? "outlined" : "text"}
+            onMouseEnter={handleMenuClick}
+          >
+            <div style={fontSize}>File</div>
+            <ArrowForwardIosRoundedIcon style={arrowStyle} />
+          </MenuItem>
+          <Menu
+            anchorEl={anchorEl}
+            open={activeMenuOption["file-menu"]}
+            onClose={handleMenuClick}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            style={{
+              marginTop: "-15px",
+              borderRadius: "0px",
+            }}
+          >
+            <FileList />
+          </Menu>
+        </div>
+        <MenuItem>
+          <div style={fontSize}>Edit</div>
+          <ArrowForwardIosRoundedIcon style={arrowStyle} />
         </MenuItem>
         <MenuItem>
-          <ListItemIcon>
-            <ContentPaste fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Paste</ListItemText>
-          <Typography variant="body2" color="text.secondary">
-            ⌘V
-          </Typography>
+          <div style={fontSize}>Selection</div>
+          <ArrowForwardIosRoundedIcon style={arrowStyle} />
         </MenuItem>
-        <Divider />
         <MenuItem>
-          <ListItemIcon>
-            <Cloud fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Web Clipboard</ListItemText>
+          <div style={fontSize}>Help</div>
+          <ArrowForwardIosRoundedIcon style={arrowStyle} />
         </MenuItem>
       </MenuList>
-    </Paper>
+    </div>
   );
-}
+};

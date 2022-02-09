@@ -21,14 +21,24 @@ const Home: NextPage = () => {
         <section>
           <NavBar />
         </section>
-        <section>
-          <MenuBar />
-        </section>
-        <section className="flex p-2 border-r-2 overflow-y-scroll">
-          <div className="fixed flex-none">
+        {/* <section>
+            <MenuBar />
+        </section> */}
+        <section
+          className="flex overflow-hidden"
+          style={{
+            marginTop: "69px",
+          }}
+        >
+          <div className="fixed flex-none h-full border-r-2">
             <SideBar />
           </div>
-          <div className=" flex-1 w-64 col-span-12 ml-60">
+          <div
+            className="flex-1 col-span-12 min-h-1/2 px-3.5"
+            style={{
+              marginTop: "15px",
+            }}
+          >
             {cellIds.map((cellId: string, i: number) => {
               const cell: NbCell = cells[cellId];
               return (
