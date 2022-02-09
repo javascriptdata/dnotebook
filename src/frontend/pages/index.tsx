@@ -17,31 +17,31 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className='flex-row'>
+      <div className="flex-row">
         <section>
           <NavBar />
         </section>
         <section>
           <MenuBar />
         </section>
-
-        <section style={{ height: "650px" }} className='grid grid-cols-12 p-2 overflow-y-scroll'>
-          <div className='fixed'>
+        <section className="flex p-2 border-r-2 overflow-y-scroll">
+          <div className="fixed flex-none">
             <SideBar />
           </div>
-          <div className='col-span-12 border-l-2 ml-60'>
-            {
-              cellIds.map((cellId: string, i: number) => {
-                const cell: NbCell = cells[cellId]
-                return <div key={cellId}><NoteBookCell cell={cell} /></div>
-              })
-            }
+          <div className=" flex-1 w-64 col-span-12 ml-60">
+            {cellIds.map((cellId: string, i: number) => {
+              const cell: NbCell = cells[cellId];
+              return (
+                <div key={cellId}>
+                  <NoteBookCell cell={cell} />
+                </div>
+              );
+            })}
           </div>
-
         </section>
       </div>
     </div>
-  )
+  );
 }
 
 export default Home

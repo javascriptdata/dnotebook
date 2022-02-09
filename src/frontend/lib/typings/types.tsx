@@ -18,6 +18,11 @@ export type NbCell = {
     outputError?: any;
 }
 
+export type DirectoryObj = {
+    key: string,
+    value: Object,
+}
+
 export type Notebook = {
     cellIds: string[];
     cells: {
@@ -53,6 +58,7 @@ export type AppState = {
     cellIds: string[];
     cells: {
         [key: string]: NbCell
-    }
+    },
+    directories: DirectoryObj[],
     config: Partial<NotebookConfig>;
 }

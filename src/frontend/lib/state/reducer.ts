@@ -24,7 +24,8 @@ const initialState: AppState = {
         cellShowLineNumbers: false,
         cellTabSize: 2,
         width: "100%",
-    }
+    },
+    directories: [],
 }
 
 const appReducer = createSlice({
@@ -43,6 +44,9 @@ const appReducer = createSlice({
         updateConfig: (state, action) => {
             state.config = action.payload;
         },
+        setDirectories: (state, action) => {
+            state.directories = action.payload;
+        }
     }
 });
 
@@ -51,6 +55,7 @@ export const {
     updateCellIds,
     updateCells,
     updateConfig,
+    setDirectories,
 } = appReducer.actions;
 
 export default appReducer.reducer;
