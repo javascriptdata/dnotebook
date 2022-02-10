@@ -13,16 +13,20 @@ import MenuBar from "../MenuBar/notebookOptionsBar";
 
 export const sideNavData = [
   {
-    name: "explorer",
+    name: "Explorer",
     icon: <FolderRoundedIcon />,
   },
   {
-    name: "search",
+    name: "Search",
     icon: <SearchRoundedIcon />,
   },
 ];
 
-export default function MiniDrawer() {
+interface MiniDrawerProps {
+  setShowPanel: Function;
+  showPanel: String | null;
+}
+export const MiniDrawer: React.FC<MiniDrawerProps> = ({setShowPanel, showPanel}) => {
   const [openFileTree, setOpenFileTree] = useState(false);
 
   const handleFileTreeOptionClick = (e: any) => {
@@ -30,43 +34,38 @@ export default function MiniDrawer() {
   };
 
   return (
+    <div className="flex">
       <div className="flex flex-col justify-center items-center mt-6">
-          <MenuBar />
-      {sideNavData.map((data) => {
-        return (
-          <div
-            style={{
-              marginTop: "25px",
-              cursor: "pointer",
-            }}
-            key={data.name}
-          >
-            <Button
+        <MenuBar />
+        {sideNavData.map((data) => {
+          return (
+            <div
               style={{
-                padding: "5px",
+                marginTop: "25px",
+                cursor: "pointer",
               }}
+              key={data.name}
             >
-              {data.icon}
-            </Button>
-          </div>
-        );
-      })}
+              <Button
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => {
+                  if (showPanel && showPanel === data.name) {
+                    setShowPanel(null);
+                  } else {
+                    setShowPanel(data.name);
+                  }
+                }}
+              >
+                {data.icon}
+              </Button>
+            </div>
+          );
+        })}
+      </div>
     </div>
-    // <Box sx={{ display: 'flex', marginLeft: '-10px', width: "50px" }}>
-    //     <div className=''>
-    //         <List>
-    //             <ListItem>
-    //                 <FolderIcon
-    //                     id={'file-tree'}
-    //                     onClick={handleFileTreeOptionClick}
-    //                 />
-    //             </ListItem>
-    //         </List>
-    //     </div>
-
-    //     <div className='mt-4'>
-    //         {openFileTree && <CustomizedTreeView />}
-    //     </div>
-    // </Box>
   );
 }
+
+export default MiniDrawer;
