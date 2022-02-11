@@ -34,11 +34,9 @@ const Home: NextPage = () => {
           <section>
             <MenuBar />
           </section>
-
           <section
-            className="overflow-hidden h-full"
+            className="overflow-hidden h-full mt-2"
             style={{
-              marginTop: "69px",
               display: "flex",
               height: "90vh",
             }}
@@ -57,22 +55,10 @@ const Home: NextPage = () => {
                 width: "100%",
               }}
             >
-              <div>
                 <NotebookTabPanel />
                 <Notebook />
-              </div>
             </div>
           </section>
-
-          {/* <section style={{ height: "650px" }} className='grid overflow-y-scroll'>
-            <div className='fixed'>
-              <SideBar />
-            </div>
-            <div>
-              <NotebookTabPanel />
-              <Notebook />
-            </div>
-          </section> */}
         </div>
       </div>
     </ThemeProvider>

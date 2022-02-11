@@ -52,7 +52,7 @@ const MenuBar = () => {
     <div style={{
       zIndex: 99,
     }}
-      className="border-b-2 mb-2 mt-20">
+      className="border-b-2 mt-20">
       <div className="flex">
         <div >
           <Button

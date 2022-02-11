@@ -35,8 +35,7 @@ export const MiniDrawer: React.FC<MiniDrawerProps> = ({setShowPanel, showPanel})
 
   return (
     <div className="flex">
-      <div className="flex flex-col justify-center items-center mt-6">
-        <MenuBar />
+      <div className="flex flex-col justify-center items-center">
         {sideNavData.map((data) => {
           return (
             <div

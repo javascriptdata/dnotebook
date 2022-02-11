@@ -8,7 +8,7 @@ const NotebookTab = () => {
     const { cellIds, cells } = notebook
 
     return (
-        <div className='col-span-12 border-l-2 ml-52'>
+        <div className='col-span-12'>
             {
                 cellIds.map((cellId: string, i: number) => {
                     const cell: NbCell = cells[cellId]
