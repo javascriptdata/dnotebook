@@ -3380,20 +3380,6 @@ react-dom@17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-folder-tree@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/react-folder-tree/-/react-folder-tree-5.0.3.tgz#586c28f26b1a5340e5a36c22d71f4067f5026f48"
-  integrity sha512-rCrojPpvJJZPzU9SrAEpcc/I2XddZ1eQ7wOnFPWHesZ9KQWehptm5QEbCw+eWRapDK+t8Nb/TVRPfE+oX0jVSA==
-  dependencies:
-    prop-types "^15.7.2"
-    react-icons "^4.1.0"
-    use-tree-state "^1.0.0"
-
-react-icons@^4.1.0:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.3.1.tgz#2fa92aebbbc71f43d2db2ed1aed07361124e91ca"
-  integrity sha512-cB10MXLTs3gVuXimblAdI71jrJx8njrJZmNMEMC+sQu5B/BIOmlsAjskdqpn81y8UBVEGuHODd7/ci5DvoSzTQ==
-
 react-is@17.0.2, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -4118,11 +4104,6 @@ use-subscription@1.5.1:
   integrity sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==
   dependencies:
     object-assign "^4.1.1"
-
-use-tree-state@^1.0.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/use-tree-state/-/use-tree-state-1.1.1.tgz#229c0eb1019c382c446506b474f676ecfedd7b11"
-  integrity sha512-oNLnmUaAef97UGvw83L0tfTYj7ZBmPdf3tsaehr8FumSdq9Th/cc97jVTnSoOCoq9wYmhDuSffJxHv+wbgUlrA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
