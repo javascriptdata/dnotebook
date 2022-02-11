@@ -2,40 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "../typings/types";
 import { v4 as uuid_v4 } from "uuid";
 
-const initialNotebookId = uuid_v4()
-const initialCellId1 = uuid_v4()
-const initialCellId2 = uuid_v4()
-
-
 const initialState: AppState = {
     interpreterMode: "node",
-    activeNotebookName: "note1.dnb",
+    activeNotebookName: "Dashboard",
     notebooks: {
-        "note1.dnb": {
-            notebookId: initialNotebookId,
-            name: "note1.dnb",
-            cellIds: [initialCellId1],
-            cells: {
-                [initialCellId1]: {
-                    id: initialCellId1,
-                    content: "",
-                    mode: "javascript",
-                    output: ""
-                },
-            },
-        },
-        "note2.dnb": {
+        "Dashboard": { //Default open tab for Dashboard
             notebookId: uuid_v4(),
-            name: "note2.dnb",
-            cellIds: [initialCellId2],
-            cells: {
-                [initialCellId2]: {
-                    id: initialCellId2,
-                    content: "",
-                    mode: "markdown",
-                    output: ""
-                },
-            },
+            name: "Dashboard",
+            cellIds: [],
+            cells: {},
         },
     },
     config: {
@@ -76,7 +51,28 @@ const appReducer = createSlice({
         },
         setDirectories: (state, action) => {
             state.directories = action.payload;
-        }
+        },
+        addNewBlankNotebook: (state, action) => {
+            const { name } = action.payload;
+            const firstCellId = uuid_v4();
+            state.notebooks[name] = {
+                notebookId: uuid_v4(),
+                name,
+                cellIds: [firstCellId],
+                cells: {
+                    [firstCellId]: {
+                        id: firstCellId,
+                        content: "",
+                        mode: "javascript",
+                        output: ""
+                    },
+                },
+            };
+            //create file in current working directory using the File API
+            // const newNotebookFile = new File([], newNotebookName, { type: "text/plain" });
+            // state.directories.push(newNotebookFile);
+
+        },
     }
 });
 
@@ -87,6 +83,7 @@ export const {
     updateConfig,
     updateActiveNotebookName,
     setDirectories,
+    addNewBlankNotebook,
 } = appReducer.actions;
 
 export default appReducer.reducer;
