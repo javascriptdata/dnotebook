@@ -19,7 +19,7 @@ export default function NotebookTabPanel() {
     };
 
     return (
-        <div className='col-span-12 border-l-2 ml-52'>
+        <div className='col-span-12'>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example">
                     {
