@@ -1,11 +1,3 @@
-import * as React from 'react';
-import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Typography from '@mui/material/Typography';
 import FileNew from '@mui/icons-material/AddBox';
 import FileOpen from '@mui/icons-material/OpenInNew';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -13,12 +5,81 @@ import SaveIcon from '@mui/icons-material/Save';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-
+import React, { useState } from "react";
+import MenuList from "@mui/material/MenuList";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Typography from "@mui/material/Typography";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import FileList from "./fileList";
 
 export default function FileMenu() {
+  const [activeMenuOption, setActiveMenuOptions] = useState({
+    "file-menu": false,
+    "edit-menu": false,
+  });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const id = event.currentTarget.id;
+    setAnchorEl(event.currentTarget);
+    //@ts-ignore */
+    const selectedMenuOptionState = activeMenuOption[id];
+    const newActiveMenuOption: any = {};
+
+    Object.keys(activeMenuOption).forEach((key) => {
+      newActiveMenuOption[key] = false;
+    });
+    newActiveMenuOption[id] = !selectedMenuOptionState;
+    setActiveMenuOptions(newActiveMenuOption);
+  };
+  const listStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+  };
+  const fontSize = {
+    fontSize: "13px",
+    width: "70px",
+  };
+  const arrowStyle = {
+    width: "15px",
+    marginLeft: "20px",
+  };
   return (
-    <Paper sx={{ width: 320, maxWidth: '100%' }}>
+    <div>
       <MenuList>
+        <div>
+          {/* @ts-ignore */}
+          <MenuItem
+            style={listStyle}
+            id="file-menu"
+            variant={activeMenuOption["file-menu"] ? "outlined" : "text"}
+            onMouseEnter={handleMenuClick}
+          >
+            <div style={fontSize}>File</div>
+            <ArrowForwardIosRoundedIcon style={arrowStyle} />
+          </MenuItem>
+          <Menu
+            anchorEl={anchorEl}
+            open={activeMenuOption["file-menu"]}
+            onClose={handleMenuClick}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            style={{
+              marginTop: "-15px",
+              borderRadius: "0px",
+            }}
+          >
+            <FileList />
+          </Menu>
+        </div>
         <MenuItem>
           <ListItemIcon>
             <FileNew fontSize="small" />
@@ -72,15 +133,22 @@ export default function FileMenu() {
           <Typography variant="body2" color="text.secondary">
             ⌘DE
           </Typography>
+          <div style={fontSize}>Edit</div>
+          <ArrowForwardIosRoundedIcon style={arrowStyle} />
         </MenuItem>
-        <Divider />
+        <MenuItem>
+          <div style={fontSize}>Selection</div>
+          <ArrowForwardIosRoundedIcon style={arrowStyle} />
+        </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <PowerSettingsNewIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Shut Down</ListItemText>
+          <div style={fontSize}>Help</div>
+          <ArrowForwardIosRoundedIcon style={arrowStyle} />
         </MenuItem>
       </MenuList>
-    </Paper>
+    </div>
   );
-}
+};

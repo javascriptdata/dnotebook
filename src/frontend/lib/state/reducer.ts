@@ -49,7 +49,8 @@ const initialState: AppState = {
         width: "100%",
         notebookThemeMode: "light",
         autosaveNotebook: true,
-    }
+    },
+    directories: [],
 }
 
 const appReducer = createSlice({
@@ -73,6 +74,9 @@ const appReducer = createSlice({
         updateActiveNotebookName: (state, action) => {
             state.activeNotebookName = action.payload;
         },
+        setDirectories: (state, action) => {
+            state.directories = action.payload;
+        }
     }
 });
 
@@ -82,6 +86,7 @@ export const {
     updateCells,
     updateConfig,
     updateActiveNotebookName,
+    setDirectories,
 } = appReducer.actions;
 
 export default appReducer.reducer;
