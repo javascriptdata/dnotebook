@@ -11,10 +11,11 @@ import TreeItem, { useTreeItem } from "@mui/lab/TreeItem";
 
 interface PanelProps {
   state: any;
-}
+  name: string;
+  items: any,
+};
 
-const RecursiveComponent = ({ name, items }) => {
-  console.log(items);
+const RecursiveComponent: React.FC<PanelProps> = ({ name, items}) => {
   const hasChildren = items && items;
   console.log(hasChildren)
 
@@ -22,7 +23,7 @@ const RecursiveComponent = ({ name, items }) => {
     <>
       <TreeItem nodeId={name} label={name} className="mt-1" key={name}>
         {hasChildren &&
-          items.map((item) => <RecursiveComponent key={item.name} {...item} />)}
+          items.map((item: JSX.IntrinsicAttributes & PanelProps & { children?: React.ReactNode; }) => <RecursiveComponent key={item.name} {...item} />)}
       </TreeItem>
     </>
   );
