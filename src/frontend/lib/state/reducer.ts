@@ -53,27 +53,6 @@ const appReducer = createSlice({
         setDirectories: (state, action) => {
             state.directories = action.payload;
         },
-        addNewBlankNotebook: (state, action) => {
-            const { name } = action.payload;
-            const firstCellId = uuid_v4();
-            state.notebooks[name] = {
-                notebookId: uuid_v4(),
-                name,
-                cellIds: [firstCellId],
-                cells: {
-                    [firstCellId]: {
-                        id: firstCellId,
-                        content: "",
-                        mode: "javascript",
-                        output: ""
-                    },
-                },
-            };
-            //create file in current working directory using the File API
-            // const newNotebookFile = new File([], newNotebookName, { type: "text/plain" });
-            // state.directories.push(newNotebookFile);
-
-        },
         addNotebook: (state, action) => {
             const notebook = action.payload;
             state.notebooks[notebook.name] = notebook;
@@ -91,7 +70,6 @@ export const {
     updateConfig,
     updateActiveNotebookName,
     setDirectories,
-    addNewBlankNotebook,
     addNotebook,
     setActiveNotebookTabNumber,
 } = appReducer.actions;

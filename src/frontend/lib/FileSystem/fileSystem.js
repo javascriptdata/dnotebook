@@ -1,7 +1,10 @@
 import { v4 as uuid_v4 } from "uuid";
 
-export async function openFile() {
-
+/**
+ * Opens an existing file
+ * @returns 
+ */
+export const openFile = async () => {
   const pickerOpts = {
     types: [
       {
@@ -16,9 +19,7 @@ export async function openFile() {
     multiple: false
   };
 
-  // open file picker
   let [fileHandle] = await window.showOpenFilePicker(pickerOpts);
-
   const fileMetaData = await fileHandle.getFile();
 
   const reader = new FileReader();
@@ -37,10 +38,41 @@ export async function openFile() {
 
 }
 
+/**
+ * Opens a new .dnb file
+ */
+export const openNewFile = async () => {
+  const pickerOpts = {
+    types: [
+      {
+        description: 'notebooks',
+        accept: {
+          'text/plain': ['.dnb'],
+        }
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false
+  };
+
+  let fileHandle = await window.showSaveFilePicker(pickerOpts);
+  const fileMetaData = await fileHandle.getFile();
+  const notebook = generateNotebook({
+    fileType: "js",
+    fileHandle,
+    fileMetaData,
+    fileContents: "",
+  });
+
+  return notebook;
+
+}
+
 
 const getNotebookFromFile = async ({ fileMetaData, fileContents, fileHandle }) => {
   let notebook;
-
+  console.log(fileMetaData.name.split(".").pop());
+  
   if (fileMetaData.name.split(".").pop() === "dnb") {
     notebook = JSON.parse(fileContents);
     notebook.metadata = {
