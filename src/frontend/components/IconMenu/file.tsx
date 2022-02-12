@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
-import { openFile } from "../../lib/utils/fileSystem";
+import { openFile } from "../../lib/FileSystem/fileSystem";
 import { addNewBlankNotebook, addNotebook, setActiveNotebookTabNumber, updateActiveNotebookName } from "../../lib/state/reducer"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';

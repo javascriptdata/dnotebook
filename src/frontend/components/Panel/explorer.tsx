@@ -1,13 +1,13 @@
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import React from "react";
 import { setDirectories } from "../../lib/state/reducer";
-import { openFolder } from "../../lib/utils/fileSystem";
+import { openFolder } from "../../lib/FileSystem/fileSystem";
 import { connect } from "react-redux";
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import TreeItem, { useTreeItem } from "@mui/lab/TreeItem";
+import TreeItem from "@mui/lab/TreeItem";
 
 interface PanelProps {
   state: any;
@@ -17,7 +17,6 @@ interface PanelProps {
 
 const RecursiveComponent: React.FC<PanelProps> = ({ name, items}) => {
   const hasChildren = items && items;
-  console.log(hasChildren)
 
   return (
     <>
