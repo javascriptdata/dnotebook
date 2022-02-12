@@ -11,8 +11,18 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
-import { openFile, openNewFile, saveNotebookToFileSystem } from "../../lib/FileSystem/fileSystem";
-import { addNotebook, setActiveNotebookTabNumber, updateActiveNotebookName, setNotebookIsSaving } from "../../lib/state/reducer"
+import {
+  openFile,
+  openNewFile,
+  saveNotebookToFileSystem,
+  downloadAsNewNotebook,
+} from "../../lib/FileSystem/fileSystem";
+import {
+  addNotebook,
+  setActiveNotebookTabNumber,
+  updateActiveNotebookName,
+  setNotebookIsSaving
+} from "../../lib/state/reducer"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
 
@@ -44,6 +54,12 @@ export default function FileMenu() {
     await saveNotebookToFileSystem(fileHandle, contents)
     dispatch(setNotebookIsSaving(false))
   }
+
+  const downloadActiveNotebook = async () => {
+    const currentNotebook = {...notebooks[activeNotebookName]}
+    await downloadAsNewNotebook(currentNotebook)
+  }
+
 
   return (
     <Paper sx={{ width: 320, maxWidth: '100%' }}>
@@ -84,7 +100,7 @@ export default function FileMenu() {
             ⌘S
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => downloadActiveNotebook()}>
           <ListItemIcon>
             <SaveAltIcon fontSize="small" />
           </ListItemIcon>

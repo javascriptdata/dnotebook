@@ -174,3 +174,22 @@ export const saveNotebookToFileSystem = async (fileHandle, contents) => {
   await writable.close();
 
 }
+
+export const downloadAsNewNotebook = async (notebook) => {
+  const fileHandle = await window.showSaveFilePicker({
+    types: [
+      {
+        description: 'notebooks',
+        accept: {
+          'text/plain': ['.dnb'],
+        }
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false
+  });
+  const fileMetaData = await fileHandle.getFile();
+  notebook.name = fileMetaData.name;
+  await saveNotebookToFileSystem(fileHandle, JSON.stringify(notebook));
+}
+
