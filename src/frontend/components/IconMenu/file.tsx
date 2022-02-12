@@ -12,7 +12,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
 import { openFile, openNewFile, saveNotebookToFileSystem } from "../../lib/FileSystem/fileSystem";
-import { addNotebook, setActiveNotebookTabNumber, updateActiveNotebookName } from "../../lib/state/reducer"
+import { addNotebook, setActiveNotebookTabNumber, updateActiveNotebookName, setNotebookIsSaving } from "../../lib/state/reducer"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
 
@@ -37,10 +37,12 @@ export default function FileMenu() {
   }
 
   const handleSaveFile = async () => {
+    dispatch(setNotebookIsSaving(true))
     const currentNotebook = notebooks[activeNotebookName]
     const fileHandle = currentNotebook.metadata?.fileHandle
     const contents = JSON.stringify(currentNotebook)
     await saveNotebookToFileSystem(fileHandle, contents)
+    dispatch(setNotebookIsSaving(false))
   }
 
   return (

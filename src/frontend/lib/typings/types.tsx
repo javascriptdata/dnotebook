@@ -69,4 +69,5 @@ export type AppState = {
     }
     directories: DirectoryObj[],
     config: Partial<NotebookConfig>;
+    notebookIsSaving: boolean;
 }

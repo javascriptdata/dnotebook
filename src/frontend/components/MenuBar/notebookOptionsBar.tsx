@@ -7,8 +7,14 @@ import ViewMenu from '../IconMenu/view'
 import RunMenu from '../IconMenu/run'
 import ServerMenu from '../IconMenu/server'
 import SettingsModal from '../Modals/Settings';
+import Chip from '@mui/material/Chip';
+import CheckIcon from '@mui/icons-material/Check';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../lib/typings/types';
+
 
 const MenuBar = () => {
+  const { notebookIsSaving } = useSelector((state: { app: AppState }) => state.app)
   const [activeMenuOption, setActiveMenuOptions] = useState({
     "file-menu": false,
     "edit-menu": false,
@@ -34,25 +40,12 @@ const MenuBar = () => {
     setActiveMenuOptions(newActiveMenuOption);
   };
 
-  // const handleServerStop = () => {
-  //     const killCellProcessCmd = `stop`;
-  //     const language = "process"
-  //     NodejsInterpreter.exec(killCellProcessCmd, language, (resp) => {
-  //         console.log(resp)
-  //     })
-  // }
-
-  // const handleNotebookRestart = () => {
-  //     //TODO: Save current notebook to local storage
-  //     //TODO: Reload notebook the page from local storage
-  //     console.log("Restarting notebook")
-  // }
 
   return (
     <div style={{
       zIndex: 99,
     }}
-      className="border-b-2 mt-20">
+      className="border-b-2 mt-20 grid grid-cols-2">
       <div className="flex">
         <div >
           <Button
@@ -143,7 +136,23 @@ const MenuBar = () => {
             <span className='normal-case'> < SettingsModal /></span>
           </Button>
         </div>
-
+      </div>
+      <div className='justify-self-end mr-5'>
+        {
+          notebookIsSaving ?
+            <Chip
+              size='small'
+              label={"Saving..."}
+              color='info'
+            />
+            :
+            <Chip
+              size='small'
+              label={"Saved"}
+              color='success'
+              icon={<CheckIcon />}
+            />
+        }
       </div>
     </div>
   )
