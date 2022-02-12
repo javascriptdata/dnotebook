@@ -56,8 +56,10 @@ export default function FileMenu() {
   }
 
   const downloadActiveNotebook = async () => {
+    dispatch(setNotebookSavingStatus("downloading"))
     const currentNotebook = {...notebooks[activeNotebookName]}
     await downloadAsNewNotebook(currentNotebook)
+    dispatch(setNotebookSavingStatus("downloaded"))
   }
 
 
