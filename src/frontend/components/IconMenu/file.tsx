@@ -11,14 +11,14 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
-import { openFile, openNewFile } from "../../lib/FileSystem/fileSystem";
+import { openFile, openNewFile, saveNotebookToFileSystem } from "../../lib/FileSystem/fileSystem";
 import { addNotebook, setActiveNotebookTabNumber, updateActiveNotebookName } from "../../lib/state/reducer"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
 
 export default function FileMenu() {
   const dispatch = useDispatch()
-  const { activeNotebookTabNumber } = useSelector((state: { app: AppState }) => state.app)
+  const { activeNotebookTabNumber, notebooks, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
 
   const handleOpenNewFile = async () => {
     const newNotebook = await openNewFile()
@@ -34,6 +34,13 @@ export default function FileMenu() {
     dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
     dispatch(updateActiveNotebookName(notebook.name))
 
+  }
+
+  const handleSaveFile = async () => {
+    const currentNotebook = notebooks[activeNotebookName]
+    const fileHandle = currentNotebook.metadata?.fileHandle
+    const contents = JSON.stringify(currentNotebook)
+    await saveNotebookToFileSystem(fileHandle, contents)
   }
 
   return (
@@ -66,7 +73,7 @@ export default function FileMenu() {
             ⌘R
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => handleSaveFile()}>
           <ListItemIcon>
             <SaveIcon fontSize="small" />
           </ListItemIcon>

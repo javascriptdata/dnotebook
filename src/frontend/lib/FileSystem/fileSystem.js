@@ -66,7 +66,7 @@ export const openNewFile = async () => {
   });
 
   //write notebook as JSON to file with fileHandler
-  await writeFileWithFileHandle(fileHandle, JSON.stringify(notebook));
+  await saveNotebookToFileSystem(fileHandle, JSON.stringify(notebook));
   //get the file metadata of the file we just wrote
   fileMetaData = await fileHandle.getFile();
   notebook.metadata.fileMetaData = fileMetaData;
@@ -79,7 +79,6 @@ export const openNewFile = async () => {
 
 const getNotebookFromFile = async ({ fileMetaData, fileContents, fileHandle }) => {
   let notebook;
-  console.log(fileMetaData.name.split(".").pop());
 
   if (fileMetaData.name.split(".").pop() === "dnb") {
     notebook = JSON.parse(fileContents);
@@ -164,7 +163,7 @@ export async function openFolder() {
   }
 }
 
-export const writeFileWithFileHandle = async (fileHandle, contents) => {
+export const saveNotebookToFileSystem = async (fileHandle, contents) => {
   // Create a FileSystemWritableFileStream to write to.
   const writable = await fileHandle.createWritable();
 
