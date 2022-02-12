@@ -15,7 +15,7 @@
     "install": "cd src/frontend && yarn && cd ../server && yarn",
     "build": "cd src/frontend && yarn build && cd ../server && yarn build",
     "dev": "cd src/frontend && yarn dev && cd ../server && yarn dev",
-    "start": "cd src/frontend && yarn start && cd ../server && yarn start"
+    "start": "cd src/frontend && yarn && yarn build && yarn start && cd ../server && yarn && yarn build && yarn start"
   },
   "repository": {
     "type": "git",

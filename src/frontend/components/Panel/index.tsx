@@ -9,7 +9,7 @@ export const Panel: React.FC<PanelProps> = ({showPanel}) => {
   return (
     <div className="p-1.5">
       <div className="px-4 text-sm">{showPanel}</div>
-      {showPanel && showPanel === "Explorer" && <Explorer state={undefined} />}
+      {showPanel && showPanel === "Explorer" && <Explorer state={""} name={""} items={""} />}
       {showPanel && showPanel === "Search" && <Search />}
     </div>
   );

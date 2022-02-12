@@ -12,7 +12,6 @@ import darkTheme from '../styles/themes/darkTheme';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import Notebook from '../components/Notebook';
 import NotebookTabPanel from '../components/NotebookTabPanel';
-import StatusBar from '../components/StatusBar';
 
 const Home: NextPage = () => {
   const { config } = useSelector((state: { app: AppState }) => state.app)
@@ -59,9 +58,6 @@ const Home: NextPage = () => {
               <NotebookTabPanel />
               <Notebook />
             </div>
-          </section>
-          <section>
-            {/* <StatusBar /> */}
           </section>
         </div>
       </div>
