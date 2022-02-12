@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCells } from "../../lib/state/reducer"
+import { updateCells, setNotebookSavingStatus } from "../../lib/state/reducer"
 import { AppState, NbCell } from "../../lib/typings/types";
 
 const AceEditor = dynamic(
@@ -32,6 +32,7 @@ const Editor = ({ cell }: { cell: NbCell }) => {
     const [code, updateCode] = useState(cell?.content);
 
     const handleCodeChange = (newCode: any) => {
+        dispatch(setNotebookSavingStatus("unsaved"))
         updateCode(newCode);
         const newCurrCell = { ...cell, content: newCode }
 

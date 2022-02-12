@@ -27,7 +27,7 @@ const initialState: AppState = {
         autosaveNotebook: true,
     },
     directories: [],
-    notebookIsSaving: false,
+    notebookSavingStatus: "saved"
 }
 
 const appReducer = createSlice({
@@ -61,9 +61,9 @@ const appReducer = createSlice({
         setActiveNotebookTabNumber: (state, action) => {
             state.activeNotebookTabNumber = action.payload;
         },
-        setNotebookIsSaving: (state, action) => {
-            state.notebookIsSaving = action.payload;
-        }
+        setNotebookSavingStatus: (state, action) => {
+            state.notebookSavingStatus = action.payload;
+        },
     }
 });
 
@@ -76,7 +76,7 @@ export const {
     setDirectories,
     addNotebook,
     setActiveNotebookTabNumber,
-    setNotebookIsSaving,
+    setNotebookSavingStatus
 } = appReducer.actions;
 
 export default appReducer.reducer;

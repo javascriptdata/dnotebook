@@ -21,7 +21,7 @@ import {
   addNotebook,
   setActiveNotebookTabNumber,
   updateActiveNotebookName,
-  setNotebookIsSaving
+  setNotebookSavingStatus,
 } from "../../lib/state/reducer"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
@@ -47,12 +47,12 @@ export default function FileMenu() {
   }
 
   const handleSaveFile = async () => {
-    dispatch(setNotebookIsSaving(true))
+    dispatch(setNotebookSavingStatus("saving"))
     const currentNotebook = notebooks[activeNotebookName]
     const fileHandle = currentNotebook.metadata?.fileHandle
     const contents = JSON.stringify(currentNotebook)
     await saveNotebookToFileSystem(fileHandle, contents)
-    dispatch(setNotebookIsSaving(false))
+    dispatch(setNotebookSavingStatus("saved"))
   }
 
   const downloadActiveNotebook = async () => {
@@ -82,7 +82,7 @@ export default function FileMenu() {
             ⌘O
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <DriveFileRenameOutlineIcon fontSize="small" />
           </ListItemIcon>
@@ -91,7 +91,7 @@ export default function FileMenu() {
             ⌘R
           </Typography>
         </MenuItem>
-        <MenuItem onClick={() => handleSaveFile()}>
+        <MenuItem onClick={() => handleSaveFile()} disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <SaveIcon fontSize="small" />
           </ListItemIcon>
@@ -100,7 +100,7 @@ export default function FileMenu() {
             ⌘S
           </Typography>
         </MenuItem>
-        <MenuItem onClick={() => downloadActiveNotebook()}>
+        <MenuItem onClick={() => downloadActiveNotebook()} disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <SaveAltIcon fontSize="small" />
           </ListItemIcon>
@@ -109,7 +109,7 @@ export default function FileMenu() {
             ⌘D
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <ImportExportIcon fontSize="small" />
           </ListItemIcon>

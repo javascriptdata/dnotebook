@@ -7,14 +7,12 @@ import ViewMenu from '../IconMenu/view'
 import RunMenu from '../IconMenu/run'
 import ServerMenu from '../IconMenu/server'
 import SettingsModal from '../Modals/Settings';
-import Chip from '@mui/material/Chip';
-import CheckIcon from '@mui/icons-material/Check';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
-
+import SaveStatusLabel from './saveStatusLabel';
 
 const MenuBar = () => {
-  const { notebookIsSaving } = useSelector((state: { app: AppState }) => state.app)
+  const { notebookSavingStatus, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
   const [activeMenuOption, setActiveMenuOptions] = useState({
     "file-menu": false,
     "edit-menu": false,
@@ -139,19 +137,10 @@ const MenuBar = () => {
       </div>
       <div className='justify-self-end mr-5'>
         {
-          notebookIsSaving ?
-            <Chip
-              size='small'
-              label={"Saving..."}
-              color='info'
-            />
+          activeNotebookName !== "Dashboard" ?
+            <SaveStatusLabel notebookStatus={notebookSavingStatus} />
             :
-            <Chip
-              size='small'
-              label={"Saved"}
-              color='success'
-              icon={<CheckIcon />}
-            />
+            <div></div>
         }
       </div>
     </div>

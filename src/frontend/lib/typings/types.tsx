@@ -59,6 +59,7 @@ export type CellLanguages = {
     }
 }
 
+export type NotebookSaveStatus = "unsaved" | "saving" | "saved";
 
 export type AppState = {
     interpreterMode: string;
@@ -69,5 +70,5 @@ export type AppState = {
     }
     directories: DirectoryObj[],
     config: Partial<NotebookConfig>;
-    notebookIsSaving: boolean;
+    notebookSavingStatus: NotebookSaveStatus
 }
