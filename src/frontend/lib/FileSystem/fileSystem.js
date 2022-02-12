@@ -57,6 +57,7 @@ export const openNewFile = async () => {
 
   let fileHandle = await window.showSaveFilePicker(pickerOpts);
   const fileMetaData = await fileHandle.getFile();
+
   const notebook = generateNotebook({
     fileType: "js",
     fileHandle,
@@ -64,15 +65,22 @@ export const openNewFile = async () => {
     fileContents: "",
   });
 
+  //write notebook as JSON to file with fileHandler
+  await writeFileWithFileHandle(fileHandle, JSON.stringify(notebook));
+  //get the file metadata of the file we just wrote
+  fileMetaData = await fileHandle.getFile();
+  notebook.metadata.fileMetaData = fileMetaData;
+  notebook.metadata.fileHandle = fileHandle;
   return notebook;
 
 }
 
 
+
 const getNotebookFromFile = async ({ fileMetaData, fileContents, fileHandle }) => {
   let notebook;
   console.log(fileMetaData.name.split(".").pop());
-  
+
   if (fileMetaData.name.split(".").pop() === "dnb") {
     notebook = JSON.parse(fileContents);
     notebook.metadata = {
@@ -156,8 +164,14 @@ export async function openFolder() {
   }
 }
 
-export const writeToFileCurrentWorkingDirectory = async (fileName, content) => {
-  const fileHandle = await window.showSaveFilePicker();
-  await fileHandle.write(content);
-  await fileHandle.close();
+export const writeFileWithFileHandle = async (fileHandle, contents) => {
+  // Create a FileSystemWritableFileStream to write to.
+  const writable = await fileHandle.createWritable();
+
+  // Write the contents of the file to the stream.
+  await writable.write(contents);
+
+  // Close the file and write the contents to disk.
+  await writable.close();
+
 }
