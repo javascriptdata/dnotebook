@@ -29,7 +29,10 @@ export type Notebook = {
     cellIds: string[];
     cells: {
         [key: string]: NbCell
-    }
+    },
+    metadata?: {
+        [key: string]: any
+    },
 }
 
 export type NotebookConfig = {
@@ -60,6 +63,7 @@ export type CellLanguages = {
 export type AppState = {
     interpreterMode: string;
     activeNotebookName: string;
+    activeNotebookTabNumber: number;
     notebooks:  {
         [key: string]: Notebook
     }

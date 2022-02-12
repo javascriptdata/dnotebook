@@ -11,18 +11,30 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
-import { openFile, openFolder } from "../../lib/utils/fileSystem";
-import { addNewBlankNotebook } from "../../lib/state/reducer"
-import { useDispatch } from 'react-redux';
+import { openFile } from "../../lib/utils/fileSystem";
+import { addNewBlankNotebook, addNotebook, setActiveNotebookTabNumber, updateActiveNotebookName } from "../../lib/state/reducer"
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../lib/typings/types';
 
 export default function FileMenu() {
   const dispatch = useDispatch()
+  const { activeNotebookTabNumber } = useSelector((state: { app: AppState }) => state.app)
 
-  const handleNewBlankFileOpen = () => {
-    console.log("New Blank File");
+  const handleNewBlankFileOpen = async () => {
+    const randomName = `Untitled_${Math.floor(Math.random() * 100)}.dnb`;
     dispatch(addNewBlankNotebook({
-      name: `Untitled_${Math.floor(Math.random() * 100)}`,
+      name: randomName,
     }))
+    dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
+    dispatch(updateActiveNotebookName(randomName));
+
+  }
+
+  const handleOpenExistingFile = async () => {
+    const notebook = await openFile();
+    dispatch(addNotebook(notebook))
+    dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
+    dispatch(updateActiveNotebookName(notebook.name))
 
   }
 
@@ -38,7 +50,7 @@ export default function FileMenu() {
             ⌘N
           </Typography>
         </MenuItem>
-        <MenuItem onClick={() => openFile()}>
+        <MenuItem onClick={() => handleOpenExistingFile()}>
           <ListItemIcon>
             <FileOpen fontSize="small" />
           </ListItemIcon>

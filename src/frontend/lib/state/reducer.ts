@@ -5,6 +5,7 @@ import { v4 as uuid_v4 } from "uuid";
 const initialState: AppState = {
     interpreterMode: "node",
     activeNotebookName: "Dashboard",
+    activeNotebookTabNumber: 0,
     notebooks: {
         "Dashboard": { //Default open tab for Dashboard
             notebookId: uuid_v4(),
@@ -73,6 +74,13 @@ const appReducer = createSlice({
             // state.directories.push(newNotebookFile);
 
         },
+        addNotebook: (state, action) => {
+            const notebook = action.payload;
+            state.notebooks[notebook.name] = notebook;
+        },
+        setActiveNotebookTabNumber: (state, action) => {
+            state.activeNotebookTabNumber = action.payload;
+        }
     }
 });
 
@@ -84,6 +92,8 @@ export const {
     updateActiveNotebookName,
     setDirectories,
     addNewBlankNotebook,
+    addNotebook,
+    setActiveNotebookTabNumber,
 } = appReducer.actions;
 
 export default appReducer.reducer;
