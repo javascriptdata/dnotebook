@@ -54,6 +54,9 @@ const appReducer = createSlice({
         setDirectories: (state, action) => {
             state.directories = action.payload;
         },
+        updateNotebooks: (state, action) => {
+            state.notebooks = action.payload;
+        },
         addNotebook: (state, action) => {
             const notebook = action.payload;
             state.notebooks[notebook.name] = notebook;
@@ -76,7 +79,8 @@ export const {
     setDirectories,
     addNotebook,
     setActiveNotebookTabNumber,
-    setNotebookSavingStatus
+    setNotebookSavingStatus,
+    updateNotebooks
 } = appReducer.actions;
 
 export default appReducer.reducer;
