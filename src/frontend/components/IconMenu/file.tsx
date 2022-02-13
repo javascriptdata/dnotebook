@@ -47,7 +47,7 @@ export default function FileMenu() {
       dispatch(updateActiveNotebookName(notebook.name))
       return;
     }
-    
+
     dispatch(addNotebook(notebook))
     dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
     dispatch(updateActiveNotebookName(notebook.name))
@@ -92,7 +92,7 @@ export default function FileMenu() {
             ⌘O
           </Typography>
         </MenuItem>
-        <MenuItem disabled={activeNotebookName === "Dashboard"}>
+        {/* <MenuItem disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <DriveFileRenameOutlineIcon fontSize="small" />
           </ListItemIcon>
@@ -100,7 +100,7 @@ export default function FileMenu() {
           <Typography variant="body2" color="text.secondary">
             ⌘R
           </Typography>
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={() => handleSaveFile()} disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <SaveIcon fontSize="small" />
