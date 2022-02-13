@@ -20,7 +20,7 @@ export default function NotebookTabPanel() {
     } | null>(null);
 
     const dispatch = useDispatch();
-    const { notebooks, activeNotebookTabNumber, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
+    const { notebooks, activeNotebookTabNumber } = useSelector((state: { app: AppState }) => state.app)
     const tabNames = Object.keys(notebooks)
 
     const handleTabChange = (event: any, newValue: number) => {

@@ -105,12 +105,13 @@ const getNotebookFromFile = async ({ fileMetaData, fileContents, fileHandle }) =
 }
 
 const FILE_TYPE_TO_MODE_MAPPER = {
-  "json": "json",
+  "json": "javascript",
   "md": "markdown",
   "js": "javascript",
   "ts": "typescript",
   "html": "html",
   "sh": "bash",
+  "txt": "markdown",
 }
 
 const generateNotebook = ({ fileType, fileHandle, fileMetaData, fileContents }) => {
@@ -215,4 +216,24 @@ export const refreshWorkspaceDirectory = async (directoryHandle) => {
     name: directoryHandle.name,
     items: files,
   };
+}
+
+export const openNotebookFromFileName = async (name, activeWorkspaceDirectoryHandle) => {
+  const fileHandle = await activeWorkspaceDirectoryHandle.getFileHandle(name);
+  const fileMetaData = await fileHandle.getFile();
+
+  const reader = new FileReader();
+  reader.readAsText(fileMetaData);
+
+  const fileContents = await new Promise((resolve, reject) => {
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
+
+  const notebook = getNotebookFromFile({
+    fileMetaData,
+    fileHandle,
+    fileContents,
+  });
+  return notebook;
 }
