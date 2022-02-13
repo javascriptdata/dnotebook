@@ -33,13 +33,21 @@ export default function FileMenu() {
   const handleOpenNewFile = async () => {
     const newNotebook = await openNewFile()
     dispatch(addNotebook(newNotebook))
-    dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
+    dispatch(setActiveNotebookTabNumber(Object.keys(notebooks).length))
     dispatch(updateActiveNotebookName(newNotebook?.name));
 
   }
 
   const handleOpenExistingFile = async () => {
     const notebook = await openFile();
+    const tabNames = Object.keys(notebooks);
+
+    if (tabNames.includes(notebook.name)){
+      dispatch(setActiveNotebookTabNumber(tabNames.indexOf(notebook.name)))
+      dispatch(updateActiveNotebookName(notebook.name))
+      return;
+    }
+    
     dispatch(addNotebook(notebook))
     dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
     dispatch(updateActiveNotebookName(notebook.name))
