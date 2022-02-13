@@ -8,14 +8,14 @@ import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
-
+import { setActiveWorkspaceDirectoryHandle } from "../../lib/state/reducer"
 interface PanelProps {
   state: any;
   name: string;
   items: any,
 };
 
-const RecursiveComponent: React.FC<PanelProps> = ({ name, items}) => {
+const RecursiveComponent: React.FC<PanelProps> = ({ name, items }) => {
   const hasChildren = items && items;
 
   return (
@@ -28,12 +28,15 @@ const RecursiveComponent: React.FC<PanelProps> = ({ name, items}) => {
   );
 };
 
-export const Explorer: React.FC<PanelProps> = ({ state }) => {
+export const Explorer: React.FC<{state: any}> = ({ state }) => {
   const dispatch = useDispatch();
+
   async function onFolderSelect() {
     const folders = await openFolder();
+    dispatch(setActiveWorkspaceDirectoryHandle(folders?.directoryHandle))
     dispatch(setDirectories(folders));
   }
+
   return (
     <div className="mt-5 px-4 text-sm">
       {state && Object.keys(state).length ? (

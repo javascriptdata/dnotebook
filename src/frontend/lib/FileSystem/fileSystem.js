@@ -20,6 +20,11 @@ export const openFile = async () => {
   };
 
   let [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+  if (!fileHandle) {
+    // User cancelled, or otherwise failed to open a file.
+    return;
+  }
+
   const fileMetaData = await fileHandle.getFile();
 
   const reader = new FileReader();
@@ -56,6 +61,11 @@ export const openNewFile = async () => {
   };
 
   let fileHandle = await window.showSaveFilePicker(pickerOpts);
+  if (!fileHandle) {
+    // User cancelled, or otherwise failed to open a file.
+    return;
+  }
+
   const fileMetaData = await fileHandle.getFile();
 
   const notebook = generateNotebook({
@@ -153,8 +163,14 @@ async function listAllFilesAndDirs(dirHandle) {
 export async function openFolder() {
   try {
     const directoryHandle = await window.showDirectoryPicker();
+    if (!directoryHandle) {
+      // User cancelled, or otherwise failed to open a file.
+      return;
+    }
+
     const files = await listAllFilesAndDirs(directoryHandle);
     return {
+      directoryHandle,
       name: directoryHandle.name,
       items: files,
     };
@@ -193,3 +209,10 @@ export const downloadAsNewNotebook = async (notebook) => {
   await saveNotebookToFileSystem(fileHandle, JSON.stringify(notebook));
 }
 
+export const refreshWorkspaceDirectory = async (directoryHandle) => {
+  const files = await listAllFilesAndDirs(directoryHandle);
+  return {
+    name: directoryHandle.name,
+    items: files,
+  };
+}

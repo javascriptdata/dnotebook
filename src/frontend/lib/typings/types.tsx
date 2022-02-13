@@ -70,5 +70,6 @@ export type AppState = {
     }
     directories: DirectoryObj[],
     config: Partial<NotebookConfig>;
-    notebookSavingStatus: NotebookSaveStatus
+    notebookSavingStatus: NotebookSaveStatus,
+    activeWorkspaceDirectoryHandle: any
 }
