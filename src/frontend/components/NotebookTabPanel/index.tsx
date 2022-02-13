@@ -4,7 +4,11 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { AppState } from '../../lib/typings/types';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateActiveNotebookName, setActiveNotebookTabNumber, updateNotebooks } from '../../lib/state/reducer';
+import {
+    updateActiveNotebookName,
+    setActiveNotebookTabNumber,
+    updateNotebooks
+} from '../../lib/state/reducer';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -16,20 +20,25 @@ export default function NotebookTabPanel() {
     } | null>(null);
 
     const dispatch = useDispatch();
-    const { notebooks, activeNotebookTabNumber } = useSelector((state: { app: AppState }) => state.app)
+    const { notebooks, activeNotebookTabNumber, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
     const tabNames = Object.keys(notebooks)
 
-    const handleChange = (event: any, newValue: number) => {
+    const handleTabChange = (event: any, newValue: number) => {
         const currentNotebookTab = notebooks[event.target.innerText]
         dispatch(updateActiveNotebookName(currentNotebookTab.name));
         dispatch(setActiveNotebookTabNumber(newValue));
     };
 
-    const handleContextMenu = (event: React.MouseEvent) => {
+    const handleContextMenu = (event: React.MouseEvent, name: string) => {
         // @ts-ignore
         if (event.target.innerText === "Dashboard") {
             return;
         }
+
+        if (name !== tabNames[activeNotebookTabNumber]) {
+            return
+        }
+
         event.preventDefault();
         setContextMenu(
             contextMenu === null
@@ -41,35 +50,47 @@ export default function NotebookTabPanel() {
         );
     };
 
-    const handleClose = () => {
+    const handleContextMenuClose = () => {
         setContextMenu(null);
     };
 
-    const handleCloseTab = (name: string) => {
-        if (name === "Dashboard") {
-            return;
-        }
+    const handleCloseCurrentTab = () => {
+        const tabName = tabNames[activeNotebookTabNumber]
         const newNotebooks = { ...notebooks };
-        delete newNotebooks[name];
-        const tabIndexBeforeCurrentTab = tabNames.indexOf(name) - 1;
+        delete newNotebooks[tabName];
+        const tabIndexBeforeCurrentTab = tabNames.indexOf(tabName) - 1; //On close set Tab immediately after as the next active Tab
         const tabNameBeforeCurrentTab = tabNames[tabIndexBeforeCurrentTab];
         dispatch(updateActiveNotebookName(tabNameBeforeCurrentTab || "Dashboard"));
         dispatch(setActiveNotebookTabNumber(tabIndexBeforeCurrentTab));
         dispatch(updateNotebooks(newNotebooks));
-        handleClose();
+        handleContextMenuClose();
     }
+
+    const handleCloseOtherTabs = () => {
+        const tabName = tabNames[activeNotebookTabNumber]
+
+        const newNotebooks = {
+            "Dashboard": { ...notebooks["Dashboard"] },
+            [tabName]: { ...notebooks[tabName] },
+        }
+        dispatch(updateNotebooks(newNotebooks));
+        dispatch(updateActiveNotebookName(tabName));
+        dispatch(setActiveNotebookTabNumber(1)); //Set to one, because remaining Tab is after Dashboard Tab
+        handleContextMenuClose();
+    }
+
 
     const CustomTabComponent = (props: any) => {
         const { name } = props
         return (
             <div
-                onContextMenu={handleContextMenu}
+                onContextMenu={(e) => handleContextMenu(e, name)}
                 style={{ cursor: 'context-menu' }}
             >
                 <Tab {...props} style={{ textTransform: "none" }} />
                 <Menu
                     open={contextMenu !== null}
-                    onClose={handleClose}
+                    onClose={handleContextMenuClose}
                     anchorReference="anchorPosition"
                     anchorPosition={
                         contextMenu !== null
@@ -77,11 +98,8 @@ export default function NotebookTabPanel() {
                             : undefined
                     }
                 >
-                    <MenuItem onClick={() => handleCloseTab(name)}>Close Tab</MenuItem>
-                    <MenuItem onClick={handleClose}>Close All Other Tabs</MenuItem>
-                    <MenuItem onClick={handleClose}>Rename Notebook</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete Notebook</MenuItem>
-
+                    <MenuItem onClick={() => handleCloseCurrentTab()}>Close Tab</MenuItem>
+                    <MenuItem id={name} onClick={() => handleCloseOtherTabs()}>Close All Other Tabs</MenuItem>
                 </Menu>
             </div>
         );
@@ -91,7 +109,7 @@ export default function NotebookTabPanel() {
     return (
         <div className='col-span-12'>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={activeNotebookTabNumber} onChange={handleChange} aria-label="basic tabs example">
+                <Tabs value={activeNotebookTabNumber} onChange={handleTabChange} aria-label="basic tabs example">
                     {
                         tabNames.map((name, i) => {
                             return (

@@ -34,7 +34,7 @@ export default function FileMenu() {
     const newNotebook = await openNewFile()
     dispatch(addNotebook(newNotebook))
     dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
-    dispatch(updateActiveNotebookName(newNotebook.name));
+    dispatch(updateActiveNotebookName(newNotebook?.name));
 
   }
 
