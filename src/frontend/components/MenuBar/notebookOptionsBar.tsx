@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
+import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import { useState } from 'react';
 import FileMenu from '../IconMenu/file'
 import EditMenu from '../IconMenu/edit'
@@ -10,8 +11,17 @@ import SettingsModal from '../Modals/Settings';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
 import SaveStatusLabel from './saveStatusLabel';
+import {
+  usePopupState,
+  bindHover,
+  bindMenu,
+} from "material-ui-popup-state/hooks";
 
 const MenuBar = () => {
+   const popupState = usePopupState({
+     variant: "popover",
+     popupId: "demoMenu",
+   });
   const { notebookSavingStatus, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
   const [activeMenuOption, setActiveMenuOptions] = useState({
     "file-menu": false,
@@ -40,111 +50,116 @@ const MenuBar = () => {
 
 
   return (
-    <div style={{
-      zIndex: 99,
-    }}
-      className="border-b-2 mt-20 grid grid-cols-2">
+    <div
+      style={{
+        zIndex: 99,
+      }}
+      className="border-b-2 mt-20 grid grid-cols-2"
+    >
       <div className="flex">
-        <div >
+        <div>
           <Button
             id="file-menu"
             variant={activeMenuOption["file-menu"] ? "outlined" : "text"}
-            onClick={handleMenuClick}
+            {...bindHover(popupState)}
+            onMouseEnter={() => usePopupState({})}
           >
-            <span className='normal-case'>File</span>
+            <span className="normal-case">File</span>
           </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={activeMenuOption["file-menu"]}
-            onClose={handleMenuClick}
+          <HoverMenu
+            {...bindMenu(popupState)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
-            < FileMenu />
-          </Menu>
+            <FileMenu />
+          </HoverMenu>
         </div>
-        <div >
+        <div>
           <Button
             id="edit-menu"
             variant={activeMenuOption["edit-menu"] ? "outlined" : "text"}
-            onClick={handleMenuClick}
+            {...bindHover(popupState)}
           >
-            <span className='normal-case'>Edit</span>
+            <span className="normal-case">Edit</span>
           </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={activeMenuOption["edit-menu"]}
-            onClose={handleMenuClick}
+          <HoverMenu
+            {...bindMenu(popupState)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
-            < EditMenu />
-          </Menu>
+            <EditMenu />
+          </HoverMenu>
         </div>
 
-        <div >
+        <div>
           <Button
             id="view-menu"
             variant={activeMenuOption["view-menu"] ? "outlined" : "text"}
             onClick={handleMenuClick}
           >
-            <span className='normal-case'>View</span>
+            <span className="normal-case">View</span>
           </Button>
           <Menu
             anchorEl={anchorEl}
             open={activeMenuOption["view-menu"]}
             onClose={handleMenuClick}
           >
-            < ViewMenu />
+            <ViewMenu />
           </Menu>
         </div>
 
-        <div >
+        <div>
           <Button
             id="run-menu"
             variant={activeMenuOption["run-menu"] ? "outlined" : "text"}
             onClick={handleMenuClick}
           >
-            <span className='normal-case'>Run</span>
+            <span className="normal-case">Run</span>
           </Button>
           <Menu
             anchorEl={anchorEl}
             open={activeMenuOption["run-menu"]}
             onClose={handleMenuClick}
           >
-            < RunMenu />
+            <RunMenu />
           </Menu>
         </div>
 
-        <div >
+        <div>
           <Button
             id="server-menu"
             variant={activeMenuOption["server-menu"] ? "outlined" : "text"}
             onClick={handleMenuClick}
           >
-            <span className='normal-case'>Server</span>
+            <span className="normal-case">Server</span>
           </Button>
           <Menu
             anchorEl={anchorEl}
             open={activeMenuOption["server-menu"]}
             onClose={handleMenuClick}
           >
-            < ServerMenu />
+            <ServerMenu />
           </Menu>
         </div>
 
         <div>
           <Button>
-            <span className='normal-case'> < SettingsModal /></span>
+            <span className="normal-case">
+              {" "}
+              <SettingsModal />
+            </span>
           </Button>
         </div>
       </div>
-      <div className='justify-self-end mr-5'>
-        {
-          activeNotebookName !== "Dashboard" ?
-            <SaveStatusLabel notebookStatus={notebookSavingStatus} />
-            :
-            <div></div>
-        }
+      <div className="justify-self-end mr-5">
+        {activeNotebookName !== "Dashboard" ? (
+          <SaveStatusLabel notebookStatus={notebookSavingStatus} />
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
 export default MenuBar
