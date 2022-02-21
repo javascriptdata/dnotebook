@@ -1,10 +1,10 @@
+import { useState } from "react";
 import FileNew from '@mui/icons-material/AddBox';
 import FileOpen from '@mui/icons-material/OpenInNew';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import SaveIcon from '@mui/icons-material/Save';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
-import React, { useState } from "react";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -25,8 +25,10 @@ import {
 } from "../../lib/state/reducer"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../lib/typings/types';
+import Export from "../Modals/Export";
 
 export default function FileMenu() {
+  const [showExport, setShowExport] = useState<boolean>(false);
   const dispatch = useDispatch()
   const { activeNotebookTabNumber, notebooks, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
 
@@ -69,8 +71,6 @@ export default function FileMenu() {
     await downloadAsNewNotebook(currentNotebook)
     dispatch(setNotebookSavingStatus("downloaded"))
   }
-
-
   return (
     <Paper sx={{ width: 320, maxWidth: '100%' }}>
       <MenuList>
@@ -119,7 +119,7 @@ export default function FileMenu() {
             ⌘D
           </Typography>
         </MenuItem>
-        <MenuItem disabled={activeNotebookName === "Dashboard"}>
+        <MenuItem disabled={activeNotebookName === "Dashboard"} onClick={() => setShowExport(true)}>
           <ListItemIcon>
             <ImportExportIcon fontSize="small" />
           </ListItemIcon>
@@ -129,6 +129,7 @@ export default function FileMenu() {
           </Typography>
         </MenuItem>
       </MenuList>
+      <Export open={showExport} handleClose={setShowExport} />
     </Paper>
   );
 };
