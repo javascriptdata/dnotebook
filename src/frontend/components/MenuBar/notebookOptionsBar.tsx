@@ -1,16 +1,16 @@
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import HoverMenu from 'material-ui-popup-state/HoverMenu'
-import { useState } from 'react';
-import FileMenu from '../IconMenu/file'
-import EditMenu from '../IconMenu/edit'
-import ViewMenu from '../IconMenu/view'
-import RunMenu from '../IconMenu/run'
-import ServerMenu from '../IconMenu/server'
-import SettingsModal from '../Modals/Settings';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../lib/typings/types';
-import SaveStatusLabel from './saveStatusLabel';
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import HoverMenu from "material-ui-popup-state/HoverMenu";
+import { useState } from "react";
+import FileMenu from "../IconMenu/file";
+import EditMenu from "../IconMenu/edit";
+import ViewMenu from "../IconMenu/view";
+import RunMenu from "../IconMenu/run";
+import ServerMenu from "../IconMenu/server";
+import SettingsModal from "../Modals/Settings";
+import { useSelector } from "react-redux";
+import { AppState } from "../../lib/typings/types";
+import SaveStatusLabel from "./saveStatusLabel";
 import {
   usePopupState,
   bindHover,
@@ -18,36 +18,31 @@ import {
 } from "material-ui-popup-state/hooks";
 
 const MenuBar = () => {
-   const popupState = usePopupState({
-     variant: "popover",
-     popupId: "demoMenu",
-   });
-  const { notebookSavingStatus, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
-  const [activeMenuOption, setActiveMenuOptions] = useState({
-    "file-menu": false,
-    "edit-menu": false,
-    "view-menu": false,
-    "run-menu": false,
-    "server-menu": false,
-  })
+  // Needs enhancement
+  const popupState = usePopupState({
+    variant: "popover",
+    popupId: "demoMenu",
+  });
+  const popupState1 = usePopupState({
+    variant: "popover",
+    popupId: "demoMenu",
+  });
 
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const id = event.currentTarget.id;
-    setAnchorEl(event.currentTarget);
-    //@ts-ignore */
-    const selectedMenuOptionState = activeMenuOption[id];
-    const newActiveMenuOption: any = {};
-
-    Object.keys(activeMenuOption).forEach((key) => {
-      newActiveMenuOption[key] = false;
-    });
-    newActiveMenuOption[id] = !selectedMenuOptionState;
-    setActiveMenuOptions(newActiveMenuOption);
-  };
-
+  const popupState2 = usePopupState({
+    variant: "popover",
+    popupId: "demoMenu",
+  });
+  const popupState3 = usePopupState({
+    variant: "popover",
+    popupId: "demoMenu",
+  });
+  const popupState4 = usePopupState({
+    variant: "popover",
+    popupId: "demoMenu",
+  });
+  const { notebookSavingStatus, activeNotebookName } = useSelector(
+    (state: { app: AppState }) => state.app
+  );
 
   return (
     <div
@@ -60,9 +55,7 @@ const MenuBar = () => {
         <div>
           <Button
             id="file-menu"
-            variant={activeMenuOption["file-menu"] ? "outlined" : "text"}
             {...bindHover(popupState)}
-            onMouseEnter={() => usePopupState({})}
           >
             <span className="normal-case">File</span>
           </Button>
@@ -77,13 +70,12 @@ const MenuBar = () => {
         <div>
           <Button
             id="edit-menu"
-            variant={activeMenuOption["edit-menu"] ? "outlined" : "text"}
-            {...bindHover(popupState)}
+            {...bindHover(popupState1)}
           >
             <span className="normal-case">Edit</span>
           </Button>
           <HoverMenu
-            {...bindMenu(popupState)}
+            {...bindMenu(popupState1)}
             anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
             transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
@@ -94,52 +86,49 @@ const MenuBar = () => {
         <div>
           <Button
             id="view-menu"
-            variant={activeMenuOption["view-menu"] ? "outlined" : "text"}
-            onClick={handleMenuClick}
+            {...bindHover(popupState2)}
           >
             <span className="normal-case">View</span>
           </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={activeMenuOption["view-menu"]}
-            onClose={handleMenuClick}
+          <HoverMenu
+            {...bindMenu(popupState2)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
             <ViewMenu />
-          </Menu>
+          </HoverMenu>
         </div>
 
         <div>
           <Button
             id="run-menu"
-            variant={activeMenuOption["run-menu"] ? "outlined" : "text"}
-            onClick={handleMenuClick}
+            {...bindHover(popupState3)}
           >
             <span className="normal-case">Run</span>
           </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={activeMenuOption["run-menu"]}
-            onClose={handleMenuClick}
+          <HoverMenu
+            {...bindMenu(popupState3)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
             <RunMenu />
-          </Menu>
+          </HoverMenu>
         </div>
 
         <div>
           <Button
             id="server-menu"
-            variant={activeMenuOption["server-menu"] ? "outlined" : "text"}
-            onClick={handleMenuClick}
+            {...bindHover(popupState4)}
           >
             <span className="normal-case">Server</span>
           </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={activeMenuOption["server-menu"]}
-            onClose={handleMenuClick}
+          <HoverMenu
+            {...bindMenu(popupState4)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
             <ServerMenu />
-          </Menu>
+          </HoverMenu>
         </div>
 
         <div>
@@ -160,6 +149,6 @@ const MenuBar = () => {
       </div>
     </div>
   );
-}
+};
 
-export default MenuBar
+export default MenuBar;
