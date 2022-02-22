@@ -40,6 +40,7 @@
     "@types/marked": "^4.0.1",
     "@types/node": "16.11.7",
     "@types/react": "17.0.34",
+    "@types/turndown": "^5.0.1",
     "@types/uuid": "^8.3.4",
     "eslint": "7",
     "eslint-config-next": "12.0.3",

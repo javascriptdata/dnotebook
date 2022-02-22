@@ -34,6 +34,7 @@ const Export: React.FC<{
   };
   const onNoteExport = () => {
     const note = notebooks[currentNote];
+    console.log(note);
     if (format === "pdf") {
       const el = document.getElementById("cellTab")!;
       htmlToImage.toPng(el, { quality: 0.95 }).then(function (dataUrl) {
