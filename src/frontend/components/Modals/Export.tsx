@@ -8,8 +8,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Button } from "@mui/material";
-import pdfMake from "pdfmake/build/pdfmake.js";
-import pdfFonts from "pdfmake/build/vfs_fonts.js";
+import * as htmlToImage from "html-to-image";
+import jsPDF from "jspdf";
 
 const style = {
   position: "absolute" as "absolute",
@@ -24,47 +24,28 @@ const style = {
 };
 const Export: React.FC<{
   open: boolean;
-    handleClose: (open: boolean) => void;
-    currentNote: string;
+  handleClose: (open: boolean) => void;
+  currentNote: string;
   notebooks: object;
 }> = ({ open, handleClose, currentNote, notebooks }) => {
   const [format, setFormat] = React.useState("");
   const handleChange = (event: SelectChangeEvent) => {
     setFormat(event.target.value as string);
   };
-    const onNoteExport = () => {
-        const note = notebooks[currentNote];
-        if (format === "pdf") {
-                pdfMake.vfs = pdfFonts.pdfMake.vfs;
-                const employees = [
-                  { firstName: "John", lastName: "Doe" },
-                  { firstName: "Anna", lastName: "Smith" },
-                  { firstName: "Peter", lastName: "Jones" },
-                ];
-                const document = {
-                  content: [
-                    { text: currentNote, fontStyle: 15, lineHeight: 2 },
-                  ],
-                };
-            for (const [key, value] of Object.entries(note)) {
-              console.log(`${key}: ${value}`);
-            }
-                // employees.forEach((employee) => {
-                //   document.content.push({
-                //     columns: [
-                //       { text: "firstname", width: 60 },
-                //       { text: ":", width: 10 },
-                //       { text: employee.firstName, width: 50 },
-                //       { text: "lastName", width: 60 },
-                //       { text: ":", width: 10 },
-                //       { text: employee.lastName, width: 50 },
-                //     ],
-                //     lineHeight: 2,
-                //   });
-                // });
-                // pdfMake.createPdf(document).download();
-        }
+  const onNoteExport = () => {
+    const note = notebooks[currentNote];
+    if (format === "pdf") {
+      const el = document.getElementById("cellTab")!;
+      htmlToImage.toPng(el, { quality: 0.95 }).then(function (dataUrl) {
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`${currentNote}.pdf`);
+      });
     }
+  };
   return (
     <Modal
       open={open}
@@ -95,18 +76,20 @@ const Export: React.FC<{
               <MenuItem value={"md"}>Markdown</MenuItem>
             </Select>
           </FormControl>
-          <Button className="mt-4 ml-2" onClick={() => onNoteExport()}>Export</Button>
+          <Button className="mt-4 ml-2" onClick={() => onNoteExport()}>
+            Export
+          </Button>
         </div>
       </Box>
     </Modal>
   );
 };
 
-const mapStateToProps = (state:object) => {
-    return {
-      notebooks: state.app.notebooks,
-      currentNote: state.app.activeNotebookName,
-    };
-}
+const mapStateToProps = (state: object) => {
+  return {
+    notebooks: state.app.notebooks,
+    currentNote: state.app.activeNotebookName,
+  };
+};
 
 export default connect(mapStateToProps, null)(Export);
