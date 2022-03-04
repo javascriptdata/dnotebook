@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOMServer from "react-dom/server";
 import { connect } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -11,6 +12,7 @@ import { Button } from "@mui/material";
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 import { download } from "../../lib/helpers/utils";
+import Notebook from "../Notebook";
 
 const style = {
   position: "absolute" as "absolute",
@@ -63,8 +65,35 @@ const Export: React.FC<{
       download(noteName, "json", res);
     }
     if (format === "html") {
-      var pageHTML = document.getElementById("cellTab").innerHTML;
-      download(noteName, "html", pageHTML.toString());
+      const modalEl = document.getElementById("export-modal");
+      const demoMenu = document.getElementById("demoMenu");
+      modalEl.style.display = "none";
+      demoMenu.style.display = "none";
+      const text = document.querySelector("html").innerHTML;
+      var element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/html;charset=utf-8," + encodeURIComponent(text)
+      );
+      element.setAttribute("download", "lorem");
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+      // var pageHTML = document.getElementById("cellTab").innerHTML;
+      //        let html = ReactDOMServer.renderToStaticMarkup(pageHTML);
+      //        let htmlWDoc = "<!DOCTYPE html>" + html;
+      // console.log(htmlWDoc);
+      // //   var a = document.createElement("a");
+      // //   a.href = URL.createObjectURL(pageHTML);
+      //   a.download = "your-download-name-here.html";
+      //   a.hidden = true;
+      // // document.body.appendChild(a);
+      //   a.click();
+      // // download(noteName, "html", pageHTML.toString());
     }
   };
   return (
@@ -73,6 +102,7 @@ const Export: React.FC<{
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      id="export-modal"
     >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
