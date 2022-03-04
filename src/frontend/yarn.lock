@@ -2910,6 +2910,11 @@ jss@10.9.0, jss@^10.8.2:
     array-includes "^3.1.3"
     object.assign "^4.1.2"
 
+jsx-md@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/jsx-md/-/jsx-md-4.0.1.tgz#2076d5c6a42128d2d7b2ce85eb15bb50194cbf36"
+  integrity sha512-MysLkW14NEPmXplBF1J2em4yDMaSOGSid5skDjvGI3Q+AnKDKnyge+703hKtwSC9NDGqkTPX2BXl7V4oZ2Kqcw==
+
 language-subtag-registry@~0.3.2:
   version "0.3.21"
   resolved "https://registry.yarnpkg.com/language-subtag-registry/-/language-subtag-registry-0.3.21.tgz#04ac218bea46f04cb039084602c6da9e788dd45a"

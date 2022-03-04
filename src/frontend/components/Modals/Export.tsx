@@ -46,6 +46,27 @@ const Export: React.FC<{
         pdf.save(`${currentNote}.pdf`);
       });
     }
+    if (format === "md") {
+      const cells = note.cells
+      const mdView = 
+        Object.keys(cells).map((cell: Object) => {
+          const data = cells[cell];
+          return `## ID: ${data.id} 
+                       ${data.content}
+`;
+        })
+      const res = mdView.join(" ");
+          const blob = new Blob([res], { type: "application/json" });
+          const url = (window.URL || window.webkitURL).createObjectURL(blob);
+          const link = document.createElement("a");
+          let fileName = "Dnote-react";
+          link.download = `${fileName}.md`;
+          link.href = url;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          return link;
+    }
   };
   return (
     <Modal
