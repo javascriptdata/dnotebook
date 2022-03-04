@@ -129,7 +129,7 @@ export default function FileMenu() {
           </Typography>
         </MenuItem>
       </MenuList>
-      <Export open={showExport} handleClose={setShowExport} />
+      <Export open={showExport} handleClose={setShowExport} currentNote={""} />
     </Paper>
   );
 };

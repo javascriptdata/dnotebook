@@ -10,6 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Button } from "@mui/material";
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
+import { download } from "../../lib/helpers/utils";
 
 const style = {
   position: "absolute" as "absolute",
@@ -34,7 +35,8 @@ const Export: React.FC<{
   };
   const onNoteExport = () => {
     const note = notebooks[currentNote];
-    console.log(note);
+    const noteName = currentNote.split(".")[0];
+    const cells = note.cells;
     if (format === "pdf") {
       const el = document.getElementById("cellTab")!;
       htmlToImage.toPng(el, { quality: 0.95 }).then(function (dataUrl) {
@@ -43,29 +45,26 @@ const Export: React.FC<{
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
         pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${currentNote}.pdf`);
+        pdf.save(`${noteName}.pdf`);
       });
     }
     if (format === "md") {
-      const cells = note.cells
-      const mdView = 
-        Object.keys(cells).map((cell: Object) => {
-          const data = cells[cell];
-          return `## ID: ${data.id} 
+      const mdView = Object.keys(cells).map((cell: Object) => {
+        const data = cells[cell];
+        return `## ID: ${data.id} 
                        ${data.content}
 `;
-        })
+      });
       const res = mdView.join(" ");
-          const blob = new Blob([res], { type: "application/json" });
-          const url = (window.URL || window.webkitURL).createObjectURL(blob);
-          const link = document.createElement("a");
-          let fileName = "Dnote-react";
-          link.download = `${fileName}.md`;
-          link.href = url;
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          return link;
+      download(noteName, "md", res);
+    }
+    if (format === "json") {
+      const res = JSON.stringify(cells);
+      download(noteName, "json", res);
+    }
+    if (format === "html") {
+      var pageHTML = document.getElementById("cellTab").innerHTML;
+      download(noteName, "html", pageHTML.toString());
     }
   };
   return (
