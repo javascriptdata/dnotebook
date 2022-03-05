@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import store from '../lib/state/store'
 import { Provider } from 'react-redux'
 import { CacheProvider } from '@emotion/react';
-import createEmotionCache from '../lib/utils/createEmotionCache';
+import createEmotionCache from '../lib/helpers/createEmotionCache';
 
 const clientSideEmotionCache = createEmotionCache();
 

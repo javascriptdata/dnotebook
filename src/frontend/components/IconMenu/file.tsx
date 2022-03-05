@@ -1,35 +1,80 @@
+import { useState } from "react";
 import FileNew from '@mui/icons-material/AddBox';
 import FileOpen from '@mui/icons-material/OpenInNew';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import SaveIcon from '@mui/icons-material/Save';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
-import React, { useState } from "react";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
-import { openFile, openFolder } from "../../lib/utils/fileSystem";
-import { addNewBlankNotebook } from "../../lib/state/reducer"
-import { useDispatch } from 'react-redux';
+import {
+  openFile,
+  openNewFile,
+  saveNotebookToFileSystem,
+  downloadAsNewNotebook,
+} from "../../lib/FileSystem/fileSystem";
+import {
+  addNotebook,
+  setActiveNotebookTabNumber,
+  updateActiveNotebookName,
+  setNotebookSavingStatus,
+} from "../../lib/state/reducer"
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../lib/typings/types';
+import Export from "../Modals/Export";
 
 export default function FileMenu() {
+  const [showExport, setShowExport] = useState<boolean>(false);
   const dispatch = useDispatch()
+  const { activeNotebookTabNumber, notebooks, activeNotebookName } = useSelector((state: { app: AppState }) => state.app)
 
-  const handleNewBlankFileOpen = () => {
-    console.log("New Blank File");
-    dispatch(addNewBlankNotebook({
-      name: `Untitled_${Math.floor(Math.random() * 100)}`,
-    }))
+  const handleOpenNewFile = async () => {
+    const newNotebook = await openNewFile()
+    dispatch(addNotebook(newNotebook))
+    dispatch(setActiveNotebookTabNumber(Object.keys(notebooks).length))
+    dispatch(updateActiveNotebookName(newNotebook?.name));
 
   }
 
+  const handleOpenExistingFile = async () => {
+    const notebook = await openFile();
+    const tabNames = Object.keys(notebooks);
+
+    if (tabNames.includes(notebook.name)){
+      dispatch(setActiveNotebookTabNumber(tabNames.indexOf(notebook.name)))
+      dispatch(updateActiveNotebookName(notebook.name))
+      return;
+    }
+
+    dispatch(addNotebook(notebook))
+    dispatch(setActiveNotebookTabNumber(activeNotebookTabNumber + 1))
+    dispatch(updateActiveNotebookName(notebook.name))
+
+  }
+
+  const handleSaveFile = async () => {
+    dispatch(setNotebookSavingStatus("saving"))
+    const currentNotebook = notebooks[activeNotebookName]
+    const fileHandle = currentNotebook.metadata?.fileHandle
+    const contents = JSON.stringify(currentNotebook)
+    await saveNotebookToFileSystem(fileHandle, contents)
+    dispatch(setNotebookSavingStatus("saved"))
+  }
+
+  const downloadActiveNotebook = async () => {
+    dispatch(setNotebookSavingStatus("downloading"))
+    const currentNotebook = {...notebooks[activeNotebookName]}
+    await downloadAsNewNotebook(currentNotebook)
+    dispatch(setNotebookSavingStatus("downloaded"))
+  }
   return (
     <Paper sx={{ width: 320, maxWidth: '100%' }}>
       <MenuList>
-        <MenuItem onClick={() => handleNewBlankFileOpen()}>
+        <MenuItem onClick={() => handleOpenNewFile()}>
           <ListItemIcon>
             <FileNew fontSize="small" />
           </ListItemIcon>
@@ -38,7 +83,7 @@ export default function FileMenu() {
             ⌘N
           </Typography>
         </MenuItem>
-        <MenuItem onClick={() => openFile()}>
+        <MenuItem onClick={() => handleOpenExistingFile()}>
           <ListItemIcon>
             <FileOpen fontSize="small" />
           </ListItemIcon>
@@ -47,7 +92,7 @@ export default function FileMenu() {
             ⌘O
           </Typography>
         </MenuItem>
-        <MenuItem>
+        {/* <MenuItem disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <DriveFileRenameOutlineIcon fontSize="small" />
           </ListItemIcon>
@@ -55,8 +100,8 @@ export default function FileMenu() {
           <Typography variant="body2" color="text.secondary">
             ⌘R
           </Typography>
-        </MenuItem>
-        <MenuItem>
+        </MenuItem> */}
+        <MenuItem onClick={() => handleSaveFile()} disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <SaveIcon fontSize="small" />
           </ListItemIcon>
@@ -65,7 +110,7 @@ export default function FileMenu() {
             ⌘S
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => downloadActiveNotebook()} disabled={activeNotebookName === "Dashboard"}>
           <ListItemIcon>
             <SaveAltIcon fontSize="small" />
           </ListItemIcon>
@@ -74,7 +119,7 @@ export default function FileMenu() {
             ⌘D
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem disabled={activeNotebookName === "Dashboard"} onClick={() => setShowExport(true)}>
           <ListItemIcon>
             <ImportExportIcon fontSize="small" />
           </ListItemIcon>
@@ -84,6 +129,7 @@ export default function FileMenu() {
           </Typography>
         </MenuItem>
       </MenuList>
+      <Export open={showExport} handleClose={setShowExport} currentNote={""} />
     </Paper>
   );
 };

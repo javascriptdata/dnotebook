@@ -8,19 +8,23 @@ const NotebookTab = () => {
     const notebook = notebooks[activeNotebookName]
     const { cellIds, cells } = notebook
     return (
-        <div className='col-span-12'>
-            {
-                notebook.name === "Dashboard" ? (
-                    <Dashboard />
-                ) : (
-                    cellIds.map((cellId: string, i: number) => {
-                        const cell: NbCell = cells[cellId]
-                        return <div key={cellId}><NoteBookCell cell={cell} /></div>
-                    })
-                )
-            }
-        </div>
-    )
+      <div className="col-span-12">
+        {notebook.name === "Dashboard" ? (
+          <Dashboard />
+        ) : (
+          <div id="cellTab">
+            {cellIds.map((cellId: string, i: number) => {
+              const cell: NbCell = cells[cellId];
+              return (
+                <div key={cellId}>
+                  <NoteBookCell cell={cell} />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
 }
 
 export default NotebookTab

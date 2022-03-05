@@ -5,6 +5,7 @@ import { v4 as uuid_v4 } from "uuid";
 const initialState: AppState = {
     interpreterMode: "node",
     activeNotebookName: "Dashboard",
+    activeNotebookTabNumber: 0,
     notebooks: {
         "Dashboard": { //Default open tab for Dashboard
             notebookId: uuid_v4(),
@@ -26,6 +27,8 @@ const initialState: AppState = {
         autosaveNotebook: true,
     },
     directories: [],
+    notebookSavingStatus: "saved",
+    activeWorkspaceDirectoryHandle: null,
 }
 
 const appReducer = createSlice({
@@ -52,27 +55,22 @@ const appReducer = createSlice({
         setDirectories: (state, action) => {
             state.directories = action.payload;
         },
-        addNewBlankNotebook: (state, action) => {
-            const { name } = action.payload;
-            const firstCellId = uuid_v4();
-            state.notebooks[name] = {
-                notebookId: uuid_v4(),
-                name,
-                cellIds: [firstCellId],
-                cells: {
-                    [firstCellId]: {
-                        id: firstCellId,
-                        content: "",
-                        mode: "javascript",
-                        output: ""
-                    },
-                },
-            };
-            //create file in current working directory using the File API
-            // const newNotebookFile = new File([], newNotebookName, { type: "text/plain" });
-            // state.directories.push(newNotebookFile);
-
+        updateNotebooks: (state, action) => {
+            state.notebooks = action.payload;
         },
+        addNotebook: (state, action) => {
+            const notebook = action.payload;
+            state.notebooks[notebook.name] = notebook;
+        },
+        setActiveNotebookTabNumber: (state, action) => {
+            state.activeNotebookTabNumber = action.payload;
+        },
+        setNotebookSavingStatus: (state, action) => {
+            state.notebookSavingStatus = action.payload;
+        },
+        setActiveWorkspaceDirectoryHandle: (state, action) => {
+            state.activeWorkspaceDirectoryHandle = action.payload;
+        }
     }
 });
 
@@ -83,7 +81,11 @@ export const {
     updateConfig,
     updateActiveNotebookName,
     setDirectories,
-    addNewBlankNotebook,
+    addNotebook,
+    setActiveNotebookTabNumber,
+    setNotebookSavingStatus,
+    updateNotebooks,
+    setActiveWorkspaceDirectoryHandle,
 } = appReducer.actions;
 
 export default appReducer.reducer;

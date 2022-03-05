@@ -29,7 +29,10 @@ export type Notebook = {
     cellIds: string[];
     cells: {
         [key: string]: NbCell
-    }
+    },
+    metadata?: {
+        [key: string]: any
+    },
 }
 
 export type NotebookConfig = {
@@ -56,13 +59,17 @@ export type CellLanguages = {
     }
 }
 
+export type NotebookSaveStatus = "unsaved" | "saving" | "saved" | "error" | "downloading" | "downloaded"
 
 export type AppState = {
     interpreterMode: string;
     activeNotebookName: string;
+    activeNotebookTabNumber: number;
     notebooks:  {
         [key: string]: Notebook
     }
     directories: DirectoryObj[],
     config: Partial<NotebookConfig>;
+    notebookSavingStatus: NotebookSaveStatus,
+    activeWorkspaceDirectoryHandle: any
 }
