@@ -17,7 +17,7 @@ import {
 } from "material-ui-popup-state/hooks";
 
 const MenuBar = () => {
-  // Needs enhancement
+  // FIXME: This usePopupState seems to only work when i replicate them like below
   const popupState = usePopupState({
     variant: "popover",
     popupId: "demoMenu",

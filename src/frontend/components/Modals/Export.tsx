@@ -11,7 +11,6 @@ import { Button } from "@mui/material";
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 import { download } from "../../lib/helpers/utils";
-import Notebook from "../Notebook";
 
 const style = {
   position: "absolute" as "absolute",
@@ -50,6 +49,7 @@ const Export: React.FC<{
       });
     }
     if (format === "md") {
+    // FIXME: Capacity to render cell code block as part of markdown
       const mdView = Object.keys(cells).map((cell: Object) => {
         const data = cells[cell];
         return `## ID: ${data.id} 
@@ -64,10 +64,13 @@ const Export: React.FC<{
       download(noteName, "json", res);
     }
     if (format === "html") {
+      // Removing open modals when exporting html file
       const modalEl = document.getElementById("export-modal");
       const demoMenu = document.getElementById("demoMenu");
       modalEl.style.display = "none";
       demoMenu.style.display = "none";
+      
+      // Exporting page as HTML
       const text = document.querySelector<HTMLInputElement>("html")!.innerHTML;
       var element = document.createElement("a");
       element.setAttribute(
