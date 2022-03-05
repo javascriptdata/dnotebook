@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 import { connect } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -69,31 +68,17 @@ const Export: React.FC<{
       const demoMenu = document.getElementById("demoMenu");
       modalEl.style.display = "none";
       demoMenu.style.display = "none";
-      const text = document.querySelector("html").innerHTML;
+      const text = document.querySelector<HTMLInputElement>("html")!.innerHTML;
       var element = document.createElement("a");
       element.setAttribute(
         "href",
         "data:text/html;charset=utf-8," + encodeURIComponent(text)
       );
       element.setAttribute("download", "lorem");
-
       element.style.display = "none";
       document.body.appendChild(element);
-
       element.click();
-
       document.body.removeChild(element);
-      // var pageHTML = document.getElementById("cellTab").innerHTML;
-      //        let html = ReactDOMServer.renderToStaticMarkup(pageHTML);
-      //        let htmlWDoc = "<!DOCTYPE html>" + html;
-      // console.log(htmlWDoc);
-      // //   var a = document.createElement("a");
-      // //   a.href = URL.createObjectURL(pageHTML);
-      //   a.download = "your-download-name-here.html";
-      //   a.hidden = true;
-      // // document.body.appendChild(a);
-      //   a.click();
-      // // download(noteName, "html", pageHTML.toString());
     }
   };
   return (
